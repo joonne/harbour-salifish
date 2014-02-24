@@ -1,0 +1,46 @@
+Name: harbour-gymtracker
+Summary: GymTracker for Sailfish
+Version: 0.5
+Release: 5
+Group: Qt/Qt
+License: GGPLv2
+Sources:
+- '%{name}-%{version}.tar.bz2'
+Description: |-
+  App for tracking your workouts at gym.
+Configure: none
+Builder: qtc5
+PkgConfigBR:
+- Qt5Core
+- Qt5Qml
+- Qt5Quick
+- sailfishapp
+Requires:
+- libsailfishapp
+Files:
+- '%defattr(0644,root,root,0755)'
+- '%{_datadir}/icons/hicolor/86x86/apps/%{name}.png'
+- '%{_datadir}/applications/%{name}.desktop'
+- '%{_datadir}/%{name}/qml'
+- '%attr(0755,-,-) %{_bindir}/%{name}'
+PkgBR: []
+SubPackages:
+- Name: harbour-gymtracker
+  Summary: GymTracker for Sailfish
+  Group: Qt/Qt
+  Description: |-
+    App for tracking your workouts at gym.
+  AutoDepend: true
+  PkgConfigBR:
+  - Qt5Core
+  - Qt5Qml
+  - Qt5Quick
+  - sailfishapp
+  Requires:
+  - libsailfishapp
+  Files:
+  - '%defattr(0644,root,root,0755)'
+  - '%{_datadir}/icons/hicolor/86x86/apps/%{name}.png'
+  - '%{_datadir}/applications/%{name}.desktop'
+  - '%{_datadir}/%{name}/qml'
+  - '%attr(0755,-,-) %{_bindir}/%{name}'

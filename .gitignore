@@ -11,3 +11,9 @@
 *.lai
 *.la
 *.a
+
+# Qt
+*.pro.user*
+
+# Other
+rename-to-my-project.sh
