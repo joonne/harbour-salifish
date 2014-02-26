@@ -2,11 +2,12 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 CoverBackground {
+
     CoverPlaceholder {
         id: placeholder
         enabled: GymModel.Mode === "normal"
         text: "GymTracker"
-        icon.source: "/usr/share/icons/hicolor/86x86/apps/Gymtracker.png"
+        icon.source: "image://theme/harbour-gymtracker"
     }
 
     CoverActionList {

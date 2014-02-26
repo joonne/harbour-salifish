@@ -10,6 +10,7 @@
 #include <QVector>
 #include <QQmlContext>
 #include <QDate>
+#include <QStandardPaths>
 
 class GymModel : public QObject
 {
@@ -68,7 +69,6 @@ public:
     Q_INVOKABLE bool deleteExcerciseFromDB();
     Q_INVOKABLE bool deleteWorkoutFromDB(QString workoutName);
     Q_INVOKABLE bool getWorkouts();
-    bool getWorkoutTables();
     Q_INVOKABLE bool getWorkout(QString workout);
     Q_INVOKABLE bool updateExcercise();
     Q_INVOKABLE bool getPreviousWorkouts();

@@ -10,7 +10,8 @@ QT += sql
 
 SOURCES += main.cpp \
     user.cpp \
-    gymmodel.cpp
+    gymmodel.cpp \
+    gymdatabasemanager.cpp
 
 OTHER_FILES = \
 # You DO NOT want .yaml be listed here as Qt Creator's editor is completely not ready for multi package .yaml's
@@ -21,7 +22,6 @@ OTHER_FILES = \
 #    ../rpm/harbour-gymtracker.yaml \
     ../rpm/harbour-gymtracker.spec \
     qml/main.qml \
-    qml/pages/test.qml \
     qml/pages/WorkoutPage.qml \
     qml/pages/ShowWorkoutPage.qml \
     qml/pages/ShowDescriptionPage.qml \
@@ -40,4 +40,5 @@ INCLUDEPATH += $$PWD
 
 HEADERS += \
     user.h \
-    gymmodel.h
+    gymmodel.h \
+    gymdatabasemanager.h

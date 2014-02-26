@@ -3,6 +3,8 @@
 
 GymModel::GymModel(QObject* parent) : QObject(parent) {
 
+    currentSeriesIndex_ = 1;
+
 }
 
 GymModel::~GymModel() {
@@ -123,7 +125,7 @@ bool GymModel::getWorkouts() {
 
     workoutNames_.clear();
     workoutTableNames_.clear();
-    //getWorkoutTables();
+    getWorkoutTables();
 
     bool ret = false;
 
@@ -144,29 +146,6 @@ bool GymModel::getWorkouts() {
     }
 
     context_->setContextProperty("workoutsModel",QVariant::fromValue(workoutNames_));
-    return ret;
-}
-
-bool GymModel::getWorkoutTables() {
-
-    workoutTableNames_.clear();
-
-    bool ret = false;
-
-    if(db_.isOpen()) {
-
-        QSqlQuery query(db_);
-        ret = query.exec(QString("SELECT * FROM workoutnames;"));
-        qDebug() << query.lastError();
-
-        while(query.next()) {
-
-            workoutTableNames_ << query.value(2).toString();
-        }
-
-        qDebug() << workoutTableNames_;
-    }
-
     return ret;
 }
 
@@ -273,6 +252,10 @@ bool GymModel::openDB() {
     // Find QSLite driver
     db_ = QSqlDatabase::addDatabase("QSQLITE","dataConnection");
     db_.setDatabaseName("/home/nemo/qml/Sqlite/gymDatabase.db.sqlite");
+
+    // TODO
+    //QString dbpath = QStandardPaths::DataLocation;
+
 
     // Open databasee
     if(db_.open()) {
