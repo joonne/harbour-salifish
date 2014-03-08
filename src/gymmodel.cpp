@@ -125,7 +125,6 @@ bool GymModel::getWorkouts() {
 
     workoutNames_.clear();
     workoutTableNames_.clear();
-    getWorkoutTables();
 
     bool ret = false;
 
@@ -251,6 +250,8 @@ bool GymModel::openDB() {
 
     // Find QSLite driver
     db_ = QSqlDatabase::addDatabase("QSQLITE","dataConnection");
+//    QString dbpath = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+//    db_.setDatabaseName(dbpath);
     db_.setDatabaseName("/home/nemo/qml/Sqlite/gymDatabase.db.sqlite");
 
     // TODO

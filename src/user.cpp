@@ -127,6 +127,8 @@ bool User::openDB() {
 
     // Find QSLite driver
     db_ = QSqlDatabase::addDatabase("QSQLITE","userConnection");
+    //    QString dbpath = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+    //    db_.setDatabaseName(dbpath);
     db_.setDatabaseName("/home/nemo/qml/Sqlite/userDatabase.db.sqlite");
 
     // Open databasee

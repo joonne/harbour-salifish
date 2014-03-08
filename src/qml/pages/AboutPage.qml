@@ -3,7 +3,7 @@ import Sailfish.Silica 1.0
 
 Page {
     PageHeader {
-        title: "About GymTracker"
+        title: "About SaliFish"
     }
 
     TextArea {

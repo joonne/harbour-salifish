@@ -57,60 +57,73 @@ Page {
 
             BackgroundItem {
 
-                Text {
-                    id: item
-                    text: modelData
+
+                Rectangle {
+
+                    id: container
                     width: editworkoutpage.width
-                    color: Theme.highlightColor
-                    anchors.left: parent.left
-                    anchors.leftMargin: 50
-                    //title: "There is going to be a small description of all excercises."
-                    //"The bench press is a great excercise for building a powerful chest and body mass."
+                    height: 200
+                    color: "transparent"
+                    border.width: 10
+                    border.color: Theme.hilightColor
+
+                        Text {
+                        id: item
+                        text: modelData
+                        width: editworkoutpage.width
+                        color: Theme.highlightColor
+                        anchors.top: container.top
+                        anchors.topMargin: 20
+                        anchors.left: parent.left
+                        anchors.leftMargin: 50
+                        //title: "There is going to be a small description of all excercises."
+                        //"The bench press is a great excercise for building a powerful chest and body mass."
 
 
-                    //checked: GymModel.isExcerciseSelected(item.text) ? checked = true : checked = false
+                        //checked: GymModel.isExcerciseSelected(item.text) ? checked = true : checked = false
 
-                    MouseArea {
-                        anchors.fill: item
-                        onClicked: {
-                            GymModel.removeExcercise(item.text)
+                        MouseArea {
+                            anchors.fill: item
+                            onClicked: {
+                                //GymModel.removeExcercise(item.text)
+                            }
+
+                            onPressAndHold: {
+                                GymModel.SelectedExcercise = item.text
+                                GymModel.getExcercise(text)
+                                pageStack.push(Qt.resolvedUrl("ShowDescriptionPage.qml"))
+                            }
+                        }
+                    }
+
+                    Row {
+                        id: currentSeries
+                        anchors.top: item.bottom
+                        anchors.topMargin: 30
+
+                        IconButton {
+                            icon.source: "image://theme/icon-cover-previous"
+                            onClicked: GymModel.decreaseCurrentSeriesIndex()
                         }
 
-                        onPressAndHold: {
-                            GymModel.SelectedExcercise = item.text
-                            GymModel.getExcercise(text)
-                            pageStack.push(Qt.resolvedUrl("ShowDescriptionPage.qml"))
+                        TextField {
+                            id: seriesLabel
+                            text: "Current Series:"
+                            color: Theme.highlightColor
+                            readOnly: true
+
+                        } TextField {
+                            id: seriesCount
+                            text: GymModel.currentSeriesIndex + " / " + GymModel.getSeries(item.text)
+                            color: Theme.highlightColor
+                            readOnly: true
+
                         }
-                    }
-                }
 
-                Row {
-                    id: currentSeries
-                    anchors.top: item.bottom
-                    anchors.topMargin: 30
-
-                    IconButton {
-                        icon.source: "image://theme/icon-cover-previous"
-                        onClicked: GymModel.decreaseCurrentSeriesIndex()
-                    }
-
-                    TextField {
-                        id: seriesLabel
-                        text: "Current Series:"
-                        color: Theme.highlightColor
-                        readOnly: true
-
-                    } TextField {
-                        id: seriesCount
-                        text: GymModel.currentSeriesIndex + " / " + GymModel.getSeries(item.text)
-                        color: Theme.highlightColor
-                        readOnly: true
-
-                    }
-
-                    IconButton {
-                        icon.source: "image://theme/icon-cover-next"
-                        onClicked: GymModel.increaseCurrentSeriesIndex()
+                        IconButton {
+                            icon.source: "image://theme/icon-cover-next"
+                            onClicked: GymModel.increaseCurrentSeriesIndex()
+                        }
                     }
                 }
 
@@ -173,7 +186,7 @@ Page {
             height: 960
             anchors.top: workoutname.bottom
             anchors.bottom: parent.bottom
-            //spacing: 170
+            spacing: 150
 
             model: selectedExcercisesModel
             delegate: excerciseDelegate

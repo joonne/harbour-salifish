@@ -6,7 +6,7 @@ CoverBackground {
     CoverPlaceholder {
         id: placeholder
         enabled: GymModel.Mode === "normal"
-        text: "GymTracker"
+        text: "SaliFish"
         icon.source: "image://theme/harbour-gymtracker"
     }
 

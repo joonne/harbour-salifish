@@ -7,8 +7,7 @@
 #include <QFile>
 #include <QSqlQuery>
 #include <QTextStream>
-#include <QVariant>
-#include <QMetaType>
+#include <QStandardPaths>
 
 class GymDatabase : public QObject
 {
@@ -21,6 +20,8 @@ public:
     bool deleteDB();
     QSqlError lastError();
     void close();
+    bool createDB();
+    bool upgradeDB();
 
     bool createChestTable();
     bool insertChestExcercise(QString name, QString description);
@@ -69,7 +70,6 @@ public:
 
     bool createPreviousWorkoutsTable(QString workoutname);
     bool insertPreviousWorkoutExcercise(QString workoutname);
-
 
 private:
 

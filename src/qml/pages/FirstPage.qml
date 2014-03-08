@@ -12,7 +12,7 @@ Page {
         PullDownMenu {
 
             MenuItem {
-                text: "About Gymtracker"
+                text: "About SaliFish"
                 onClicked: {
                     GymModel.Mode = "normal"
                     pageStack.push(Qt.resolvedUrl("AboutPage.qml"))
@@ -54,7 +54,7 @@ Page {
         contentHeight: parent.height
 
         PageHeader {
-            title: "Gymtracker"
+            title: "SaliFish"
         }
 
         Label {
