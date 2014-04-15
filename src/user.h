@@ -9,6 +9,8 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlDriver>
+#include <QDir>
+#include <QStandardPaths>
 
 class User : public QObject
 {

@@ -12,6 +12,31 @@ GymModel::~GymModel() {
     clean();
 }
 
+bool GymModel::openDB() {
+
+    // Find QSLite driver
+    db_ = QSqlDatabase::addDatabase("QSQLITE","dataConnection");
+    QString dbname = "gymDatabase.db.sqlite";
+    QString dbpath = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QDir::separator() + dbname;
+    //QString dbpath = "/usr/share/harbour-gymtracker/databases/" + dbname;
+    db_.setDatabaseName(dbpath);
+    //db_.setDatabaseName("/home/nemo/qml/Sqlite/gymDatabase.db.sqlite");
+
+    // Open databasee
+    if(db_.open()) {
+        QStringList tables = db_.tables();
+        qDebug() << "Tables: " << tables;
+        return true;
+    } else {
+        qDebug() << db_.lastError();
+        return false;
+    }
+}
+
+void GymModel::closeDB() {
+    db_.close();
+}
+
 QString GymModel::getName() {
 
     return name_;
@@ -244,33 +269,6 @@ bool GymModel::getExcercise(QString excercise) {
     }
 
     return ret;
-}
-
-bool GymModel::openDB() {
-
-    // Find QSLite driver
-    db_ = QSqlDatabase::addDatabase("QSQLITE","dataConnection");
-//    QString dbpath = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
-//    db_.setDatabaseName(dbpath);
-    db_.setDatabaseName("/home/nemo/qml/Sqlite/gymDatabase.db.sqlite");
-
-    // TODO
-    //QString dbpath = QStandardPaths::DataLocation;
-
-
-    // Open databasee
-    if(db_.open()) {
-        QStringList tables = db_.tables();
-        qDebug() << "Tables: " << tables;
-        return true;
-    } else {
-        qDebug() << db_.lastError();
-        return false;
-    }
-}
-
-void GymModel::closeDB() {
-    db_.close();
 }
 
 bool GymModel::insertExcerciseName(QString excerciseName) {
@@ -760,20 +758,20 @@ void GymModel::setSeries(QString excercisename,int series) {
 
     qDebug() << "Setting series";
 
-//    if(findWorkoutIndex(workoutName_)) {
+    //    if(findWorkoutIndex(workoutName_)) {
 
-//        int workoutIndex = workoutIndex_ - 1;
-//        QString tablename = workoutTableNames_.at(workoutIndex);
+    //        int workoutIndex = workoutIndex_ - 1;
+    //        QString tablename = workoutTableNames_.at(workoutIndex);
 
-//        findWorkoutExcerciseIndex(excercisename);
+    //        findWorkoutExcerciseIndex(excercisename);
 
-//        if(db_.isOpen()) {
-//            QSqlQuery query(db_);
-//            query.exec(QString("UPDATE '%1' SET series = '%2' WHERE ID = %3 ;")
-//                       .arg(tablename).arg(series).arg(workoutExcerciseIndex_));
+    //        if(db_.isOpen()) {
+    //            QSqlQuery query(db_);
+    //            query.exec(QString("UPDATE '%1' SET series = '%2' WHERE ID = %3 ;")
+    //                       .arg(tablename).arg(series).arg(workoutExcerciseIndex_));
 
-//        }
-//    }
+    //        }
+    //    }
 }
 
 int GymModel::getRepeats(QString excerciseName, int currentSerie) {
@@ -805,23 +803,23 @@ void GymModel::setRepeats(QString excercisename, int repeats, int currentSerie) 
 
     qDebug() << "setting repeats";
 
-//    QString serierepeats = "repeats";
-//    serierepeats = serierepeats + currentSerie;
+    //    QString serierepeats = "repeats";
+    //    serierepeats = serierepeats + currentSerie;
 
-//    if(findWorkoutIndex(workoutName_)) {
+    //    if(findWorkoutIndex(workoutName_)) {
 
-//        int workoutIndex = workoutIndex_ - 1;
-//        QString tablename = workoutTableNames_.at(workoutIndex);
+    //        int workoutIndex = workoutIndex_ - 1;
+    //        QString tablename = workoutTableNames_.at(workoutIndex);
 
-//        findWorkoutExcerciseIndex(excercisename);
+    //        findWorkoutExcerciseIndex(excercisename);
 
-//        if(db_.isOpen()) {
-//            QSqlQuery query(db_);
-//            query.exec(QString("UPDATE '%1' SET '%2' = '%3' WHERE ID = %4 ;")
-//                       .arg(tablename).arg(repeats).arg(serierepeats).arg(workoutExcerciseIndex_));
+    //        if(db_.isOpen()) {
+    //            QSqlQuery query(db_);
+    //            query.exec(QString("UPDATE '%1' SET '%2' = '%3' WHERE ID = %4 ;")
+    //                       .arg(tablename).arg(repeats).arg(serierepeats).arg(workoutExcerciseIndex_));
 
-//        }
-//    }
+    //        }
+    //    }
 }
 
 double GymModel::getWeights(QString excerciseName, int currentSerie) {
@@ -853,42 +851,42 @@ void GymModel::setWeights(QString excercisename, double weights, int currentSeri
 
     qDebug() << "setting weights";
 
-//    QString serieweights = "weights";
-//    serieweights = serieweights + currentSerie;
+    //    QString serieweights = "weights";
+    //    serieweights = serieweights + currentSerie;
 
-//    if(findWorkoutIndex(workoutName_)) {
+    //    if(findWorkoutIndex(workoutName_)) {
 
-//        int workoutIndex = workoutIndex_ - 1;
-//        QString tablename = workoutTableNames_.at(workoutIndex);
+    //        int workoutIndex = workoutIndex_ - 1;
+    //        QString tablename = workoutTableNames_.at(workoutIndex);
 
-//        findWorkoutExcerciseIndex(excercisename);
+    //        findWorkoutExcerciseIndex(excercisename);
 
-//        if(db_.isOpen()) {
-//            QSqlQuery query(db_);
-//            query.exec(QString("UPDATE '%1' SET '%2' = '%3' WHERE ID = %4 ;")
-//                       .arg(tablename).arg(weights).arg(serieweights).arg(workoutExcerciseIndex_));
+    //        if(db_.isOpen()) {
+    //            QSqlQuery query(db_);
+    //            query.exec(QString("UPDATE '%1' SET '%2' = '%3' WHERE ID = %4 ;")
+    //                       .arg(tablename).arg(weights).arg(serieweights).arg(workoutExcerciseIndex_));
 
-//        }
-//    }
+    //        }
+    //    }
 }
 
 QString GymModel::getComments(QString excerciseName) {
 
     QString comments = "";
 
-//    if(findWorkoutIndex(workoutName_)) {
+    //    if(findWorkoutIndex(workoutName_)) {
 
-//        int workoutIndex = workoutIndex_ - 1;
-//        QString tablename = workoutTableNames_.at(workoutIndex);
+    //        int workoutIndex = workoutIndex_ - 1;
+    //        QString tablename = workoutTableNames_.at(workoutIndex);
 
-//        qDebug() << "get comments of " << excerciseName << " from " << tablename;
+    //        qDebug() << "get comments of " << excerciseName << " from " << tablename;
 
-//        if(db_.isOpen()) {
-//            QSqlQuery query(db_);
-//            query.exec(QString("SELECT comments FROM '%1 WHERE excercisename = '%2';").arg(tablename).arg(excerciseName));
-//            if(query.next()) comments = query.value(1).toString();
-//        }
-//    }
+    //        if(db_.isOpen()) {
+    //            QSqlQuery query(db_);
+    //            query.exec(QString("SELECT comments FROM '%1 WHERE excercisename = '%2';").arg(tablename).arg(excerciseName));
+    //            if(query.next()) comments = query.value(1).toString();
+    //        }
+    //    }
 
     return comments;
 }
@@ -897,20 +895,20 @@ void GymModel::setComments(QString excercisename, QString comments) {
 
     qDebug() << "setting comments";
 
-//    if(findWorkoutIndex(workoutName_)) {
+    //    if(findWorkoutIndex(workoutName_)) {
 
-//        int workoutIndex = workoutIndex_ - 1;
-//        QString tablename = workoutTableNames_.at(workoutIndex);
+    //        int workoutIndex = workoutIndex_ - 1;
+    //        QString tablename = workoutTableNames_.at(workoutIndex);
 
-//        findWorkoutExcerciseIndex(excercisename);
+    //        findWorkoutExcerciseIndex(excercisename);
 
-//        if(db_.isOpen()) {
-//            QSqlQuery query(db_);
-//            query.exec(QString("UPDATE '%1' SET comments = '%2' WHERE ID = %3 ;")
-//                       .arg(tablename).arg(comments).arg(workoutExcerciseIndex_));
+    //        if(db_.isOpen()) {
+    //            QSqlQuery query(db_);
+    //            query.exec(QString("UPDATE '%1' SET comments = '%2' WHERE ID = %3 ;")
+    //                       .arg(tablename).arg(comments).arg(workoutExcerciseIndex_));
 
-//        }
-//    }
+    //        }
+    //    }
 }
 
 QString GymModel::nextCoverExcercise() {

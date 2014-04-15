@@ -5,9 +5,11 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QFile>
+#include <QDir>
 #include <QSqlQuery>
 #include <QTextStream>
 #include <QStandardPaths>
+#include <QVariant>
 
 class GymDatabase : public QObject
 {
@@ -16,12 +18,18 @@ public:
     explicit GymDatabase(QObject *parent = 0);
     ~GymDatabase();
 
+    void setUpDB();
+
     bool openDB();
     bool deleteDB();
     QSqlError lastError();
     void close();
     bool createDB();
-    bool upgradeDB();
+    bool updateDB();
+
+    bool initializeInfoTable();
+    bool createInfoTable();
+    bool updateInfoTable(double version);
 
     bool createChestTable();
     bool insertChestExcercise(QString name, QString description);

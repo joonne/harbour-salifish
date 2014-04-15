@@ -3,19 +3,37 @@
 UserDatabase::UserDatabase(QObject *parent) :
     QObject(parent)
 {
+    setUpDB();
+    close();
 }
 
-UserDatabase::~UserDatabase() {}
+UserDatabase::~UserDatabase() {
+
+    qDebug() << "Destroying userdbmanager..";
+    deleteDB();
+
+}
 
 bool UserDatabase::openDB() {
 
-    // Find QSLite driver
-    db = QSqlDatabase::addDatabase("QSQLITE");
-    QString dbpath = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
-    dbpath = dbpath + "/gymDatabase.db.sqlite";
-    db.setDatabaseName(dbpath);
+    QString dbname = "userDatabase.db.sqlite";
+    QString dbpath = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QDir::separator() + dbname;
+    //QString dbpath = "/usr/share/harbour-gymtracker/databases/" + dbname;
+    QDir path(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QDir::separator() + dbname);
 
-    // Open databasee
+    if(!path.exists()) {
+
+        path.mkpath(dbpath);
+
+    } else {
+
+        // Find SQLite driver
+        db = QSqlDatabase::addDatabase("QSQLITE","userdbmanager");
+        db.setDatabaseName(dbpath);
+
+    }
+
+    // Open database
     return db.open();
 }
 
@@ -32,11 +50,32 @@ bool UserDatabase::deleteDB() {
     db.close();
 
     // Remove created database binary file
-    return QFile::remove("userDatabase.db.sqlite");
-}
+    QString dbname = "userDatabase.db.sqlite";
+    QString dbpath = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QDir::separator() + dbname;
+    return QFile::remove(dbpath);}
 
 void UserDatabase::close() {
     db.close();
+}
+
+void UserDatabase::setUpDB() {
+
+    if(openDB()) {
+
+        QSqlQuery query(db);
+        query.exec("SELECT count(*) FROM sqlite_master WHERE type = 'table';");
+        int tableCount = query.value(0).toInt();
+        qDebug() << "Tables in userdatabase: " << tableCount;
+
+        if(tableCount == 0) {
+
+            createDB();
+
+        }
+    }
+
+    close();
+
 }
 
 bool UserDatabase::createUserTable() {
@@ -71,4 +110,11 @@ bool UserDatabase::insertUser(QString name, int age, QString gender, double heig
 
     }
     return ret;
+}
+
+bool UserDatabase::createDB() {
+
+    if(createUserTable()) {
+        insertUser("Jonne Pihlanen",23,"male",177,77);
+    }
 }

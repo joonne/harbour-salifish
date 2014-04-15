@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import QtQuick.Controls 1.0
 import Sailfish.Silica 1.0
 
 Page {
@@ -67,7 +68,7 @@ Page {
                     border.width: 10
                     border.color: Theme.hilightColor
 
-                        Text {
+                    Text {
                         id: item
                         text: modelData
                         width: editworkoutpage.width
@@ -125,72 +126,76 @@ Page {
                             onClicked: GymModel.increaseCurrentSeriesIndex()
                         }
                     }
+
+                    Row {
+                        id: specifications
+                        anchors.top: currentSeries.bottom
+                        anchors.topMargin: 10
+
+
+
+
+//                        TextField {
+//                            id: series
+//                            width: (editworkoutpage.width - 40) / 3
+//                            text: GymModel.getSeries(item.text)
+//                            anchors.top: item.bottom
+//                            anchors.topMargin: 10
+//                            label: "Series"
+//                            focus: false
+//                            EnterKey.enabled: text.length > 0
+//                            EnterKey.onClicked: {
+//                                GymModel.setSeries(item.text,GymModel.getCurrentSeriesIndex())
+//                                repeats.focus = true
+//                            }
+
+//                        } TextField {
+//                            id: repeats
+//                            width: (editworkoutpage.width - 40) / 3
+//                            text: GymModel.getRepeats(item.text,GymModel.currentSeriesIndex)
+//                            anchors.top: item.bottom
+//                            anchors.topMargin: 10
+//                            label: "Repeats"
+//                            focus: false
+//                            EnterKey.enabled: text.length > 0
+//                            EnterKey.onClicked: {
+//                                GymModel.setRepeats(item.text,repeats.text,GymModel.getCurrentSeriesIndex())
+//                                weights.focus = true
+//                            }
+
+//                        } TextField {
+//                            id: weights
+//                            width: (editworkoutpage.width - 40) / 3
+//                            text: GymModel.getWeights(item.text,GymModel.currentSeriesIndex)
+//                            anchors.top: item.bottom
+//                            anchors.topMargin: 10
+//                            label: "Weights"
+//                            focus: false
+//                            EnterKey.enabled: text.length > 0
+//                            EnterKey.onClicked: {
+//                                GymModel.setWeights(item.text,weights.text,GymModel.getCurrentSeriesIndex())
+//                                focus = false
+//                            }
+//                        }
+                    }
                 }
-
-                //                Row {
-                //                    id: specifications
-                //                    anchors.top: currentSeries.bottom
-                //                    anchors.topMargin: 10
-
-                //                    TextField {
-                //                        id: series
-                //                        width: (editworkoutpage.width - 40) / 3
-                //                        text: GymModel.getSeries(item.text)
-                //                        anchors.top: item.bottom
-                //                        anchors.topMargin: 10
-                //                        label: "Series"
-                //                        focus: false
-                //                        EnterKey.enabled: text.length > 0
-                //                        EnterKey.onClicked: {
-                //                            GymModel.setSeries(item.text,GymModel.getCurrentSeriesIndex())
-                //                            repeats.focus = true
-                //                        }
-
-                //                    } TextField {
-                //                        id: repeats
-                //                        width: (editworkoutpage.width - 40) / 3
-                //                        text: GymModel.getRepeats(item.text,GymModel.currentSeriesIndex)
-                //                        anchors.top: item.bottom
-                //                        anchors.topMargin: 10
-                //                        label: "Repeats"
-                //                        focus: false
-                //                        EnterKey.enabled: text.length > 0
-                //                        EnterKey.onClicked: {
-                //                            GymModel.setRepeats(item.text,repeats.text,GymModel.getCurrentSeriesIndex())
-                //                            weights.focus = true
-                //                        }
-
-                //                    } TextField {
-                //                        id: weights
-                //                        width: (editworkoutpage.width - 40) / 3
-                //                        text: GymModel.getWeights(item.text,GymModel.currentSeriesIndex)
-                //                        anchors.top: item.bottom
-                //                        anchors.topMargin: 10
-                //                        label: "Weights"
-                //                        focus: false
-                //                        EnterKey.enabled: text.length > 0
-                //                        EnterKey.onClicked: {
-                //                            GymModel.setWeights(item.text,weights.text,GymModel.getCurrentSeriesIndex())
-                //                            focus = false
-                //                        }
-                //                    }
             }
-        }
 
-        SilicaListView {
+            SilicaListView {
 
-            VerticalScrollDecorator {}
+                VerticalScrollDecorator {}
 
-            id: list
-            width: 540
-            height: 960
-            anchors.top: workoutname.bottom
-            anchors.bottom: parent.bottom
-            spacing: 150
+                id: list
+                width: 540
+                height: 960
+                anchors.top: workoutname.bottom
+                anchors.bottom: parent.bottom
+                spacing: 150
 
-            model: selectedExcercisesModel
-            delegate: excerciseDelegate
+                model: selectedExcercisesModel
+                delegate: excerciseDelegate
 
+            }
         }
     }
 }

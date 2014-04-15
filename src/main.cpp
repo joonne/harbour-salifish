@@ -22,12 +22,11 @@ int main(int argc, char *argv[])
     QScopedPointer<QGuiApplication> app(SailfishApp::application(argc, argv));
     QScopedPointer<QQuickView> view(SailfishApp::createView());
 
-    QString dbpath = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
-    dbpath = dbpath + "/gymDatabase.db.sqlite";
-    qDebug() << "Databases will be created in " << dbpath;
+    GymDatabase* gymDB = new GymDatabase();
+    //gymDB->setUpDB();
 
-    //    GymDatabase gymDB;
-    //    gymDB::createDB();
+    UserDatabase* userDB = new UserDatabase();
+    //userDB->setUpDB();
 
     User* user = new User();
     if(user->openDB()) user->getUser();
@@ -50,6 +49,8 @@ int main(int argc, char *argv[])
 
     app->exec();
 
+    delete userDB;
+    delete gymDB;
     delete user;
     delete model;
 }

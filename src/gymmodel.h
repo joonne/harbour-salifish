@@ -11,6 +11,7 @@
 #include <QQmlContext>
 #include <QDate>
 #include <QStandardPaths>
+#include <QDir>
 
 class GymModel : public QObject
 {
