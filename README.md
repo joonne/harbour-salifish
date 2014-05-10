@@ -1,4 +1,4 @@
-GymTracker
+SaliFish
 ==========
 
-GymTracker for Sailfish OS
+Browse gym excercises and create/manage your workouts.
