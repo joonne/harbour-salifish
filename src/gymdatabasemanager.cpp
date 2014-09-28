@@ -54,13 +54,11 @@ bool GymDatabase::openDB() {
 
         path.mkpath(dbpath);
 
-    } else {
-
-        // Find SQLite driver
-        db = QSqlDatabase::addDatabase("QSQLITE","gymdbmanager");
-        db.setDatabaseName(dbpath);
-
     }
+
+    // Find SQLite driver
+    db = QSqlDatabase::addDatabase("QSQLITE","gymdbmanager");
+    db.setDatabaseName(dbpath);
 
     // Open databasee
     return db.open();
