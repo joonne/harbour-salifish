@@ -18,7 +18,7 @@ bool GymModel::openDB() {
     db_ = QSqlDatabase::addDatabase("QSQLITE","dataConnection");
     QString dbname = "gymDatabase.db.sqlite";
     QString dbpath = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QDir::separator() + dbname;
-    //QString dbpath = "/usr/share/harbour-gymtracker/databases/" + dbname;
+    //QString dbpath = "/usr/share/harbour-salifish/databases/" + dbname;
     db_.setDatabaseName(dbpath);
     //db_.setDatabaseName("/home/nemo/qml/Sqlite/gymDatabase.db.sqlite");
 

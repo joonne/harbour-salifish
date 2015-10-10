@@ -1,7 +1,7 @@
 TEMPLATE = app
 
 # The name of your app
-TARGET = tst-harbour-gymtracker
+TARGET = tst-harbour-salifish
 
 CONFIG += qmltestcase
 

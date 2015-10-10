@@ -7,7 +7,7 @@ CoverBackground {
         id: placeholder
         enabled: GymModel.Mode === "normal"
         text: "SaliFish"
-        icon.source: "image://theme/harbour-gymtracker"
+        icon.source: "image://theme/harbour-salifish"
     }
 
     CoverActionList {

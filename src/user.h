@@ -12,6 +12,8 @@
 #include <QDir>
 #include <QStandardPaths>
 
+#include "databasemanager.h"
+
 class User : public QObject
 {
     Q_OBJECT
@@ -70,15 +72,15 @@ signals:
 
 
 private:
-    QString name_;
-    int age_;
-    QString gender_;
-    double height_;
-    double weight_;
-    double BMI_;
-    QString BMIdescription_;
-    double BMR_;
-    QSqlDatabase db_;
+    QString myName;
+    int myAge;
+    QString myGender;
+    double myHeight;
+    double myWeight;
+    double myBMI;
+    QString myBMIdescription;
+    double BMR;
+    DatabaseManager mydbmanager;
 
 };
 

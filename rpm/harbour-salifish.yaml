@@ -1,4 +1,4 @@
-Name: harbour-gymtracker
+Name: harbour-salifish
 Summary: GymTracker for Sailfish
 Version: 0.5
 Release: 5
@@ -25,7 +25,7 @@ Files:
 - '%attr(0755,-,-) %{_bindir}/%{name}'
 PkgBR: []
 SubPackages:
-- Name: harbour-gymtracker
+- Name: harbour-salifish
   Summary: GymTracker for Sailfish
   Group: Qt/Qt
   Description: |-

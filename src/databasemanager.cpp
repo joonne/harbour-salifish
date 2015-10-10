@@ -1,27 +1,27 @@
-#include "gymdatabasemanager.h"
+#include "databasemanager.h"
 #include <QDebug>
 
-GymDatabase::GymDatabase(QObject *parent) :
+DatabaseManager::DatabaseManager(QObject *parent) :
     QObject(parent)
 {
     setUpDB();
     close();
 }
 
-GymDatabase::~GymDatabase() {
+DatabaseManager::~DatabaseManager() {
 
     qDebug() << "Destroying gymdbmanager..";
     deleteDB();
 }
 
-void GymDatabase::setUpDB() {
+void DatabaseManager::setUpDB() {
 
     if(openDB()) {
 
         QSqlQuery query(db);
         query.exec("SELECT count(*) FROM sqlite_master WHERE type = 'table';");
         int tableCount = query.value(1).toInt();
-        qDebug() << "Tables in gymdatabase: " << tableCount;
+        qDebug() << "Tables in DatabaseManager: " << tableCount;
 
         if(tableCount == 0) {
 
@@ -43,50 +43,47 @@ void GymDatabase::setUpDB() {
 
 }
 
-bool GymDatabase::openDB() {
+bool DatabaseManager::openDB() {
 
-    QString dbname = "gymDatabase.db.sqlite";
+    QString dbname = "salifish.db.sqlite";
     QString dbpath = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QDir::separator() + dbname;
-    //QString dbpath = "/usr/share/harbour-gymtracker/databases/" + dbname;
-    QDir path(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QDir::separator() + dbname);
+    QDir dir(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
 
-    if(!path.exists()) {
-
-        path.mkpath(dbpath);
-
+    if(!dir.exists()) {
+        dir.mkpath(".");
     }
 
     // Find SQLite driver
-    db = QSqlDatabase::addDatabase("QSQLITE","gymdbmanager");
+    db = QSqlDatabase::addDatabase("QSQLITE","databasemanager");
     db.setDatabaseName(dbpath);
 
     // Open databasee
     return db.open();
 }
 
-QSqlError GymDatabase::lastError() {
+QSqlError DatabaseManager::lastError() {
 
     // If opening database has failed user can ask
     // error description by QSqlError::text()
     return db.lastError();
 }
 
-bool GymDatabase::deleteDB() {
+bool DatabaseManager::deleteDB() {
 
     // Close database
     db.close();
 
     // Remove created database binary file
-    QString dbname = "gymDatabase.db.sqlite";
+    QString dbname = "DatabaseManager.db.sqlite";
     QString dbpath = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QDir::separator() + dbname;
     return QFile::remove(dbpath);
 }
 
-void GymDatabase::close() {
+void DatabaseManager::close() {
     db.close();
 }
 
-bool GymDatabase::initializeInfoTable() {
+bool DatabaseManager::initializeInfoTable() {
 
     bool ret = createInfoTable();
 
@@ -99,7 +96,7 @@ bool GymDatabase::initializeInfoTable() {
     return false;
 }
 
-bool GymDatabase::createInfoTable() {
+bool DatabaseManager::createInfoTable() {
 
     bool ret = false;
 
@@ -113,7 +110,7 @@ bool GymDatabase::createInfoTable() {
     return ret;
 }
 
-bool GymDatabase::updateInfoTable(double version) {
+bool DatabaseManager::updateInfoTable(double version) {
 
     bool ret = false;
     if(db.isOpen()) {
@@ -124,7 +121,7 @@ bool GymDatabase::updateInfoTable(double version) {
     return ret;
 }
 
-bool GymDatabase::createChestTable() {
+bool DatabaseManager::createChestTable() {
 
     // Create table "chest"
     bool ret = false;
@@ -140,7 +137,7 @@ bool GymDatabase::createChestTable() {
     return ret;
 }
 
-bool GymDatabase::insertChestExcercise(QString name, QString description) {
+bool DatabaseManager::insertChestExcercise(QString name, QString description) {
 
     bool ret = false;
 
@@ -154,7 +151,7 @@ bool GymDatabase::insertChestExcercise(QString name, QString description) {
     return ret;
 }
 
-bool GymDatabase::createShouldersTable() {
+bool DatabaseManager::createShouldersTable() {
 
     // Create table shoulders
     bool ret = false;
@@ -170,7 +167,7 @@ bool GymDatabase::createShouldersTable() {
     return ret;
 }
 
-bool GymDatabase::insertShouldersExcercise(QString name, QString description) {
+bool DatabaseManager::insertShouldersExcercise(QString name, QString description) {
 
     bool ret = false;
 
@@ -184,7 +181,7 @@ bool GymDatabase::insertShouldersExcercise(QString name, QString description) {
     return ret;
 }
 
-bool GymDatabase::createAbsTable() {
+bool DatabaseManager::createAbsTable() {
 
     // Create table abs
     bool ret = false;
@@ -200,7 +197,7 @@ bool GymDatabase::createAbsTable() {
     return ret;
 }
 
-bool GymDatabase::insertAbsEcercise(QString name, QString description) {
+bool DatabaseManager::insertAbsEcercise(QString name, QString description) {
 
     bool ret = false;
 
@@ -214,7 +211,7 @@ bool GymDatabase::insertAbsEcercise(QString name, QString description) {
     return ret;
 }
 
-bool GymDatabase::createBicepsTable() {
+bool DatabaseManager::createBicepsTable() {
 
     // Create table biceps
     bool ret = false;
@@ -230,7 +227,7 @@ bool GymDatabase::createBicepsTable() {
     return ret;
 }
 
-bool GymDatabase::insertBicepsExcercise(QString name, QString description) {
+bool DatabaseManager::insertBicepsExcercise(QString name, QString description) {
 
     bool ret = false;
 
@@ -244,7 +241,7 @@ bool GymDatabase::insertBicepsExcercise(QString name, QString description) {
     return ret;
 }
 
-bool GymDatabase::createForearmsTable() {
+bool DatabaseManager::createForearmsTable() {
 
     bool ret = false;
     if (db.isOpen()) {
@@ -259,7 +256,7 @@ bool GymDatabase::createForearmsTable() {
     return ret;
 }
 
-bool GymDatabase::insertForearmsExcercise(QString name, QString description) {
+bool DatabaseManager::insertForearmsExcercise(QString name, QString description) {
 
     bool ret = false;
 
@@ -273,7 +270,7 @@ bool GymDatabase::insertForearmsExcercise(QString name, QString description) {
     return ret;
 }
 
-bool GymDatabase::createQuadsTable() {
+bool DatabaseManager::createQuadsTable() {
 
     // Create table quads
     bool ret = false;
@@ -289,7 +286,7 @@ bool GymDatabase::createQuadsTable() {
     return ret;
 }
 
-bool GymDatabase::insertQuadsExcercise(QString name, QString description) {
+bool DatabaseManager::insertQuadsExcercise(QString name, QString description) {
 
     bool ret = false;
 
@@ -303,7 +300,7 @@ bool GymDatabase::insertQuadsExcercise(QString name, QString description) {
     return ret;
 }
 
-bool GymDatabase::createCalvesTable() {
+bool DatabaseManager::createCalvesTable() {
 
     // Create table calves
     bool ret = false;
@@ -319,7 +316,7 @@ bool GymDatabase::createCalvesTable() {
     return ret;
 }
 
-bool GymDatabase::insertCalvesExcercise(QString name, QString description) {
+bool DatabaseManager::insertCalvesExcercise(QString name, QString description) {
 
     bool ret = false;
 
@@ -333,7 +330,7 @@ bool GymDatabase::insertCalvesExcercise(QString name, QString description) {
     return ret;
 }
 
-bool GymDatabase::createTrapeziusTable() {
+bool DatabaseManager::createTrapeziusTable() {
 
     // Create table trapezius
     bool ret = false;
@@ -349,7 +346,7 @@ bool GymDatabase::createTrapeziusTable() {
     return ret;
 }
 
-bool GymDatabase::insertTrapeziusExcercise(QString name, QString description) {
+bool DatabaseManager::insertTrapeziusExcercise(QString name, QString description) {
 
     bool ret = false;
 
@@ -363,7 +360,7 @@ bool GymDatabase::insertTrapeziusExcercise(QString name, QString description) {
     return ret;
 }
 
-bool GymDatabase::createLatsTable() {
+bool DatabaseManager::createLatsTable() {
 
     // Create table lats
     bool ret = false;
@@ -379,7 +376,7 @@ bool GymDatabase::createLatsTable() {
     return ret;
 }
 
-bool GymDatabase::insertLatsExcercise(QString name, QString description) {
+bool DatabaseManager::insertLatsExcercise(QString name, QString description) {
 
     bool ret = false;
 
@@ -393,7 +390,7 @@ bool GymDatabase::insertLatsExcercise(QString name, QString description) {
     return ret;
 }
 
-bool GymDatabase::createTricepsTable() {
+bool DatabaseManager::createTricepsTable() {
 
     // Create table triceps
     bool ret = false;
@@ -409,7 +406,7 @@ bool GymDatabase::createTricepsTable() {
     return ret;
 }
 
-bool GymDatabase::insertTricepsExcercise(QString name, QString description) {
+bool DatabaseManager::insertTricepsExcercise(QString name, QString description) {
 
     bool ret = false;
 
@@ -423,7 +420,7 @@ bool GymDatabase::insertTricepsExcercise(QString name, QString description) {
     return ret;
 }
 
-bool GymDatabase::createGlutesTable() {
+bool DatabaseManager::createGlutesTable() {
 
     // Create table glutes
     bool ret = false;
@@ -439,7 +436,7 @@ bool GymDatabase::createGlutesTable() {
     return ret;
 }
 
-bool GymDatabase::insertGlutesExcercise(QString name, QString description) {
+bool DatabaseManager::insertGlutesExcercise(QString name, QString description) {
 
     bool ret = false;
 
@@ -453,7 +450,7 @@ bool GymDatabase::insertGlutesExcercise(QString name, QString description) {
     return ret;
 }
 
-bool GymDatabase::createHamstringsTable() {
+bool DatabaseManager::createHamstringsTable() {
 
     // Create table hamstrings
     bool ret = false;
@@ -469,7 +466,7 @@ bool GymDatabase::createHamstringsTable() {
     return ret;
 }
 
-bool GymDatabase::insertHamstringsExcercise(QString name, QString description) {
+bool DatabaseManager::insertHamstringsExcercise(QString name, QString description) {
 
     bool ret = false;
 
@@ -483,7 +480,7 @@ bool GymDatabase::insertHamstringsExcercise(QString name, QString description) {
     return ret;
 }
 
-bool GymDatabase::insertWorkout(QString workoutname) {
+bool DatabaseManager::insertWorkout(QString workoutname) {
 
     bool ret = false;
 
@@ -545,7 +542,7 @@ bool GymDatabase::insertWorkout(QString workoutname) {
     return ret;
 }
 
-bool GymDatabase::createWorkoutTable(QString workoutname) {
+bool DatabaseManager::createWorkoutTable(QString workoutname) {
 
     QStringRef sub(&workoutname, 0, 3);
     QString tablename = sub.toString() + "-workout";
@@ -575,7 +572,7 @@ bool GymDatabase::createWorkoutTable(QString workoutname) {
 }
 
 
-bool GymDatabase::createWorkoutNamesTable() {
+bool DatabaseManager::createWorkoutNamesTable() {
 
     bool ret = false;
     if (db.isOpen()) {
@@ -590,7 +587,7 @@ bool GymDatabase::createWorkoutNamesTable() {
     return ret;
 }
 
-bool GymDatabase::insertWorkoutName(QString name) {
+bool DatabaseManager::insertWorkoutName(QString name) {
 
     QStringRef sub(&name, 0, 3);
     QString tablename = sub.toString() + "-workout";
@@ -607,7 +604,7 @@ bool GymDatabase::insertWorkoutName(QString name) {
     return ret;
 }
 
-bool GymDatabase::createPreviousWorkoutNamesTable() {
+bool DatabaseManager::createPreviousWorkoutNamesTable() {
 
     bool ret = false;
     if (db.isOpen()) {
@@ -623,7 +620,7 @@ bool GymDatabase::createPreviousWorkoutNamesTable() {
     return ret;
 }
 
-bool GymDatabase::insertPreviousWorkoutName(QString name, QString date) {
+bool DatabaseManager::insertPreviousWorkoutName(QString name, QString date) {
 
     QStringRef sub(&name, 0, 3);
     QString tablename = sub.toString() + "-doneworkout";
@@ -641,7 +638,7 @@ bool GymDatabase::insertPreviousWorkoutName(QString name, QString date) {
 }
 
 
-bool GymDatabase::createPreviousWorkoutsTable(QString workoutname) {
+bool DatabaseManager::createPreviousWorkoutsTable(QString workoutname) {
 
     QStringRef sub(&workoutname, 0, 3);
     QString tablename = sub.toString() + "-doneworkout";
@@ -672,7 +669,7 @@ bool GymDatabase::createPreviousWorkoutsTable(QString workoutname) {
     return ret;
 }
 
-bool GymDatabase::insertPreviousWorkoutExcercise(QString workoutname) {
+bool DatabaseManager::insertPreviousWorkoutExcercise(QString workoutname) {
 
     QStringRef sub(&workoutname, 0, 3);
     QString tablename = sub.toString() + "-doneworkout";
@@ -699,7 +696,7 @@ bool GymDatabase::insertPreviousWorkoutExcercise(QString workoutname) {
     return ret;
 }
 
-bool GymDatabase::createDB() {
+bool DatabaseManager::createDB() {
 
     if(db.isOpen()) {
 
@@ -894,11 +891,91 @@ bool GymDatabase::createDB() {
     return true;
 }
 
+bool DatabaseManager::createUserTable() {
+
+    // Create table "user"
+    bool ret = false;
+    if (db.isOpen()) {
+
+        QSqlQuery query(db);
+        ret = query.exec("create table user"
+                         "(id integer primary key, "
+                         "name varchar(50), "
+                         "age integer, "
+                         "gender varchar(10), "
+                         "height real, "
+                         "weight real)");
+
+
+    }
+    return ret;
+}
+
+bool DatabaseManager::insertUser(QString name, int age, QString gender, double height, double weight) {
+
+    bool ret = false;
+
+    if (db.isOpen()) {
+
+        QSqlQuery query(db);
+        ret = query.exec(QString("insert into user values(NULL,'%1',%2,'%3',%4,%5)")
+                         .arg(name).arg(age).arg(gender).arg(height).arg(weight));
+
+    }
+    return ret;
+}
+
 // This function is used to update the database, upcoming changes are coming trough this.
-bool GymDatabase::updateDB() {
+bool DatabaseManager::updateDB() {
 
     //updateInfoTable(2.0);
 
     qDebug() << "Updating database...";
+
+}
+
+// returns all users from db
+QMap<QString,QString> DatabaseManager::getUser() {
+
+    bool ret = false;
+    QString name;
+    int age;
+    QString gender;
+    double height;
+    double weight;
+
+    QMap<QString,QString> temp;
+
+    if(db.isOpen()) {
+
+        QSqlQuery query(db);
+        ret = query.exec("SELECT * FROM user;");
+
+        if (query.isSelect()) {
+
+            name = query.value(1).toString();
+            temp.insert("name", name);
+
+            age = query.value(2).toInt();
+            temp.insert("age", age);
+
+            gender = query.value(3).toString();
+            temp.insert("gender", gender);
+
+            height = query.value(4).toDouble();
+            temp.insert("height", height);
+
+            weight = query.value(5).toDouble();
+            temp.insert("weight", weight);
+
+//            calculateBMI();
+//            calculateBMR();
+        }
+    }
+
+    return temp;
+}
+
+bool DatabaseManager::updateName(QString name) {
 
 }

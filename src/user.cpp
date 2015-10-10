@@ -14,61 +14,60 @@ User::~User() {
 bool User::openDB() {
 
     // Find QSLite driver
-    db_ = QSqlDatabase::addDatabase("QSQLITE","userConnection");
+    mydbmanager = QSqlDatabase::addDatabase("QSQLITE","userConnection");
     QString dbname = "userDatabase.db.sqlite";
     QString dbpath = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QDir::separator() + dbname;
-    //QString dbpath = "/usr/share/harbour-gymtracker/databases/" + dbname;
-    db_.setDatabaseName(dbpath);
-    //db_.setDatabaseName("/home/nemo/qml/Sqlite/userDatabase.db.sqlite");
+    //QString dbpath = "/usr/share/harbour-salifish/databases/" + dbname;
+    mydbmanager.setDatabaseName(dbpath);
 
     // Open databasee
-    if(db_.open()) {
-        QStringList tables = db_.tables();
+    if(mydbmanager.open()) {
+        QStringList tables = mydbmanager.tables();
         qDebug() << "Tables: " << tables;
         return true;
     } else {
-        qDebug() << db_.lastError();
+        qDebug() << mydbmanager.lastError();
         return false;
     }
 }
 
 void User::closeDB() {
-    db_.close();
+    mydbmanager.close();
 }
 
 QString User::getName() {
-    return name_;
+    return myName;
 }
 
 void User::setName(QString name) {
 
-    if(name_ != name) {
-        name_ = name;
+    if(myName != name) {
+        myName = name;
         updateName(name);
     }
 }
 
 int User::getAge() {
-    return age_;
+    return myAge;
 }
 
 void User::setAge(int age) {
 
-    if(age_ != age) {
-        age_ = age;
+    if(myAge != age) {
+        myAge = age;
         updateAge(age);
         calculateBMR();
     }
 }
 
 QString User::getGender() {
-    return gender_;
+    return myGender;
 }
 
 void User::setGender(QString gender) {
 
-    if(gender_ != gender) {
-        gender_ = gender;
+    if(myGender != gender) {
+        myGender = gender;
         updateGender(gender);
         calculateBMR();
     }
@@ -104,48 +103,33 @@ void User::setWeight(double weight) {
 
 bool User::getUser() {
 
-    bool ret = false;
+    QMap<QString, QString> user = mydbmanager.getUser();
 
-    if(db_.isOpen()) {
-
-        qDebug() << "Tietokannan avaaminen onnistui.";
-
-        QSqlQuery query(db_);
-        if(!query.exec("SELECT * FROM user;")) {
-            qDebug() << query.lastError();
+    QMap<QString, QString>::iterator itr = user.first();
+    while(itr != user.end()) {
+        if(itr.key() == "name") {
+            myName = itr.value();
+        } else if(itr.key() == "age") {
+            myAge = itr.value();
+        } else if(itr.key() == "gender") {
+            myGender = itr.value();
+        } else if(itr.key() == "height") {
+            myHeight = itr.value();
+        } else if(itr.key() == "weight") {
+            myWeight = itr.value();
         }
 
-        if (query.first()) {
-
-            qDebug() << "Kohdistettu lailliseen kenttaan";
-
-            name_ = query.value(1).toString();
-            age_ = query.value(2).toInt();
-            gender_ = query.value(3).toString();
-            height_ = query.value(4).toDouble();
-            weight_ = query.value(5).toDouble();
-            ret = true;
-
-            calculateBMI();
-            calculateBMR();
-        }
+        ++itr;
     }
 
-    return ret;
+    calculateBMI();
+    calculateBMR();
 }
 
 // Insert new user
 bool User::insertUser(QString name, int age, QString gender, double height, double weight) {
 
-    bool ret = false;
-
-    if (db_.isOpen()) {
-
-        QSqlQuery query(db_);
-        ret = query.exec(QString("insert into user values(NULL,'%1',%2,'%3',%4,%5)")
-                         .arg(name).arg(age).arg(gender).arg(height).arg(weight));
-    }
-    return ret;
+    return mydbmanager.insertUser(name, age, gender, height, weight);
 }
 
 
@@ -154,9 +138,9 @@ bool User::updateName(QString name) {
 
     bool ret = false;
 
-    if (db_.isOpen()) {
+    if (mydbmanager.isOpen()) {
 
-        QSqlQuery query(db_);
+        QSqlQuery query(mydbmanager);
         ret = query.exec(QString("UPDATE user SET name = '%1' WHERE Id = 1;").arg(name));
         qDebug() << query.lastError();
         ret = true;
@@ -168,9 +152,9 @@ bool User::updateAge(int age) {
 
     bool ret = false;
 
-    if (db_.isOpen()) {
+    if (mydbmanager.isOpen()) {
 
-        QSqlQuery query(db_);
+        QSqlQuery query(mydbmanager);
         ret = query.exec(QString("UPDATE user SET age = %1 WHERE Id = 1;").arg(age));
         qDebug() << query.lastError();
     }
@@ -181,9 +165,9 @@ bool User::updateGender(QString gender) {
 
     bool ret = false;
 
-    if (db_.isOpen()) {
+    if (mydbmanager.isOpen()) {
 
-        QSqlQuery query(db_);
+        QSqlQuery query(mydbmanager);
         ret = query.exec(QString("UPDATE user SET gender = '%1' WHERE Id = 1;").arg(gender));
         qDebug() << query.lastError();
         ret = true;
@@ -195,9 +179,9 @@ bool User::updateHeight(double height) {
 
     bool ret = false;
 
-    if (db_.isOpen()) {
+    if (mydbmanager.isOpen()) {
 
-        QSqlQuery query(db_);
+        QSqlQuery query(mydbmanager);
         ret = query.exec(QString("UPDATE user SET height = %1 WHERE Id = 1;").arg(height));
         qDebug() << query.lastError();
         ret = true;
@@ -209,9 +193,9 @@ bool User::updateWeight(double weight) {
 
     bool ret = false;
 
-    if (db_.isOpen()) {
+    if (mydbmanager.isOpen()) {
 
-        QSqlQuery query(db_);
+        QSqlQuery query(mydbmanager);
         ret = query.exec(QString("UPDATE user SET weight = %1 WHERE Id = 1;").arg(weight));
         qDebug() << query.lastError();
         ret = true;
@@ -259,24 +243,24 @@ QString User::getBMIdescription() {
 
 void User::clean() {
 
-    name_.clear();
-    age_ = 0;
-    gender_.clear();
+    myName.clear();
+    myAge = 0;
+    myGender.clear();
     height_ = 0;
     weight_ = 0;
     BMI_ = 0;
     BMIdescription_.clear();
     BMR_ = 0;
-    db_.close();
+    mydbmanager.close();
 
 }
 
 void User::calculateBMR() {
 
-    if(gender_ == "Male") {
-        BMR_ = 66 + (13.8*weight_) + (5 * height_) - (6.8 * age_);
-    } else if(gender_ == "Female") {
-        BMR_ = 655 + (9.6 * weight_) + (1.8 * height_) - (4.7 * age_);
+    if(myGender == "Male") {
+        BMR_ = 66 + (13.8*weight_) + (5 * height_) - (6.8 * myAge);
+    } else if(myGender == "Female") {
+        BMR_ = 655 + (9.6 * weight_) + (1.8 * height_) - (4.7 * myAge);
     }
     emit BMRChanged();
 }

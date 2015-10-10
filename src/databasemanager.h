@@ -1,5 +1,5 @@
-#ifndef GYMDATABASE_H
-#define GYMDATABASE_H
+#ifndef DATABASEMANAGER_H
+#define DATABASEMANAGER_H
 
 #include <QObject>
 #include <QSqlDatabase>
@@ -11,12 +11,12 @@
 #include <QStandardPaths>
 #include <QVariant>
 
-class GymDatabase : public QObject
+class DatabaseManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit GymDatabase(QObject *parent = 0);
-    ~GymDatabase();
+    explicit DatabaseManager(QObject *parent = 0);
+    ~DatabaseManager();
 
     void setUpDB();
 
@@ -79,9 +79,19 @@ public:
     bool createPreviousWorkoutsTable(QString workoutname);
     bool insertPreviousWorkoutExcercise(QString workoutname);
 
+    bool createUserTable();
+    bool insertUser(QString name, int age, QString gender, double height, double weight);
+
+    QMap<QString, QString> getUser();
+    bool updateName(QString name);
+    bool updateAge(int age);
+    bool updateGender(QString gender);
+    bool updateHeight(double height);
+    bool updateWeight(double weight);
+
 private:
 
     QSqlDatabase db;
 };
 
-#endif // GYMDATABASE_H
+#endif // DATABASEMANAGER_H

@@ -2,5 +2,5 @@
 Type=Application
 X-Nemo-Application-Type=silica-qt5
 Name=SaliFish
-Icon=harbour-gymtracker
-Exec=harbour-gymtracker
+Icon=harbour-salifish
+Exec=harbour-salifish

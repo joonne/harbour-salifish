@@ -6,7 +6,7 @@ import QtTest 1.0
 import Sailfish.Silica 1.0
 
 import "../src/qml/pages"
-//import "../harbour-gymtracker/qml/pages"
+//import "../harbour-salifish/qml/pages"
 
 
 // Putting TestCase into the full app structure to test UI interactions and probably page transitions too
