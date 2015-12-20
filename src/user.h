@@ -79,7 +79,7 @@ private:
     double myWeight;
     double myBMI;
     QString myBMIdescription;
-    double BMR;
+    double myBMR;
     DatabaseManager mydbmanager;
 
 };

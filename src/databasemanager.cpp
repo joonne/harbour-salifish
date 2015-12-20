@@ -18,29 +18,26 @@ void DatabaseManager::setUpDB() {
 
     if(openDB()) {
 
-        QSqlQuery query(db);
-        query.exec("SELECT count(*) FROM sqlite_master WHERE type = 'table';");
-        int tableCount = query.value(1).toInt();
-        qDebug() << "Tables in DatabaseManager: " << tableCount;
-
-        if(tableCount == 0) {
+        // check whether db is empty, if it is, create db
+        if(db.tables().size() == 0) {
 
             createDB();
 
         } else {
 
             QSqlQuery query(db);
-            query.exec("SELECT version FROM information;");
-            double version = query.value(1).toDouble();
+            query.exec("SELECT name,version FROM information;");
+            if(query.isSelect()) {
+                while(query.next()) {
+                    QString name = query.value(0).toString();
+                    double version = query.value(1).toDouble();
+                    qDebug() << "App name: " << name;
+                    qDebug() << "Database version : " << version;
 
-            qDebug() << "Database already created, current version is: " << version;
-
-            updateDB();
+                }
+            }
         }
     }
-
-    close();
-
 }
 
 bool DatabaseManager::openDB() {
@@ -104,7 +101,8 @@ bool DatabaseManager::createInfoTable() {
 
         QSqlQuery query(db);
         ret = query.exec("CREATE TABLE information"
-                         "(version real primary key, "
+                         "(id INTEGER PRIMARY KEY, "
+                         "version REAL, "
                          "name varchar(50))");
     }
     return ret;
@@ -121,580 +119,233 @@ bool DatabaseManager::updateInfoTable(double version) {
     return ret;
 }
 
-bool DatabaseManager::createChestTable() {
+bool DatabaseManager::createCategoryTable() {
 
-    // Create table "chest"
+    // Create table "category"
     bool ret = false;
     if (db.isOpen()) {
 
         QSqlQuery query(db);
-        ret = query.exec("CREATE TABLE chest"
-                         "(id integer primary key, "
-                         "name varchar(50), "
-                         "description varchar(160))");
+        ret = query.exec("CREATE TABLE category"
+                         "(id INTEGER PRIMARY KEY, "
+                         "name VARCHAR(50))");
 
     }
     return ret;
 }
 
-bool DatabaseManager::insertChestExcercise(QString name, QString description) {
+bool DatabaseManager::insertCategory(QString name) {
 
     bool ret = false;
 
-    if (db.isOpen()) {
+    if(db.isOpen()) {
 
         QSqlQuery query(db);
-        ret = query.exec(QString("insert into chest values(NULL,'%1','%2')")
-                         .arg(name).arg(description));
-
+        ret = query.exec(QString("INSERT INTO category VALUES(NULL,'%1')").arg(name));
     }
     return ret;
 }
 
-bool DatabaseManager::createShouldersTable() {
-
-    // Create table shoulders
-    bool ret = false;
-    if (db.isOpen()) {
-
-        QSqlQuery query(db);
-        ret = query.exec("CREATE TABLE shoulders"
-                         "(id integer primary key, "
-                         "name varchar(50), "
-                         "description varchar(160))");
-
-    }
-    return ret;
+int DatabaseManager::findCategory(QString category) {
+    return 1;
 }
 
-bool DatabaseManager::insertShouldersExcercise(QString name, QString description) {
+bool DatabaseManager::createExcerciseTable() {
 
-    bool ret = false;
-
-    if (db.isOpen()) {
-
-        QSqlQuery query(db);
-        ret = query.exec(QString("INSERT INTO shoulders VALUES(NULL,'%1','%2')")
-                         .arg(name).arg(description));
-
-    }
-    return ret;
-}
-
-bool DatabaseManager::createAbsTable() {
-
-    // Create table abs
+    // Create table "excercise"
     bool ret = false;
     if (db.isOpen()) {
 
         QSqlQuery query(db);
-        ret = query.exec("CREATE TABLE abs"
-                         "(id integer primary key, "
-                         "name varchar(50), "
-                         "description varchar(160))");
-
-    }
-    return ret;
-}
-
-bool DatabaseManager::insertAbsEcercise(QString name, QString description) {
-
-    bool ret = false;
-
-    if (db.isOpen()) {
-
-        QSqlQuery query(db);
-        ret = query.exec(QString("insert into abs values(NULL,'%1','%2')")
-                         .arg(name).arg(description));
-
-    }
-    return ret;
-}
-
-bool DatabaseManager::createBicepsTable() {
-
-    // Create table biceps
-    bool ret = false;
-    if (db.isOpen()) {
-
-        QSqlQuery query(db);
-        ret = query.exec("CREATE TABLE biceps"
-                         "(id integer primary key, "
-                         "name varchar(50), "
-                         "description varchar(160))");
-
-    }
-    return ret;
-}
-
-bool DatabaseManager::insertBicepsExcercise(QString name, QString description) {
-
-    bool ret = false;
-
-    if (db.isOpen()) {
-
-        QSqlQuery query(db);
-        ret = query.exec(QString("insert into biceps values(NULL,'%1','%2')")
-                         .arg(name).arg(description));
-
-    }
-    return ret;
-}
-
-bool DatabaseManager::createForearmsTable() {
-
-    bool ret = false;
-    if (db.isOpen()) {
-
-        QSqlQuery query(db);
-        ret = query.exec("CREATE TABLE forearms"
-                         "(id integer primary key, "
-                         "name varchar(50), "
-                         "description varchar(160))");
-
-    }
-    return ret;
-}
-
-bool DatabaseManager::insertForearmsExcercise(QString name, QString description) {
-
-    bool ret = false;
-
-    if (db.isOpen()) {
-
-        QSqlQuery query(db);
-        ret = query.exec(QString("insert into forearms values(NULL,'%1','%2')")
-                         .arg(name).arg(description));
-
-    }
-    return ret;
-}
-
-bool DatabaseManager::createQuadsTable() {
-
-    // Create table quads
-    bool ret = false;
-    if (db.isOpen()) {
-
-        QSqlQuery query(db);
-        ret = query.exec("CREATE TABLE quads"
-                         "(id integer primary key, "
-                         "name varchar(50), "
-                         "description varchar(160))");
-
-    }
-    return ret;
-}
-
-bool DatabaseManager::insertQuadsExcercise(QString name, QString description) {
-
-    bool ret = false;
-
-    if (db.isOpen()) {
-
-        QSqlQuery query(db);
-        ret = query.exec(QString("insert into quads values(NULL,'%1','%2')")
-                         .arg(name).arg(description));
-
-    }
-    return ret;
-}
-
-bool DatabaseManager::createCalvesTable() {
-
-    // Create table calves
-    bool ret = false;
-    if (db.isOpen()) {
-
-        QSqlQuery query(db);
-        ret = query.exec("CREATE TABLE calves"
-                         "(id integer primary key, "
-                         "name varchar(50), "
-                         "description varchar(160))");
-
-    }
-    return ret;
-}
-
-bool DatabaseManager::insertCalvesExcercise(QString name, QString description) {
-
-    bool ret = false;
-
-    if (db.isOpen()) {
-
-        QSqlQuery query(db);
-        ret = query.exec(QString("insert into calves values(NULL,'%1','%2')")
-                         .arg(name).arg(description));
-
-    }
-    return ret;
-}
-
-bool DatabaseManager::createTrapeziusTable() {
-
-    // Create table trapezius
-    bool ret = false;
-    if (db.isOpen()) {
-
-        QSqlQuery query(db);
-        ret = query.exec("CREATE TABLE trapezius"
-                         "(id integer primary key, "
-                         "name varchar(50), "
-                         "description varchar(160))");
-
-    }
-    return ret;
-}
-
-bool DatabaseManager::insertTrapeziusExcercise(QString name, QString description) {
-
-    bool ret = false;
-
-    if (db.isOpen()) {
-
-        QSqlQuery query(db);
-        ret = query.exec(QString("insert into trapezius values(NULL,'%1','%2')")
-                         .arg(name).arg(description));
-
-    }
-    return ret;
-}
-
-bool DatabaseManager::createLatsTable() {
-
-    // Create table lats
-    bool ret = false;
-    if (db.isOpen()) {
-
-        QSqlQuery query(db);
-        ret = query.exec("CREATE TABLE lats"
-                         "(id integer primary key, "
-                         "name varchar(50), "
-                         "description varchar(160))");
-
-    }
-    return ret;
-}
-
-bool DatabaseManager::insertLatsExcercise(QString name, QString description) {
-
-    bool ret = false;
-
-    if (db.isOpen()) {
-
-        QSqlQuery query(db);
-        ret = query.exec(QString("insert into lats values(NULL,'%1','%2')")
-                         .arg(name).arg(description));
-
-    }
-    return ret;
-}
-
-bool DatabaseManager::createTricepsTable() {
-
-    // Create table triceps
-    bool ret = false;
-    if (db.isOpen()) {
-
-        QSqlQuery query(db);
-        ret = query.exec("CREATE TABLE triceps"
-                         "(id integer primary key, "
-                         "name varchar(50), "
-                         "description varchar(160))");
-
-    }
-    return ret;
-}
-
-bool DatabaseManager::insertTricepsExcercise(QString name, QString description) {
-
-    bool ret = false;
-
-    if (db.isOpen()) {
-
-        QSqlQuery query(db);
-        ret = query.exec(QString("insert into triceps values(NULL,'%1','%2')")
-                         .arg(name).arg(description));
-
-    }
-    return ret;
-}
-
-bool DatabaseManager::createGlutesTable() {
-
-    // Create table glutes
-    bool ret = false;
-    if (db.isOpen()) {
-
-        QSqlQuery query(db);
-        ret = query.exec("CREATE TABLE glutes"
-                         "(id integer primary key, "
-                         "name varchar(50), "
-                         "description varchar(160))");
-
-    }
-    return ret;
-}
-
-bool DatabaseManager::insertGlutesExcercise(QString name, QString description) {
-
-    bool ret = false;
-
-    if (db.isOpen()) {
-
-        QSqlQuery query(db);
-        ret = query.exec(QString("insert into glutes values(NULL,'%1','%2')")
-                         .arg(name).arg(description));
-
-    }
-    return ret;
-}
-
-bool DatabaseManager::createHamstringsTable() {
-
-    // Create table hamstrings
-    bool ret = false;
-    if (db.isOpen()) {
-
-        QSqlQuery query(db);
-        ret = query.exec("CREATE TABLE hamstrings"
-                         "(id integer primary key, "
-                         "name varchar(50), "
-                         "description varchar(160))");
-
-    }
-    return ret;
-}
-
-bool DatabaseManager::insertHamstringsExcercise(QString name, QString description) {
-
-    bool ret = false;
-
-    if (db.isOpen()) {
-
-        QSqlQuery query(db);
-        ret = query.exec(QString("insert into hamstrings values(NULL,'%1','%2')")
-                         .arg(name).arg(description));
-
-    }
-    return ret;
-}
-
-bool DatabaseManager::insertWorkout(QString workoutname) {
-
-    bool ret = false;
-
-    QStringRef sub(&workoutname, 0, 3);
-    QString tablename = sub.toString() + "-workout";
-
-    if (db.isOpen()) {
-
-        QSqlQuery query(db);
-        ret = query.exec(QString("insert into '%1' values(NULL,'%2',%3,%4,%5,%6,%7,%8,%9,%10,%11,%12,%13,%14,%15)")
-                         .arg(tablename)
-                         .arg("Bench Press")
-                         .arg(3)
-                         .arg(12).arg(80)
-                         .arg(12).arg(80)
-                         .arg(12).arg(80)
-                         .arg(0).arg(0)
-                         .arg(0).arg(0)
-                         .arg(0).arg(0));
-        qDebug() << query.lastError();
-
-        ret = query.exec(QString("insert into '%1' values(NULL,'%2',%3,%4,%5,%6,%7,%8,%9,%10,%11,%12,%13,%14,%15)")
-                         .arg(tablename)
-                         .arg("Butterfly Machine")
-                         .arg(3)
-                         .arg(12).arg(80)
-                         .arg(12).arg(80)
-                         .arg(12).arg(80)
-                         .arg(0).arg(0)
-                         .arg(0).arg(0)
-                         .arg(0).arg(0));
-        qDebug() << query.lastError();
-
-        ret = query.exec(QString("insert into '%1' values(NULL,'%2',%3,%4,%5,%6,%7,%8,%9,%10,%11,%12,%13,%14,%15)")
-                         .arg(tablename)
-                         .arg("Shoulder Press")
-                         .arg(3)
-                         .arg(12).arg(80)
-                         .arg(12).arg(80)
-                         .arg(12).arg(80)
-                         .arg(0).arg(0)
-                         .arg(0).arg(0)
-                         .arg(0).arg(0));
-        qDebug() << query.lastError();
-
-        ret = query.exec(QString("insert into '%1' values(NULL,'%2',%3,%4,%5,%6,%7,%8,%9,%10,%11,%12,%13,%14,%15)")
-                         .arg(tablename)
-                         .arg("Dumbbel Front Raise")
-                         .arg(3)
-                         .arg(12).arg(80)
-                         .arg(12).arg(80)
-                         .arg(12).arg(80)
-                         .arg(0).arg(0)
-                         .arg(0).arg(0)
-                         .arg(0).arg(0));
+        ret = query.exec("CREATE TABLE excercise"
+                         "(id INTEGER PRIMARY KEY, "
+                         "name VARCHAR(50), "
+                         "description VARCHAR(160), "
+                         "category INTEGER, "
+                         "FOREIGN KEY(category) REFERENCES category(id))");
         qDebug() << query.lastError();
 
     }
     return ret;
 }
 
-bool DatabaseManager::createWorkoutTable(QString workoutname) {
-
-    QStringRef sub(&workoutname, 0, 3);
-    QString tablename = sub.toString() + "-workout";
+bool DatabaseManager::insertExcercise(QString name, QString description, QString category) {
 
     bool ret = false;
+    int categoryid = findCategory(category);
+
     if (db.isOpen()) {
 
         QSqlQuery query(db);
-        ret = query.exec(QString("CREATE TABLE '%1'"
-                                 "(id integer primary key, "
-                                 "excercisename varchar(50), "
-                                 "series integer, "
-                                 "repeats1 integer, "
-                                 "weights1 real, "
-                                 "repeats2 integer, "
-                                 "weights2 real, "
-                                 "repeats3 integer, "
-                                 "weights3 real, "
-                                 "repeats4 integer, "
-                                 "weights4 real, "
-                                 "repeats5 integer, "
-                                 "weights5 real, "
-                                 "repeats6 integer, "
-                                 "weights6 real)").arg(tablename));
-    }
-    return ret;
-}
-
-
-bool DatabaseManager::createWorkoutNamesTable() {
-
-    bool ret = false;
-    if (db.isOpen()) {
-
-        QSqlQuery query(db);
-        ret = query.exec(QString("CREATE TABLE workoutnames"
-                                 "(id integer primary key, "
-                                 "workoutname varchar(50), "
-                                 "tablename varchar(50))"));
+        ret = query.exec(QString("INSERT INTO excercise values(NULL,'%1','%2',%3)")
+                         .arg(name).arg(description).arg(categoryid));
 
     }
     return ret;
 }
 
-bool DatabaseManager::insertWorkoutName(QString name) {
+bool DatabaseManager::createExcerciseMuscleTable() {
 
-    QStringRef sub(&name, 0, 3);
-    QString tablename = sub.toString() + "-workout";
-
-    bool ret = false;
-
-    if (db.isOpen()) {
-
-        QSqlQuery query(db);
-        ret = query.exec(QString("insert into workoutnames values(NULL,'%1','%2')")
-                         .arg(name).arg(tablename));
-
-    }
-    return ret;
-}
-
-bool DatabaseManager::createPreviousWorkoutNamesTable() {
-
+    // Create table "excerciseMuscle"
     bool ret = false;
     if (db.isOpen()) {
 
         QSqlQuery query(db);
-        ret = query.exec(QString("CREATE TABLE previousworkoutnames"
-                                 "(id integer primary key, "
-                                 "workoutname varchar(50), "
-                                 "tablename varchar(50), "
-                                 "date varchar(50))"));
-
-    }
-    return ret;
-}
-
-bool DatabaseManager::insertPreviousWorkoutName(QString name, QString date) {
-
-    QStringRef sub(&name, 0, 3);
-    QString tablename = sub.toString() + "-doneworkout";
-
-    bool ret = false;
-
-    if (db.isOpen()) {
-
-        QSqlQuery query(db);
-        ret = query.exec(QString("insert into previousworkoutnames values(NULL,'%1','%2','%3')")
-                         .arg(name).arg(tablename).arg(date));
-
-    }
-    return ret;
-}
-
-
-bool DatabaseManager::createPreviousWorkoutsTable(QString workoutname) {
-
-    QStringRef sub(&workoutname, 0, 3);
-    QString tablename = sub.toString() + "-doneworkout";
-
-    bool ret = false;
-    if (db.isOpen()) {
-
-        QSqlQuery query(db);
-        ret = query.exec(QString("CREATE TABLE '%1'"
-                                 "(id integer primary key, "
-                                 "excercisename varchar(50), "
-                                 "series integer, "
-                                 "repeats1 integer, "
-                                 "weights1 real, "
-                                 "repeats2 integer, "
-                                 "weights2 real, "
-                                 "repeats3 integer, "
-                                 "weights3 real, "
-                                 "repeats4 integer, "
-                                 "weights4 real, "
-                                 "repeats5 integer, "
-                                 "weights5 real, "
-                                 "repeats6 integer, "
-                                 "weights6 real, "
-                                 "comments varchar(160))").arg(tablename));
-
-    }
-    return ret;
-}
-
-bool DatabaseManager::insertPreviousWorkoutExcercise(QString workoutname) {
-
-    QStringRef sub(&workoutname, 0, 3);
-    QString tablename = sub.toString() + "-doneworkout";
-
-    bool ret = false;
-
-    if (db.isOpen()) {
-
-        QSqlQuery query(db);
-        ret = query.exec(QString("insert into '%1' values(NULL,'%2',%3,%4,%5,%6,%7,%8,%9,%10,%11,%12,%13,%14,%15,'%16')")
-                         .arg(tablename)
-                         .arg("Bench Press")
-                         .arg(3)
-                         .arg(12).arg(70)
-                         .arg(12).arg(70)
-                         .arg(12).arg(70)
-                         .arg(0).arg(0)
-                         .arg(0).arg(0)
-                         .arg(0).arg(0)
-                         .arg("Went well."));
+        ret = query.exec("CREATE TABLE excerciseMuscle"
+                         "(id INTEGER PRIMARY KEY, "
+                         "muscle INTEGER, "
+                         "excercise INTEGER, "
+                         "FOREIGN KEY(muscle) REFERENCES muscle(id), "
+                         "FOREIGN KEY(excercise) REFERENCES excercise(id))");
         qDebug() << query.lastError();
 
     }
     return ret;
 }
+
+bool DatabaseManager::insertExcerciseMuscle(int muscle, int excercise) {
+
+    bool ret = false;
+
+    if (db.isOpen()) {
+
+        QSqlQuery query(db);
+        ret = query.exec(QString("INSERT INTO excerciseMuscle values(NULL, %1, %2)")
+                         .arg(muscle).arg(excercise));
+
+    }
+    return ret;
+}
+
+bool DatabaseManager::createMuscleTable() {
+
+    bool ret = false;
+
+    if(db.isOpen()) {
+
+        QSqlQuery query(db);
+        ret = query.exec("CREATE TABLE muscle"
+                         "(id INTEGER PRIMARY KEY, "
+                         "name VARCHAR(50))");
+    }
+
+    return ret;
+}
+
+bool DatabaseManager::insertMuscle(QString name) {
+
+    bool ret = false;
+
+    if(db.isOpen()) {
+
+        QSqlQuery query(db);
+        ret = query.exec(QString("INSERT INTO muscle VALUES(NULL, '%1')").arg(name));
+    }
+    return ret;
+}
+
+bool DatabaseManager::createWorkoutTable() {
+
+    bool ret = false;
+    if (db.isOpen()) {
+
+        QSqlQuery query(db);
+        ret = query.exec("CREATE TABLE workout"
+                         "(id INTEGER PRIMARY KEY, "
+                         "name VARCHAR(160), "
+                         "calories REAL)");
+    }
+    return ret;
+}
+
+bool DatabaseManager::insertWorkout(QString name, double calories) {
+
+    bool ret = false;
+
+    if (db.isOpen()) {
+
+        QSqlQuery query(db);
+        ret = query.exec(QString("INSERT INTO workout VALUES(NULL,'%1'").arg(name).arg(calories));
+
+    }
+    return ret;
+}
+
+bool DatabaseManager::createWorkoutEntryTable() {
+
+    bool ret = false;
+
+    if(db.isOpen()) {
+
+        QSqlQuery query(db);
+        ret = query.exec("CREATE TABLE workoutEntry"
+                         "(id INTEGER PRIMARY KEY, "
+                         "excercise INTEGER, "
+                         "user INTEGER, "
+                         "workout INTEGER, "
+                         "date VARCHAR(15), "
+                         "repeats INTEGER, "
+                         "weights REAL, "
+                         "equipment INTEGER, "
+                         "FOREIGN KEY(excercise) REFERENCES excercise(id), "
+                         "FOREIGN KEY(user) REFERENCES user(id), "
+                         "FOREIGN KEY(workout) REFERENCES workout(id), "
+                         "FOREIGN KEY(equipment) REFERENCES equipment(id))");
+    }
+    return ret;
+}
+
+bool DatabaseManager::insertWorkoutEntry(int excercise,
+                                         int user,
+                                         int workout,
+                                         QString date,
+                                         int repeats,
+                                         double weights,
+                                         int equipment) {
+
+    bool ret = false;
+
+    if(db.isOpen()) {
+        QSqlQuery query(db);
+        ret = query.exec(QString("INSERT INTO workoutEntry VALUES(NULL, %1, %2, %3, '%4', %5, %6, %7)")
+                         .arg(excercise)
+                         .arg(user)
+                         .arg(workout)
+                         .arg(date)
+                         .arg(repeats)
+                         .arg(weights)
+                         .arg(equipment));
+    }
+    return ret;
+}
+
+bool DatabaseManager::createEquipmentTable() {
+
+    bool ret = false;
+
+    if(db.isOpen()) {
+
+        QSqlQuery query(db);
+        query.exec("CREATE TABLE equipment"
+                   "(id INTEGER PRIMARY KEY, "
+                   "name VARCHAR(50))");
+    }
+    return ret;
+}
+
+bool DatabaseManager::insertEquipment(QString name) {
+
+    bool ret = false;
+
+    if(db.isOpen()) {
+
+        QSqlQuery query(db);
+        query.exec(QString("INSERT INTO equipment VALUES(NULL, '%1')").arg(name));
+    }
+    return ret;
+}
+
+
 
 bool DatabaseManager::createDB() {
 
@@ -706,36 +357,19 @@ bool DatabaseManager::createDB() {
 
         //-----------------------------------------------------------------
 
-        if(createShouldersTable() and
-                createAbsTable() and
-                createBicepsTable() and
-                createForearmsTable() and
-                createTricepsTable() and
-                createTrapeziusTable() and
-                createCalvesTable() and
-                createGlutesTable() and
-                createHamstringsTable() and
-                createLatsTable() and
-                createQuadsTable() and
-                createChestTable() and
-                createWorkoutTable("example") and
-                createWorkoutNamesTable() and
-                createPreviousWorkoutNamesTable() and
-                createPreviousWorkoutsTable("chestday") and
-                initializeInfoTable()) {
-
+        if(createCategoryTable() && createExcerciseTable() && createMuscleTable() && createExcerciseMuscleTable() && createWorkoutTable() && createWorkoutEntryTable() && createEquipmentTable()) {
             qDebug() << "Tables created";
         }
 
         //-----------------------------------------------------------------
 
-        if(insertChestExcercise("Bench Press","Raise the bar.")) {
+        if(insertExcercise("Bench Press", "Raise the bar.", "chest")) {
             qDebug() << "Chest Excercise added.";
         } else {
             qDebug() << "Chest Excercise addition failed";
         }
 
-        if(insertChestExcercise("Butterfly Machine","Push the handles together slowly as you squeeze your chest in the middle.")) {
+        if(insertExcercise("Butterfly Machine", "Push the handles together slowly as you squeeze your chest in the middle.", "chest")) {
             qDebug() << "Chest Excercise added.";
         } else {
             qDebug() << "Chest Excercise addition failed";
@@ -743,21 +377,21 @@ bool DatabaseManager::createDB() {
 
         //-----------------------------------------------------------------
 
-        if(insertTrapeziusExcercise("Deadlift","The deadlift is a weight training exercise where a loaded barbell is lifted off the ground from a stabilized, bent over position.")) {
+        if(insertExcercise("Deadlift", "The deadlift is a weight training exercise where a loaded barbell is lifted off the ground from a stabilized, bent over position.", "trapezius")) {
             qDebug() << "Trapezius Excercise added.";
         } else {
             qDebug() << "Trapezius Excercise addition failed";
         }
 
-        if(insertTrapeziusExcercise("Back Extension Machine","Extend your back slowly up and return to starting position.")) {
+        if(insertExcercise("Back Extension Machine","Extend your back slowly up and return to starting position.", "trapezius")) {
             qDebug() << "Trapezius Excercise added.";
         } else {
             qDebug() << "Trapezius Excercise addition failed";
         }
 
         //-----------------------------------------------------------------
-        if(insertBicepsExcercise("Seated Arm Curl on Scott Bench","Lower weights slowly and lift them up.") and
-                insertBicepsExcercise("Seated Dumbbel Curl","Sit on a flat bench with a dumbbel on each hand. Lift dumbbels up to your shoulder level and hold a second. Then Bring dumbbels back to starting position.")) {
+        if(insertExcercise("Seated Arm Curl on Scott Bench","Lower weights slowly and lift them up.", "biceps") &&
+                insertExcercise("Seated Dumbbel Curl","Sit on a flat bench with a dumbbel on each hand. Lift dumbbels up to your shoulder level and hold a second. Then Bring dumbbels back to starting position.", "biceps")) {
             qDebug() << "Bicep Excercises added." ;
         } else {
             qDebug() << "Bicep Excercise addition failed" ;
@@ -765,7 +399,7 @@ bool DatabaseManager::createDB() {
 
         //-----------------------------------------------------------------
 
-        if(insertAbsEcercise("Ab Roll", "Roll slowly down with your back a little curved. Then roll back up and squeeze your abdominals at the same time.")) {
+        if(insertExcercise("Ab Roll", "Roll slowly down with your back a little curved. Then roll back up and squeeze your abdominals at the same time.", "abs")) {
             qDebug() << "Ab Excercise added." ;
         } else {
             qDebug() << "Ab Excercise addition failed" ;
@@ -773,13 +407,13 @@ bool DatabaseManager::createDB() {
 
         //-----------------------------------------------------------------
 
-        if(insertShouldersExcercise("Shoulder Press","Press bar/dumbbels upward until arms are extended overhead. Return to upper chest and repeat.")) {
+        if(insertExcercise("Shoulder Press","Press bar/dumbbels upward until arms are extended overhead. Return to upper chest and repeat.", "shoulders")) {
             qDebug() << "Shoulder Excercise added." ;
         } else {
             qDebug() << "Shoulder Excercise addition failed" ;
         }
 
-        if(insertShouldersExcercise("Dumbbel Front Raise","Raise dumbbells forward and upward with until upper arms are above horizontal. Lower and repeat.")) {
+        if(insertExcercise("Dumbbel Front Raise","Raise dumbbells forward and upward with until upper arms are above horizontal. Lower and repeat.", "shoulders")) {
             qDebug() << "Shoulder Excercise added." ;
         } else {
             qDebug() << "Shoulder Excercise addition failed" ;
@@ -787,7 +421,7 @@ bool DatabaseManager::createDB() {
 
         //-----------------------------------------------------------------
 
-        if(insertLatsExcercise("Barbell Incline Row","Pull shoulders back and push chest forward while arching back. Return until arms are extended, shoulders are stretched forward, and lower back is flexed forward. Repeat.")) {
+        if(insertExcercise("Barbell Incline Row","Pull shoulders back and push chest forward while arching back. Return until arms are extended, shoulders are stretched forward, and lower back is flexed forward. Repeat.", "lats")) {
             qDebug() << "Lats Excercise added." ;
         } else {
             qDebug() << "Lats Excercise addition failed" ;
@@ -795,7 +429,7 @@ bool DatabaseManager::createDB() {
 
         //-----------------------------------------------------------------
 
-        if(insertCalvesExcercise("Calf Raises","Raise heels by extending ankles as high as possible. Lower heels by bending ankles until calves are stretched. Repeat.")) {
+        if(insertExcercise("Calf Raises","Raise heels by extending ankles as high as possible. Lower heels by bending ankles until calves are stretched. Repeat.", "calves")) {
             qDebug() << "Calves Excercise added." ;
         } else {
             qDebug() << "Calves Excercise addition failed" ;
@@ -803,19 +437,19 @@ bool DatabaseManager::createDB() {
 
         //-----------------------------------------------------------------
 
-        if(insertQuadsExcercise("Squat","Bend knees forward while allowing hips to bend back behind, keeping back straight and knees pointed same direction as feet. Descend until knees and hips are fully bent. Extend knees and hips until legs are straight. Return and repeat.")) {
+        if(insertExcercise("Squat","Bend knees forward while allowing hips to bend back behind, keeping back straight and knees pointed same direction as feet. Descend until knees and hips are fully bent. Extend knees and hips until legs are straight. Return and repeat.", "quads")) {
             qDebug() << "Quads Excercise added." ;
         } else {
             qDebug() << "Quads Excercise addition failed" ;
         }
 
-        if(insertQuadsExcercise("Leg Extension","Move lever forward and upward by extending knees until leg are straight. Return lever to original position by bending knees. Repeat.")) {
+        if(insertExcercise("Leg Extension","Move lever forward and upward by extending knees until leg are straight. Return lever to original position by bending knees. Repeat.", "quads")) {
             qDebug() << "Quads Excercise added." ;
         } else {
             qDebug() << "Quads Excercise addition failed" ;
         }
 
-        if(insertQuadsExcercise("Leg Press Machine","Push platform(s) away by extending knees and hips until knees are fully extended. Return until hips are completely flexed. Repeat.")) {
+        if(insertExcercise("Leg Press Machine","Push platform(s) away by extending knees and hips until knees are fully extended. Return until hips are completely flexed. Repeat.", "quads")) {
             qDebug() << "Quads Excercise added." ;
         } else {
             qDebug() << "Quads Excercise addition failed" ;
@@ -823,7 +457,7 @@ bool DatabaseManager::createDB() {
 
         //-----------------------------------------------------------------
 
-        if(insertForearmsExcercise("Barbell Roll","Roll barbell slowly down towards your fingertips and roll it back up.")) {
+        if(insertExcercise("Barbell Roll","Roll barbell slowly down towards your fingertips and roll it back up.", "forearms")) {
             qDebug() << "Forearms Excercise added." ;
         } else {
             qDebug() << "Forearms Excercise addition failed" ;
@@ -831,13 +465,13 @@ bool DatabaseManager::createDB() {
 
         //-----------------------------------------------------------------
 
-        if(insertHamstringsExcercise("Straight Leg Deadlift","With knees straight, lower bar toward top of feet by bending hips. After hips can no longer flex, bend waist as bar approaches top of feet. Lift bar by extending waist and hip until standing upright. Pull shoulders back slightly if rounded. Repeat.")) {
+        if(insertExcercise("Straight Leg Deadlift","With knees straight, lower bar toward top of feet by bending hips. After hips can no longer flex, bend waist as bar approaches top of feet. Lift bar by extending waist and hip until standing upright. Pull shoulders back slightly if rounded. Repeat.", "hamstrings")) {
             qDebug() << "Hamstrings Excercise added." ;
         } else {
             qDebug() << "Hamstrings Excercise addition failed" ;
         }
 
-        if(insertHamstringsExcercise("Seated Leg Curl","Pull lever to back of thighs by flexing knees. Return lever until knees are straight. Repeat.")) {
+        if(insertExcercise("Seated Leg Curl","Pull lever to back of thighs by flexing knees. Return lever until knees are straight. Repeat.", "hamstrings")) {
             qDebug() << "Hamstrings Excercise added." ;
         } else {
             qDebug() << "Hamstrings Excercise addition failed" ;
@@ -845,19 +479,19 @@ bool DatabaseManager::createDB() {
 
         //-----------------------------------------------------------------
 
-        if(insertTricepsExcercise("Dip","Lower body until slight stretch is felt in shoulders. Push body up until arms are straight. Repeat.")) {
+        if(insertExcercise("Dip","Lower body until slight stretch is felt in shoulders. Push body up until arms are straight. Repeat.", "triceps")) {
             qDebug() << "Triceps Excercise added." ;
         } else {
             qDebug() << "Triceps Excercise addition failed" ;
         }
 
-        if(insertTricepsExcercise("Pushdown","Extend arms down. Return until forearm is close to upper arm. Repeat.")) {
+        if(insertExcercise("Pushdown","Extend arms down. Return until forearm is close to upper arm. Repeat.", "triceps")) {
             qDebug() << "Triceps Excercise added." ;
         } else {
             qDebug() << "Triceps Excercise addition failed" ;
         }
 
-        if(insertTricepsExcercise("Kneeling Triceps Extension","Extend forearms overhead until elbow are fully extended. Return and repeat.")) {
+        if(insertExcercise("Kneeling Triceps Extension","Extend forearms overhead until elbow are fully extended. Return and repeat.", "triceps")) {
             qDebug() << "Triceps Excercise added." ;
         } else {
             qDebug() << "Triceps Excercise addition failed" ;
@@ -865,26 +499,10 @@ bool DatabaseManager::createDB() {
 
         //-----------------------------------------------------------------
 
-        if(insertGlutesExcercise("Lunge","Lunge forward with first leg. Land on heel then forefoot. Lower body by flexing knee and hip of front leg until knee of rear leg is almost in contact with floor. Return to original standing position by forcibly extending hip and knee of forward leg. Repeat by alternating lunge with opposite leg.")) {
+        if(insertExcercise("Lunge","Lunge forward with first leg. Land on heel then forefoot. Lower body by flexing knee and hip of front leg until knee of rear leg is almost in contact with floor. Return to original standing position by forcibly extending hip and knee of forward leg. Repeat by alternating lunge with opposite leg.", "glutes")) {
             qDebug() << "Glutes Excercise added." ;
         } else {
             qDebug() << "Glutes Excercise addition failed" ;
-        }
-
-        //-----------------------------------------------------------------
-
-
-        if(insertWorkout("example") and insertWorkoutName("example")) {
-            qDebug() << "Workout and workoutname added" ;
-        }
-
-        if(insertPreviousWorkoutName("chestday","15.01.2014")) {
-            qDebug() << "Previous workoutname added" ;
-        }
-
-        if(insertPreviousWorkoutExcercise("chestday") and
-                insertPreviousWorkoutExcercise("chestday")) {
-            qDebug() << "Previous workout added";
         }
     }
 
@@ -898,13 +516,13 @@ bool DatabaseManager::createUserTable() {
     if (db.isOpen()) {
 
         QSqlQuery query(db);
-        ret = query.exec("create table user"
-                         "(id integer primary key, "
-                         "name varchar(50), "
-                         "age integer, "
-                         "gender varchar(10), "
-                         "height real, "
-                         "weight real)");
+        ret = query.exec("CREATE TABLE user"
+                         "(id INTEGER PRIMARY KEY, "
+                         "name VARCHAR(50), "
+                         "age INTEGER, "
+                         "gender VARCHAR(1), "
+                         "height REAL, "
+                         "weight REAL)");
 
 
     }
@@ -918,7 +536,7 @@ bool DatabaseManager::insertUser(QString name, int age, QString gender, double h
     if (db.isOpen()) {
 
         QSqlQuery query(db);
-        ret = query.exec(QString("insert into user values(NULL,'%1',%2,'%3',%4,%5)")
+        ret = query.exec(QString("INSERT INTO user VALUES(NULL,'%1',%2,'%3',%4,%5)")
                          .arg(name).arg(age).arg(gender).arg(height).arg(weight));
 
     }
@@ -937,39 +555,35 @@ bool DatabaseManager::updateDB() {
 // returns all users from db
 QMap<QString,QString> DatabaseManager::getUser() {
 
-    bool ret = false;
     QString name;
-    int age;
+    QString age;
     QString gender;
-    double height;
-    double weight;
+    QString height;
+    QString weight;
 
     QMap<QString,QString> temp;
 
     if(db.isOpen()) {
 
         QSqlQuery query(db);
-        ret = query.exec("SELECT * FROM user;");
+        query.exec("SELECT * FROM user;");
 
         if (query.isSelect()) {
 
             name = query.value(1).toString();
             temp.insert("name", name);
 
-            age = query.value(2).toInt();
+            age = query.value(2).toString();
             temp.insert("age", age);
 
             gender = query.value(3).toString();
             temp.insert("gender", gender);
 
-            height = query.value(4).toDouble();
+            height = query.value(4).toString();
             temp.insert("height", height);
 
-            weight = query.value(5).toDouble();
+            weight = query.value(5).toString();
             temp.insert("weight", weight);
-
-//            calculateBMI();
-//            calculateBMR();
         }
     }
 
@@ -978,4 +592,65 @@ QMap<QString,QString> DatabaseManager::getUser() {
 
 bool DatabaseManager::updateName(QString name) {
 
+    bool ret = false;
+
+    if (db.isOpen()) {
+
+        QSqlQuery query(db);
+        ret = query.exec(QString("UPDATE user SET name = '%1' WHERE Id = 1;").arg(name));
+        qDebug() << query.lastError();
+    }
+    return ret;
+}
+
+bool DatabaseManager::updateAge(int age) {
+
+    bool ret = false;
+
+    if (db.isOpen()) {
+
+        QSqlQuery query(db);
+        ret = query.exec(QString("UPDATE user SET age = %1 WHERE Id = 1;").arg(age));
+        qDebug() << query.lastError();
+    }
+    return ret;
+}
+
+bool DatabaseManager::updateGender(QString gender) {
+
+    bool ret = false;
+
+    if (db.isOpen()) {
+
+        QSqlQuery query(db);
+        ret = query.exec(QString("UPDATE user SET gender = '%1' WHERE Id = 1;").arg(gender));
+        qDebug() << query.lastError();
+    }
+    return ret;
+}
+
+bool DatabaseManager::updateHeight(double height) {
+
+    bool ret = false;
+
+    if (db.isOpen()) {
+
+        QSqlQuery query(db);
+        ret = query.exec(QString("UPDATE user SET height = %1 WHERE Id = 1;").arg(height));
+        qDebug() << query.lastError();
+    }
+    return ret;
+}
+
+bool DatabaseManager::updateWeight(double weight) {
+
+    bool ret = false;
+
+    if (db.isOpen()) {
+
+        QSqlQuery query(db);
+        ret = query.exec(QString("UPDATE user SET weight = %1 WHERE Id = 1;").arg(weight));
+        qDebug() << query.lastError();
+    }
+    return ret;
 }

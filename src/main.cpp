@@ -10,8 +10,7 @@
 #include <QQmlContext>
 #include <gymmodel.h>
 #include <user.h>
-#include <userdatabasemanager.h>
-#include <gymdatabasemanager.h>
+#include <databasemanager.h>
 #include <QStandardPaths>
 #include <QDebug>
 
@@ -22,23 +21,9 @@ int main(int argc, char *argv[])
     QScopedPointer<QGuiApplication> app(SailfishApp::application(argc, argv));
     QScopedPointer<QQuickView> view(SailfishApp::createView());
 
-    GymDatabase* gymDB = new GymDatabase();
-    //gymDB->setUpDB();
-
-    UserDatabase* userDB = new UserDatabase();
-    //userDB->setUpDB();
-
-    User* user = new User();
-    if(user->openDB()) user->getUser();
-
-    GymModel* model = new GymModel();
-    model->openDB();
-
-    QQmlContext *context = view->engine()->rootContext();
-    context->setContextProperty("User", user);
-    context->setContextProperty("GymModel", model);
-    model->setContext(context);
-    model->getPreviousWorkouts();
+    QScopedPointer<DatabaseManager> db(new DatabaseManager);
+    QQmlContext* context = view->rootContext();
+    context->setContextProperty("db", db.data());
 
     //    Here's how you will add QML components whenever you start using them
     //    Check https://github.com/amarchen/Wikipedia for a more full example
@@ -47,10 +32,6 @@ int main(int argc, char *argv[])
 
     view->showFullScreen();
 
-    app->exec();
+    return app->exec();
 
-    delete userDB;
-    delete gymDB;
-    delete user;
-    delete model;
 }

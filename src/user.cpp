@@ -1,38 +1,11 @@
 #include "user.h"
 #include <QDebug>
-#include <QFile>
-#include <QFileInfo>
-#include <QStandardPaths>
 
 User::User(QObject *parent) : QObject(parent) {}
 
 User::~User() {
     qDebug() << "Destroying User..";
     clean();
-}
-
-bool User::openDB() {
-
-    // Find QSLite driver
-    mydbmanager = QSqlDatabase::addDatabase("QSQLITE","userConnection");
-    QString dbname = "userDatabase.db.sqlite";
-    QString dbpath = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QDir::separator() + dbname;
-    //QString dbpath = "/usr/share/harbour-salifish/databases/" + dbname;
-    mydbmanager.setDatabaseName(dbpath);
-
-    // Open databasee
-    if(mydbmanager.open()) {
-        QStringList tables = mydbmanager.tables();
-        qDebug() << "Tables: " << tables;
-        return true;
-    } else {
-        qDebug() << mydbmanager.lastError();
-        return false;
-    }
-}
-
-void User::closeDB() {
-    mydbmanager.close();
 }
 
 QString User::getName() {
@@ -74,13 +47,13 @@ void User::setGender(QString gender) {
 }
 
 double User::getHeight() {
-    return height_;
+    return myHeight;
 }
 
 void User::setHeight(double height) {
 
-    if(height_ != height) {
-        height_ = height;
+    if(myHeight != height) {
+        myHeight = height;
         updateHeight(height);
         calculateBMI();
         calculateBMR();
@@ -88,13 +61,13 @@ void User::setHeight(double height) {
 }
 
 double User::getWeight() {
-    return weight_;
+    return myWeight;
 }
 
 void User::setWeight(double weight) {
 
-    if(weight_ != weight) {
-        weight_ = weight;
+    if(myWeight != weight) {
+        myWeight = weight;
         updateWeight(weight);
         calculateBMI();
         calculateBMR();
@@ -103,20 +76,20 @@ void User::setWeight(double weight) {
 
 bool User::getUser() {
 
-    QMap<QString, QString> user = mydbmanager.getUser();
+    QMap<QString,QString> user = mydbmanager.getUser();
 
-    QMap<QString, QString>::iterator itr = user.first();
+    QMap<QString, QString>::iterator itr = user.begin();
     while(itr != user.end()) {
         if(itr.key() == "name") {
             myName = itr.value();
         } else if(itr.key() == "age") {
-            myAge = itr.value();
+            myAge = itr.value().toInt();
         } else if(itr.key() == "gender") {
             myGender = itr.value();
         } else if(itr.key() == "height") {
-            myHeight = itr.value();
+            myHeight = itr.value().toDouble();
         } else if(itr.key() == "weight") {
-            myWeight = itr.value();
+            myWeight = itr.value().toDouble();
         }
 
         ++itr;
@@ -124,9 +97,10 @@ bool User::getUser() {
 
     calculateBMI();
     calculateBMR();
+
+    return true;
 }
 
-// Insert new user
 bool User::insertUser(QString name, int age, QString gender, double height, double weight) {
 
     return mydbmanager.insertUser(name, age, gender, height, weight);
@@ -136,95 +110,52 @@ bool User::insertUser(QString name, int age, QString gender, double height, doub
 
 bool User::updateName(QString name) {
 
-    bool ret = false;
-
-    if (mydbmanager.isOpen()) {
-
-        QSqlQuery query(mydbmanager);
-        ret = query.exec(QString("UPDATE user SET name = '%1' WHERE Id = 1;").arg(name));
-        qDebug() << query.lastError();
-        ret = true;
-    }
-    return ret;
+    return mydbmanager.updateName(name);
 }
 
 bool User::updateAge(int age) {
 
-    bool ret = false;
+    return mydbmanager.updateAge(age);
 
-    if (mydbmanager.isOpen()) {
-
-        QSqlQuery query(mydbmanager);
-        ret = query.exec(QString("UPDATE user SET age = %1 WHERE Id = 1;").arg(age));
-        qDebug() << query.lastError();
-    }
-    return ret;
 }
 
 bool User::updateGender(QString gender) {
 
-    bool ret = false;
-
-    if (mydbmanager.isOpen()) {
-
-        QSqlQuery query(mydbmanager);
-        ret = query.exec(QString("UPDATE user SET gender = '%1' WHERE Id = 1;").arg(gender));
-        qDebug() << query.lastError();
-        ret = true;
-    }
-    return ret;
+    return mydbmanager.updateGender(gender);
 }
 
 bool User::updateHeight(double height) {
 
-    bool ret = false;
-
-    if (mydbmanager.isOpen()) {
-
-        QSqlQuery query(mydbmanager);
-        ret = query.exec(QString("UPDATE user SET height = %1 WHERE Id = 1;").arg(height));
-        qDebug() << query.lastError();
-        ret = true;
-    }
-    return ret;
+    return mydbmanager.updateHeight(height);
 }
 
 bool User::updateWeight(double weight) {
 
-    bool ret = false;
-
-    if (mydbmanager.isOpen()) {
-
-        QSqlQuery query(mydbmanager);
-        ret = query.exec(QString("UPDATE user SET weight = %1 WHERE Id = 1;").arg(weight));
-        qDebug() << query.lastError();
-        ret = true;
-    }
-    return ret;
+    return mydbmanager.updateWeight(weight);
 }
 
 void User::calculateBMI() {
 
-    BMI_ = weight_ / ((height_/100) * (height_ / 100));
-    BMI_ = static_cast<double>(static_cast<int>(BMI_*100+0.5))/100.0;
+    myBMI = myWeight / ((myHeight/100) * (myHeight / 100));
+    myBMI = static_cast<double>(static_cast<int>(myBMI*100+0.5))/100.0;
     emit BMIChanged();
 
-    if(BMI_ < 15) {
-        BMIdescription_ = "Very severely underweight";
-    } else if(BMI_ >= 15.0 and BMI_ < 16.0 ) {
-        BMIdescription_ = "Severely underweight";
-    } else if(BMI_ >= 16.0 and BMI_ < 18.5) {
-        BMIdescription_ = "Underweight";
-    } else if(BMI_ >= 18.5 and BMI_ < 25.0) {
-        BMIdescription_ = "Normal (healthy weight)";
-    } else if(BMI_ >= 25.0 and BMI_ < 30.0) {
-        BMIdescription_ = "Overweight";
-    } else if( BMI_ >= 30 and BMI_ < 35) {
-        BMIdescription_ = "Moderately obese";
-    } else if(BMI_ >= 35 and BMI_ < 40) {
-        BMIdescription_ = "Severely obese";
-    } else if(BMI_ >= 40){
-        BMIdescription_ = "Very severely obese";
+    if(myBMI < 15) {
+        myBMIdescription = "Very severely underweight";
+    } else if(myBMI >= 15.0 and myBMI < 16.0 ) {
+        myBMIdescription = "Severely underweight";
+    } else if(myBMI >= 16.0 and myBMI < 18.5) {
+        myBMIdescription = "Underweight";
+    } else if(myBMI >= 18.5 and myBMI < 25.0) {
+        myBMIdescription = "Normal (healthy weight)";
+    } else if(myBMI >= 25.0 and myBMI < 30.0) {
+        myBMIdescription = "Overweight";
+    } else if( myBMI >= 30 and myBMI < 35) {
+        myBMIdescription = "Moderately obese";
+    } else if(myBMI >= 35 and myBMI < 40) {
+        myBMIdescription = "Severely obese";
+    } else if(myBMI >= 40){
+        myBMIdescription = "Very severely obese";
     }
 
     emit BMIdescriptionChanged();
@@ -233,12 +164,12 @@ void User::calculateBMI() {
 
 double User::getBMI() {
 
-    return BMI_;
+    return myBMI;
 }
 
 QString User::getBMIdescription() {
 
-    return BMIdescription_;
+    return myBMIdescription;
 }
 
 void User::clean() {
@@ -246,26 +177,25 @@ void User::clean() {
     myName.clear();
     myAge = 0;
     myGender.clear();
-    height_ = 0;
-    weight_ = 0;
-    BMI_ = 0;
-    BMIdescription_.clear();
-    BMR_ = 0;
+    myHeight = 0;
+    myWeight = 0;
+    myBMI = 0;
+    myBMIdescription.clear();
+    myBMR = 0;
     mydbmanager.close();
-
 }
 
 void User::calculateBMR() {
 
     if(myGender == "Male") {
-        BMR_ = 66 + (13.8*weight_) + (5 * height_) - (6.8 * myAge);
+        myBMR = 66 + (13.8*myWeight) + (5 * myHeight) - (6.8 * myAge);
     } else if(myGender == "Female") {
-        BMR_ = 655 + (9.6 * weight_) + (1.8 * height_) - (4.7 * myAge);
+        myBMR = 655 + (9.6 * myWeight) + (1.8 * myHeight) - (4.7 * myAge);
     }
     emit BMRChanged();
 }
 
 double User::getBMR() {
 
-    return BMR_;
+    return myBMR;
 }

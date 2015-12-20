@@ -31,53 +31,27 @@ public:
     bool createInfoTable();
     bool updateInfoTable(double version);
 
-    bool createChestTable();
-    bool insertChestExcercise(QString name, QString description);
+    bool createCategoryTable();
+    bool insertCategory(QString name);
+    int findCategory(QString category);
 
-    bool createShouldersTable();
-    bool insertShouldersExcercise(QString name, QString description);
+    bool createExcerciseTable();
+    bool insertExcercise(QString name, QString description, QString category);
 
-    bool createAbsTable();
-    bool insertAbsEcercise(QString name, QString description);
+    bool createExcerciseMuscleTable();
+    bool insertExcerciseMuscle(int muscle, int excercise);
 
-    bool createBicepsTable();
-    bool insertBicepsExcercise(QString name, QString description);
+    bool createMuscleTable();
+    bool insertMuscle(QString name);
 
-    bool createForearmsTable();
-    bool insertForearmsExcercise(QString name, QString description);
+    bool createWorkoutTable();
+    bool insertWorkout(QString name, double calories);
 
-    bool createQuadsTable();
-    bool insertQuadsExcercise(QString name, QString description);
+    bool createWorkoutEntryTable();
+    bool insertWorkoutEntry(int excercise, int user, int  workout, QString date, int repeats, double weights, int equipment);
 
-    bool createCalvesTable();
-    bool insertCalvesExcercise(QString name, QString description);
-
-    bool createTrapeziusTable();
-    bool insertTrapeziusExcercise(QString name, QString description);
-
-    bool createLatsTable();
-    bool insertLatsExcercise(QString name, QString description);
-
-    bool createTricepsTable();
-    bool insertTricepsExcercise(QString name, QString description);
-
-    bool createGlutesTable();
-    bool insertGlutesExcercise(QString name, QString description);
-
-    bool createHamstringsTable();
-    bool insertHamstringsExcercise(QString name, QString description);
-
-    bool createWorkoutTable(QString workoutname);
-    bool insertWorkout(QString workoutname);
-
-    bool createWorkoutNamesTable();
-    bool insertWorkoutName(QString name);
-
-    bool createPreviousWorkoutNamesTable();
-    bool insertPreviousWorkoutName(QString name, QString date);
-
-    bool createPreviousWorkoutsTable(QString workoutname);
-    bool insertPreviousWorkoutExcercise(QString workoutname);
+    bool createEquipmentTable();
+    bool insertEquipment(QString name);
 
     bool createUserTable();
     bool insertUser(QString name, int age, QString gender, double height, double weight);
@@ -90,7 +64,6 @@ public:
     bool updateWeight(double weight);
 
 private:
-
     QSqlDatabase db;
 };
 

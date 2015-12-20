@@ -12,31 +12,6 @@ GymModel::~GymModel() {
     clean();
 }
 
-bool GymModel::openDB() {
-
-    // Find QSLite driver
-    db_ = QSqlDatabase::addDatabase("QSQLITE","dataConnection");
-    QString dbname = "gymDatabase.db.sqlite";
-    QString dbpath = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QDir::separator() + dbname;
-    //QString dbpath = "/usr/share/harbour-salifish/databases/" + dbname;
-    db_.setDatabaseName(dbpath);
-    //db_.setDatabaseName("/home/nemo/qml/Sqlite/gymDatabase.db.sqlite");
-
-    // Open databasee
-    if(db_.open()) {
-        QStringList tables = db_.tables();
-        qDebug() << "Tables: " << tables;
-        return true;
-    } else {
-        qDebug() << db_.lastError();
-        return false;
-    }
-}
-
-void GymModel::closeDB() {
-    db_.close();
-}
-
 QString GymModel::getName() {
 
     return name_;

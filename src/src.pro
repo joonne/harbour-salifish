@@ -11,8 +11,8 @@ QT += sql
 SOURCES += main.cpp \
     user.cpp \
     gymmodel.cpp \
-    workoutmodel/excercise.cpp \
-    databasemanager.cpp
+    databasemanager.cpp \
+    workoutmodel/excercisedata.cpp
 
 OTHER_FILES = \
 # You DO NOT want .yaml be listed here as Qt Creator's editor is completely not ready for multi package .yaml's
@@ -42,5 +42,5 @@ INCLUDEPATH += $$PWD
 HEADERS += \
     user.h \
     gymmodel.h \
-    workoutmodel/excercise.h \
-    databasemanager.h
+    databasemanager.h \
+    workoutmodel/excercisedata.h

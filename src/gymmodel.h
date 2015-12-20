@@ -24,13 +24,9 @@ class GymModel : public QObject
                NOTIFY SelectedMuscleChanged)
     Q_PROPERTY(QString SelectedExcercise READ getSelectedExcercise WRITE setSelectedExcercise
                NOTIFY SelectedExcerciseChanged)
-    //Q_PROPERTY(int SelectedExcercisesCount READ getSelectedExcercisesCount NOTIFY selectedExcercisesCountChanged)
     Q_PROPERTY(QString ExcerciseName READ getExcerciseName WRITE setExcerciseName NOTIFY excerciseNameChanged)
     Q_PROPERTY(QString ExcerciseDescription READ getExcerciseDescription WRITE setExcerciseDescription NOTIFY excerciseDescriptionChanged)
     Q_PROPERTY(QString Mode READ getMode WRITE setMode NOTIFY modeChanged)
-    //Q_PROPERTY(int series READ getSeries WRITE setSeries NOTIFY seriesChanged)
-    //Q_PROPERTY(int repeats READ getRepeats WRITE setRepeats NOTIFY repeatsChanged)
-    //Q_PROPERTY(double weights READ getWeights WRITE setWeights NOTIFY weightsChanged)
     Q_PROPERTY(int currentSeriesIndex READ getCurrentSeriesIndex NOTIFY currentSeriesIndexChanged)
 
 public:
