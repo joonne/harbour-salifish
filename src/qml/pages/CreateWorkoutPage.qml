@@ -13,34 +13,36 @@ Page {
             visible: listview.count > 0
 
             MenuItem {
-                text: "Clear"
+                text: qsTr("Clear")
                 onClicked: GymModel.clearSelectedExcercises()
             }
 
             MenuItem {
-                text: "Continue"
+                text: qsTr("Continue")
                 onClicked: pageStack.push(Qt.resolvedUrl("EditWorkoutPage.qml"))
             }
         }
 
         PageHeader {
             id: header
-            title: "Choose Muscle Group"
+            title: qsTr("Choose muscle group")
         }
 
-        SilicaListView {
-
+        Column {
+            id: column
+            anchors.top: parent.top
+            anchors.topMargin: 150
             spacing: Theme.paddingMedium
 
-            BackgroundItem {
+            Row {
+                anchors.left: parent.left
+                anchors.leftMargin: (createworkoutpage.width - chest.width - shoulders.width) / 3
+                width: createworkoutpage.width
+                spacing: (createworkoutpage.width - chest.width - shoulders.width) / 3
 
                 Button {
-                    text: "Chest"
-                    //y: 100
-                    anchors.top: parent.top
-                    anchors.topMargin: 100
-                    anchors.left: parent.left
-                    anchors.leftMargin: 10
+                    id: chest
+                    text: qsTr("Chest")
                     onClicked: {
                         GymModel.SelectedMuscle = text
                         GymModel.getExcercises()
@@ -49,31 +51,25 @@ Page {
                     }
 
                 } Button {
-                    text: "Shoulders"
-                    y: 100
-                    x: 270
-                    //anchors.right: createworkoutpage.right
+                    id: shoulders
+                    text: qsTr("Shoulders")
                     onClicked: {
                         GymModel.SelectedMuscle = text
                         GymModel.getExcercises()
                         pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"))
                     }
+                }
+            }
 
-                } Button {
-                    text: "Abs"
-                    y: 160
-                    x: 10
-                    onClicked: {
-                        GymModel.SelectedMuscle = text
-                        GymModel.getExcercises()
-                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"))
+            Row {
+                anchors.left: parent.left
+                anchors.leftMargin: (createworkoutpage.width - chest.width - shoulders.width) / 3
+                width: createworkoutpage.width
+                spacing: (createworkoutpage.width - chest.width - shoulders.width) / 3
 
-                    }
-
-                } Button {
-                    text: "Biceps"
-                    y: 160
-                    x: 270
+                Button {
+                    id: abs
+                    text: qsTr("Abs")
                     onClicked: {
                         GymModel.SelectedMuscle = text
                         GymModel.getExcercises()
@@ -82,9 +78,26 @@ Page {
                     }
 
                 } Button {
-                    text: "Forearms"
-                    y: 220
-                    x: 10
+                    id: biceps
+                    text: qsTr("Biceps")
+                    onClicked: {
+                        GymModel.SelectedMuscle = text
+                        GymModel.getExcercises()
+                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"))
+
+                    }
+                }
+            }
+
+            Row {
+                anchors.left: parent.left
+                anchors.leftMargin: (createworkoutpage.width - chest.width - shoulders.width) / 3
+                width: createworkoutpage.width
+                spacing: (createworkoutpage.width - chest.width - shoulders.width) / 3
+
+                Button {
+                    id: forearms
+                    text: qsTr("Forearms")
                     onClicked: {
                         GymModel.SelectedMuscle = text
                         GymModel.getExcercises()
@@ -93,9 +106,26 @@ Page {
                     }
 
                 } Button {
-                    text: "Quads"
-                    y: 220
-                    x: 270
+                    id: quads
+                    text: qsTr("Quads")
+                    onClicked: {
+                        GymModel.SelectedMuscle = text
+                        GymModel.getExcercises()
+                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"))
+
+                    }
+                }
+            }
+
+            Row {
+                anchors.left: parent.left
+                anchors.leftMargin: (createworkoutpage.width - chest.width - shoulders.width) / 3
+                width: createworkoutpage.width
+                spacing: (createworkoutpage.width - chest.width - shoulders.width) / 3
+
+                Button {
+                    id: calves
+                    text: qsTr("Calves")
                     onClicked: {
                         GymModel.SelectedMuscle = text
                         GymModel.getExcercises()
@@ -104,9 +134,27 @@ Page {
                     }
 
                 } Button {
-                    text: "Calves"
-                    y: 280
-                    x: 10
+                    id: trapezius
+                    text: qsTr("Trapezius")
+                    onClicked: {
+                        GymModel.SelectedMuscle = text
+                        GymModel.getExcercises()
+                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"))
+
+                    }
+
+                }
+            }
+
+            Row {
+                anchors.left: parent.left
+                anchors.leftMargin: (createworkoutpage.width - chest.width - shoulders.width) / 3
+                width: createworkoutpage.width
+                spacing: (createworkoutpage.width - chest.width - shoulders.width) / 3
+
+                Button {
+                    id: lats
+                    text: qsTr("Lats")
                     onClicked: {
                         GymModel.SelectedMuscle = text
                         GymModel.getExcercises()
@@ -115,42 +163,26 @@ Page {
                     }
 
                 } Button {
-                    text: "Trapezius"
-                    y: 280
-                    x: 270
+                    id: triceps
+                    text: qsTr("Triceps")
                     onClicked: {
                         GymModel.SelectedMuscle = text
                         GymModel.getExcercises()
                         pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"))
 
                     }
+                }
+            }
 
-                } Button {
-                    text: "Lats"
-                    y: 340
-                    x: 10
-                    onClicked: {
-                        GymModel.SelectedMuscle = text
-                        GymModel.getExcercises()
-                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"))
+            Row {
+                anchors.left: parent.left
+                anchors.leftMargin: (createworkoutpage.width - chest.width - shoulders.width) / 3
+                width: createworkoutpage.width
+                spacing: (createworkoutpage.width - chest.width - shoulders.width) / 3
 
-                    }
-
-                } Button {
-                    text: "Triceps"
-                    y: 340
-                    x: 270
-                    onClicked: {
-                        GymModel.SelectedMuscle = text
-                        GymModel.getExcercises()
-                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"))
-
-                    }
-
-                } Button {
-                    text: "Glutes"
-                    y: 400
-                    x: 10
+                Button {
+                    id: glutes
+                    text: qsTr("Glutes")
                     onClicked: {
                         GymModel.SelectedMuscle = text
                         GymModel.getExcercises()
@@ -160,9 +192,7 @@ Page {
 
                 } Button {
                     id: hamstrings
-                    text: "Hamstrings"
-                    y: 400
-                    x: 270
+                    text: qsTr("Hamstrings")
                     onClicked: {
                         GymModel.SelectedMuscle = text
                         GymModel.getExcercises()
@@ -180,8 +210,8 @@ Page {
             id: listview
             width: 540
             height: 960
-            anchors.top: parent.top
-            anchors.topMargin: 550
+            anchors.top: column.bottom
+            anchors.topMargin: 50
             anchors.bottom: parent.bottom
             spacing: 10 //Theme.paddingSmall
 

@@ -12,6 +12,7 @@ SOURCES += main.cpp \
     user.cpp \
     gymmodel.cpp \
     databasemanager.cpp \
+    workoutmodel/excercisemodel.cpp \
     workoutmodel/excercisedata.cpp
 
 OTHER_FILES = \
@@ -43,4 +44,5 @@ HEADERS += \
     user.h \
     gymmodel.h \
     databasemanager.h \
+    workoutmodel/excercisemodel.h \
     workoutmodel/excercisedata.h

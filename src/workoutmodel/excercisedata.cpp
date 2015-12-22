@@ -1,8 +1,12 @@
 #include "excercisedata.h"
 
-ExcerciseData::ExcerciseData(QObject *parent) :
+ExcerciseData::ExcerciseData(QObject *parent, int excerciseId, QString excerciseName, QString excerciseDescription, QString excerciseCategory) :
     QObject(parent)
 {
+    myExcerciseId = excerciseId;
+    myExcerciseName = excerciseName;
+    myExcerciseDescription = excerciseDescription;
+    myExcerciseCategory = excerciseCategory;
 }
 
 ExcerciseData::~ExcerciseData() { }
@@ -12,45 +16,20 @@ QString ExcerciseData::getExcerciseName() {
 }
 
 QString ExcerciseData::getExcerciseDescription() {
-    return myExceriseDescription;
-}
-
-int ExcerciseData::getRepeats() {
-    return myRepeats;
-}
-
-double ExcerciseData::getWeights() {
-    return myWeights;
+    return myExcerciseDescription;
 }
 
 void ExcerciseData::setExcerciseName(QString excerciseName) {
 
     if(myExcerciseName != excerciseName) {
         myExcerciseName = excerciseName;
-        emit excerciseNameChanged();
     }
 }
 
 void ExcerciseData::setExcerciseDescription(QString excerciseDescription) {
 
-    if(myExceriseDescription != excerciseDescription) {
-        myExceriseDescription = excerciseDescription;
-        emit excerciseDescriptionChanged();
+    if(myExcerciseDescription != excerciseDescription) {
+        myExcerciseDescription = excerciseDescription;
     }
 }
 
-void ExcerciseData::setRepeats(int repeats) {
-
-    if(myRepeats != repeats) {
-        myRepeats = repeats;
-        emit repeatsChanged();
-    }
-}
-
-void ExcerciseData::setWeights(double weights) {
-
-    if(myWeights != weights) {
-        myWeights = weights;
-        emit weightsChanged();
-    }
-}

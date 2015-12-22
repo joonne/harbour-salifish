@@ -8,11 +8,13 @@
 #include <QQmlEngine>
 #include <QGuiApplication>
 #include <QQmlContext>
-#include <gymmodel.h>
-#include <user.h>
-#include <databasemanager.h>
 #include <QStandardPaths>
 #include <QDebug>
+
+#include "gymmodel.h"
+#include "user.h"
+#include "databasemanager.h"
+#include "workoutmodel/excercisemodel.h"
 
 int main(int argc, char *argv[])
 {
@@ -24,6 +26,8 @@ int main(int argc, char *argv[])
     QScopedPointer<DatabaseManager> db(new DatabaseManager);
     QQmlContext* context = view->rootContext();
     context->setContextProperty("db", db.data());
+
+    qmlRegisterType<ExcerciseModel>("harbour.salifish", 1, 0, "ExcerciseModel");
 
     //    Here's how you will add QML components whenever you start using them
     //    Check https://github.com/amarchen/Wikipedia for a more full example

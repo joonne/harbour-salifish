@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import harbour.salifish 1.0
 
 Page {
     id: page
@@ -14,37 +15,37 @@ Page {
             MenuItem {
                 text: "About SaliFish"
                 onClicked: {
-                    GymModel.Mode = "normal"
+                    //GymModel.Mode = "normal"
                     pageStack.push(Qt.resolvedUrl("AboutPage.qml"))
                 }
             }
             MenuItem {
                 text: "Select a Workout"
                 onClicked: {
-                    GymModel.Mode = "normal"
-                    GymModel.getWorkouts()
+                    //GymModel.Mode = "normal"
+                    //GymModel.getWorkouts()
                     pageStack.push(Qt.resolvedUrl("SavedWorkoutsPage.qml"))
                 }
             }
             MenuItem {
                 text: "Create a new Workout"
                 onClicked: {
-                    GymModel.Mode = "normal"
-                    GymModel.clearSelectedExcercises()
+                    //GymModel.Mode = "normal"
+                    //GymModel.clearSelectedExcercises()
                     pageStack.push(Qt.resolvedUrl("CreateWorkoutPage.qml"))
                 }
             }
             MenuItem {
                 text: "Settings"
                 onClicked: {
-                    GymModel.Mode = "normal"
+                    //GymModel.Mode = "normal"
                     pageStack.push(Qt.resolvedUrl("SettingsPage.qml"))
                 }
             }
             MenuItem {
                 text: "Profile"
                 onClicked: {
-                    GymModel.Mode = "normal"
+                    //GymModel.Mode = "normal"
                     pageStack.push(Qt.resolvedUrl("ProfilePage.qml"))
                 }
             }
@@ -85,14 +86,15 @@ Page {
             //anchors.bottom: parent.bottom
             //spacing: Theme.paddingSmall
 
-            model: previousWorkoutsModel
+            model: ExcerciseModel {
+                id: excerciseModel
+                Component.onCompleted: excerciseModel.populate()
+            }
+
             delegate: TextField {
-                text: modelData
+                text: name
                 readOnly: true
                 color: Theme.highlightColor
-                onPressAndHold: {
-
-                }
             }
         }
     }
