@@ -10,8 +10,8 @@ DatabaseManager::DatabaseManager(QObject *parent) :
 
 DatabaseManager::~DatabaseManager() {
 
-    qDebug() << "Destroying gymdbmanager..";
-    deleteDB();
+    qDebug() << "Destroying dbmanager...";
+    db.close();
 }
 
 void DatabaseManager::setUpDB() {
@@ -147,7 +147,22 @@ bool DatabaseManager::insertCategory(QString name) {
 }
 
 int DatabaseManager::findCategory(QString category) {
-    return 1;
+
+    int categoryId = 0;
+
+    if(db.isOpen()) {
+        QSqlQuery query(db);
+        query.exec(QString("SELECT id FROM category WHERE name = '%1'").arg(category));
+        qDebug() << query.lastError();
+
+        if(query.isSelect()) {
+            while(query.next()) {
+                categoryId = query.value(0).toInt();
+            }
+        }
+    }
+
+    return categoryId;
 }
 
 bool DatabaseManager::createExcerciseTable() {
@@ -363,6 +378,18 @@ bool DatabaseManager::createDB() {
 
         //-----------------------------------------------------------------
 
+
+        if(insertCategory("chest") && insertCategory("shoulders") &&
+                insertCategory("abs") && insertCategory("biceps") &&
+                insertCategory("forearms") && insertCategory("quads") &&
+                insertCategory("calves") && insertCategory("trapezius") &&
+                insertCategory("lats") && insertCategory("triceps") &&
+                insertCategory("glutes") && insertCategory("hamstrings")) {
+            qDebug() << "Categories added";
+        }
+
+        //-----------------------------------------------------------------
+
         if(insertExcercise("Bench Press", "Raise the bar.", "chest")) {
             qDebug() << "Chest Excercise added.";
         } else {
@@ -549,6 +576,7 @@ bool DatabaseManager::updateDB() {
     //updateInfoTable(2.0);
 
     qDebug() << "Updating database...";
+    return true;
 
 }
 
@@ -653,4 +681,31 @@ bool DatabaseManager::updateWeight(double weight) {
         qDebug() << query.lastError();
     }
     return ret;
+}
+
+QList<QMap<QString, QString> > DatabaseManager::getExcercises(QString category) {
+
+    int categoryId = findCategory(category);
+    QList<QMap<QString, QString> > excercises;
+
+    if(db.isOpen()) {
+
+        QSqlQuery query(db);
+        query.exec(QString("SELECT * FROM excercise WHERE category = %0;").arg(categoryId));
+        qDebug() << query.lastError();
+        qDebug() << query.lastQuery();
+
+        if(query.isSelect()) {
+            while(query.next()) {
+                QMap<QString,QString> temp;
+                temp.insert("id", query.value(0).toString());
+                temp.insert("name", query.value(1).toString());
+                temp.insert("description", query.value(2).toString());
+                temp.insert("category", query.value(3).toString());
+                excercises.append(temp);
+            }
+        }
+    }
+    qDebug() << excercises;
+    return excercises;
 }

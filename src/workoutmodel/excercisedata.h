@@ -1,13 +1,13 @@
 #ifndef EXCERCISEDATA_H
 #define EXCERCISEDATA_H
 
-#include <QObject>
+#include <QString>
 
-class ExcerciseData : public QObject
+class ExcerciseData
 {
-    Q_OBJECT
+
 public:
-    explicit ExcerciseData(QObject *parent = 0, int excerciseId = 0, QString excerciseName = "", QString excerciseDescription = "", QString excerciseCategory = "");
+    explicit ExcerciseData(int excerciseId = 0, QString excerciseName = "", QString excerciseDescription = "", QString excerciseCategory = "");
     ~ExcerciseData();
 
     int getExcerciseId();
@@ -19,8 +19,8 @@ public:
     QString getExcerciseDescription();
     void setExcerciseDescription(QString excerciseDescription);
 
-    QString getCategory();
-    void setCategory(QString category);
+    QString getExcerciseCategory();
+    void setExcerciseCategory(QString excerciseCategory);
 
 private:
     int myExcerciseId;

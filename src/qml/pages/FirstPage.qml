@@ -64,18 +64,17 @@ Page {
             anchors.leftMargin: 20
             anchors.top: parent.top
             anchors.topMargin: 120
-            text: "Choose action from pulldown menu"
-            color: Theme.secondaryHighlightColor
+            text: qsTr("Choose action from pulldown menu")
+            color: Theme.secondaryColor
             font.pixelSize: Theme.fontSizeMedium
         }
 
-        Label {
+        SectionHeader {
             anchors.top: label.bottom
             anchors.topMargin: 50
             anchors.left: parent.left
             anchors.leftMargin: 20
-            color: Theme.secondaryHighlightColor
-            text: "Recent Workouts"
+            text: qsTr("Recent Workouts")
         }
 
         SilicaListView {
@@ -86,15 +85,11 @@ Page {
             //anchors.bottom: parent.bottom
             //spacing: Theme.paddingSmall
 
-            model: ExcerciseModel {
-                id: excerciseModel
-                Component.onCompleted: excerciseModel.populate()
-            }
+            model: 2
 
             delegate: TextField {
-                text: name
+                text: "PENKKIHAUKKA"
                 readOnly: true
-                color: Theme.highlightColor
             }
         }
     }

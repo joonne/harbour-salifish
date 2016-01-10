@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import harbour.salifish 1.0
 
 Page {
     id: createworkoutpage
@@ -44,9 +45,7 @@ Page {
                     id: chest
                     text: qsTr("Chest")
                     onClicked: {
-                        GymModel.SelectedMuscle = text
-                        GymModel.getExcercises()
-                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"))
+                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"), {selectedMuscle: text})
 
                     }
 
@@ -54,10 +53,7 @@ Page {
                     id: shoulders
                     text: qsTr("Shoulders")
                     onClicked: {
-                        GymModel.SelectedMuscle = text
-                        GymModel.getExcercises()
-                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"))
-                    }
+                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"), {selectedMuscle: text})                    }
                 }
             }
 
@@ -71,20 +67,14 @@ Page {
                     id: abs
                     text: qsTr("Abs")
                     onClicked: {
-                        GymModel.SelectedMuscle = text
-                        GymModel.getExcercises()
-                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"))
-
+                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"), {selectedMuscle: text})
                     }
 
                 } Button {
                     id: biceps
                     text: qsTr("Biceps")
                     onClicked: {
-                        GymModel.SelectedMuscle = text
-                        GymModel.getExcercises()
-                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"))
-
+                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"), {selectedMuscle: text})
                     }
                 }
             }
@@ -99,20 +89,14 @@ Page {
                     id: forearms
                     text: qsTr("Forearms")
                     onClicked: {
-                        GymModel.SelectedMuscle = text
-                        GymModel.getExcercises()
-                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"))
-
+                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"), {selectedMuscle: text})
                     }
 
                 } Button {
                     id: quads
                     text: qsTr("Quads")
                     onClicked: {
-                        GymModel.SelectedMuscle = text
-                        GymModel.getExcercises()
-                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"))
-
+                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"), {selectedMuscle: text})
                     }
                 }
             }
@@ -127,20 +111,14 @@ Page {
                     id: calves
                     text: qsTr("Calves")
                     onClicked: {
-                        GymModel.SelectedMuscle = text
-                        GymModel.getExcercises()
-                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"))
-
+                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"), {selectedMuscle: text})
                     }
 
                 } Button {
                     id: trapezius
                     text: qsTr("Trapezius")
                     onClicked: {
-                        GymModel.SelectedMuscle = text
-                        GymModel.getExcercises()
-                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"))
-
+                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"), {selectedMuscle: text})
                     }
 
                 }
@@ -156,20 +134,16 @@ Page {
                     id: lats
                     text: qsTr("Lats")
                     onClicked: {
-                        GymModel.SelectedMuscle = text
-                        GymModel.getExcercises()
-                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"))
-
+                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"), {selectedMuscle: text})
                     }
 
-                } Button {
+                }
+
+                Button {
                     id: triceps
                     text: qsTr("Triceps")
                     onClicked: {
-                        GymModel.SelectedMuscle = text
-                        GymModel.getExcercises()
-                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"))
-
+                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"), {selectedMuscle: text})
                     }
                 }
             }
@@ -184,51 +158,45 @@ Page {
                     id: glutes
                     text: qsTr("Glutes")
                     onClicked: {
-                        GymModel.SelectedMuscle = text
-                        GymModel.getExcercises()
-                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"))
-
+                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"), {selectedMuscle: text})
                     }
 
                 } Button {
                     id: hamstrings
                     text: qsTr("Hamstrings")
                     onClicked: {
-                        GymModel.SelectedMuscle = text
-                        GymModel.getExcercises()
-                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"))
-
+                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"), {selectedMuscle: text})
                     }
                 }
             }
-        }
 
-        SilicaListView {
-
-            VerticalScrollDecorator {}
-
-            id: listview
-            width: 540
-            height: 960
-            anchors.top: column.bottom
-            anchors.topMargin: 50
-            anchors.bottom: parent.bottom
-            spacing: 10 //Theme.paddingSmall
-
-            model: selectedExcercisesModel
-            delegate: TextField {
-                text: modelData
-                readOnly: true
-                onPressAndHold: {
-
-                }
+            SectionHeader {
+                text: "Selected excercises"
+                visible: listview.count > 0
             }
 
-            ViewPlaceholder {
-                enabled: listview.count === 0
-                text: "Selected excercises will appear here."
-                anchors.centerIn: listview
+            SilicaListView {
+                id: listview
+                width: 540
+                height: 960
+                spacing: 10 //Theme.paddingSmall
 
+                model: 1
+                delegate: Label {
+                    text: "PENA"
+                    font.pixelSize: Theme.fontSizeSmall
+                    anchors.left: parent.left
+                    anchors.leftMargin: Theme.paddingMedium
+                }
+
+                ViewPlaceholder {
+                    enabled: listview.count === 0
+                    text: qsTr("Selected excercises will appear here.")
+                    anchors.centerIn: listview
+
+                }
+
+                VerticalScrollDecorator {}
             }
         }
     }

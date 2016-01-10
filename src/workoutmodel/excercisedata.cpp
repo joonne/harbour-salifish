@@ -1,7 +1,6 @@
 #include "excercisedata.h"
 
-ExcerciseData::ExcerciseData(QObject *parent, int excerciseId, QString excerciseName, QString excerciseDescription, QString excerciseCategory) :
-    QObject(parent)
+ExcerciseData::ExcerciseData(int excerciseId, QString excerciseName, QString excerciseDescription, QString excerciseCategory)
 {
     myExcerciseId = excerciseId;
     myExcerciseName = excerciseName;
@@ -11,12 +10,27 @@ ExcerciseData::ExcerciseData(QObject *parent, int excerciseId, QString excercise
 
 ExcerciseData::~ExcerciseData() { }
 
+int ExcerciseData::getExcerciseId() {
+    return myExcerciseId;
+}
+
 QString ExcerciseData::getExcerciseName() {
     return myExcerciseName;
 }
 
 QString ExcerciseData::getExcerciseDescription() {
     return myExcerciseDescription;
+}
+
+QString ExcerciseData::getExcerciseCategory() {
+    return myExcerciseCategory;
+}
+
+void ExcerciseData::setExcerciseId(int excerciseId) {
+
+    if(myExcerciseId != excerciseId) {
+        myExcerciseId = excerciseId;
+    }
 }
 
 void ExcerciseData::setExcerciseName(QString excerciseName) {
@@ -33,3 +47,9 @@ void ExcerciseData::setExcerciseDescription(QString excerciseDescription) {
     }
 }
 
+void ExcerciseData::setExcerciseCategory(QString excerciseCategory) {
+
+    if(myExcerciseCategory != excerciseCategory) {
+        myExcerciseCategory = excerciseCategory;
+    }
+}

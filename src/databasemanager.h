@@ -63,6 +63,8 @@ public:
     bool updateHeight(double height);
     bool updateWeight(double weight);
 
+    QList<QMap<QString, QString> > getExcercises(QString category);
+
 private:
     QSqlDatabase db;
 };

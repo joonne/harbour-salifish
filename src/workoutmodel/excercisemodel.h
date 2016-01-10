@@ -5,6 +5,7 @@
 #include <QAbstractListModel>
 
 #include "excercisedata.h"
+#include "databasemanager.h"
 
 class ExcerciseModel : public QAbstractListModel
 {
@@ -20,15 +21,16 @@ public:
 
     explicit ExcerciseModel(QObject *parent = 0);
 
-    virtual int rowCount(const QModelIndex &) const { return excercises.size(); }
+    virtual int rowCount(const QModelIndex &index) const;
     virtual QVariant data(const QModelIndex &index, int role) const;
 
     virtual QHash<int, QByteArray> roleNames() const;
 
-    Q_INVOKABLE void populate();
+    Q_INVOKABLE void populate(QString selectedMuscle);
 
 private:
-    QVector<QString> excercises;
+    QList<ExcerciseData*> myExcercises;
+    DatabaseManager* mydbmanager;
 
 };
 
