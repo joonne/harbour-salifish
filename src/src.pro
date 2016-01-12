@@ -46,3 +46,9 @@ HEADERS += \
     databasemanager.h \
     workoutmodel/excercisemodel.h \
     workoutmodel/excercisedata.h
+
+DISTFILES += \
+    qml/pages/WorkoutStartPage.qml \
+    qml/pages/WorkoutViewPage.qml \
+    qml/pages/Workout.qml \
+    qml/pages/WorkoutStatus.qml

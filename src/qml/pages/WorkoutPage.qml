@@ -41,7 +41,7 @@ Page {
             }
 
             ViewPlaceholder {
-                text: "All done for now, remember to stretch and recover properly."
+                text: qsTr("All done for now, remember to stretch and recover properly.")
                 enabled: workout.count === 0
                 anchors.centerIn: workout
             }

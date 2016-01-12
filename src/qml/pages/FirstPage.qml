@@ -49,6 +49,10 @@ Page {
                     pageStack.push(Qt.resolvedUrl("ProfilePage.qml"))
                 }
             }
+            MenuItem {
+                text: "Start Workout"
+                onClicked: pageStack.push(Qt.resolvedUrl("WorkoutStartPage.qml"))
+            }
         }
 
         // Tell SilicaFlickable the height of its content.
