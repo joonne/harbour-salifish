@@ -2,11 +2,13 @@
 
 #define APIURL "https://wger.de/api/v2/"
 
-APIReader::APIReader(QObject *parent) :
+APIReader::APIReader(QObject *parent, DatabaseManager *dbmanager) :
     QObject(parent),
-    myNetWorkAccessManager(0)
+    myNetWorkAccessManager(0),
+    mydbmanager(0)
 {
     myNetWorkAccessManager = new QNetworkAccessManager(this);
+    mydbmanager = dbmanager;
 
     connect(myNetWorkAccessManager,
             SIGNAL(finished(QNetworkReply*)),
@@ -14,6 +16,10 @@ APIReader::APIReader(QObject *parent) :
             SLOT(replyFinished(QNetworkReply*)));
 
     getExcercises("1");
+    getExcercises("2");
+    getExcercises("3");
+    getExcercises("4");
+    getExcercises("5");
 }
 
 APIReader::~APIReader() {
@@ -62,14 +68,18 @@ void APIReader::replyFinished(QNetworkReply *reply) {
     reply->deleteLater();
 
 
-    qDebug() << obj.toVariantMap()["results"].value<QVariantMap>();
+    qDebug() << obj.value("results");
 
-//    QVariantMap results = obj.toVariantMap()["results"].at(0);
+    QString name = "";
+    QString description = "";
 
-//    QVariantMap::iterator itr = results.begin();
-//    while(itr != results.end()) {
-//        qDebug() << itr.key();
-//        qDebug() << itr.value();
-//    }
+    QJsonValue excercisesObj = obj.value("results");
+    QJsonArray excercises = excercisesObj.toArray();
 
+    int size = excercises.size();
+    for(int i = 0; i < size; ++i) {
+        name = excercises.at(i).toObject().value("name").toString();
+        description = excercises.at(i).toObject().value("description").toString();
+//        mydbmanager->insertExcercise(name,description,"biceps");
+    }
 }

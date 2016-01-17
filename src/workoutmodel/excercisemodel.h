@@ -19,7 +19,7 @@ public:
         CategoryRole
     };
 
-    explicit ExcerciseModel(QObject *parent = 0);
+    explicit ExcerciseModel(QObject *parent = 0, DatabaseManager* dbmanager = 0);
 
     virtual int rowCount(const QModelIndex &index) const;
     virtual QVariant data(const QModelIndex &index, int role) const;

@@ -16,6 +16,7 @@
 #include "databasemanager.h"
 #include "workoutmodel/excercisemodel.h"
 #include "apireader.h"
+#include "controller.h"
 
 int main(int argc, char *argv[])
 {
@@ -24,11 +25,9 @@ int main(int argc, char *argv[])
     QScopedPointer<QGuiApplication> app(SailfishApp::application(argc, argv));
     QScopedPointer<QQuickView> view(SailfishApp::createView());
 
-    // QScopedPointer<DatabaseManager> db(new DatabaseManager);
-    // QQmlContext* context = view->rootContext();
-    // context->setContextProperty("db", db.data());
-
-    QScopedPointer<APIReader> apireader(new APIReader);
+    QScopedPointer<Controller> controller(new Controller);
+    QQmlContext* context = view->rootContext();
+    context->setContextProperty("controller", controller.data());
 
     qmlRegisterType<ExcerciseModel>("harbour.salifish", 1, 0, "ExcerciseModel");
 

@@ -14,7 +14,8 @@ SOURCES += main.cpp \
     databasemanager.cpp \
     workoutmodel/excercisemodel.cpp \
     workoutmodel/excercisedata.cpp \
-    apireader.cpp
+    apireader.cpp \
+    controller.cpp
 
 OTHER_FILES = \
 # You DO NOT want .yaml be listed here as Qt Creator's editor is completely not ready for multi package .yaml's
@@ -47,7 +48,8 @@ HEADERS += \
     databasemanager.h \
     workoutmodel/excercisemodel.h \
     workoutmodel/excercisedata.h \
-    apireader.h
+    apireader.h \
+    controller.h
 
 DISTFILES += \
     qml/pages/WorkoutStartPage.qml \

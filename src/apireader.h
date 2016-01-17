@@ -2,26 +2,23 @@
 #define APIREADER_H
 
 #include <QObject>
-#include <QXmlStreamReader>
-#include <QFile>
 #include <QDebug>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>
-#include <QTemporaryFile>
 #include <QList>
-#include <QStringRef>
-#include <QByteArray>
-#include <QBuffer>
 #include <QJsonObject>
+#include <QJsonArray>
 #include <QJsonDocument>
+
+#include "databasemanager.h"
 
 class APIReader : public QObject
 {
     Q_OBJECT
 public:
 
-    explicit APIReader(QObject *parent = 0);
+    explicit APIReader(QObject *parent = 0, DatabaseManager* dbmanager = 0);
     ~APIReader();
 
     void startRequest(QUrl url);
@@ -33,8 +30,9 @@ public slots:
     void replyFinished(QNetworkReply* reply);
 
 private:
-
     QNetworkAccessManager* myNetWorkAccessManager;
+    DatabaseManager* mydbmanager;
+
 
 };
 

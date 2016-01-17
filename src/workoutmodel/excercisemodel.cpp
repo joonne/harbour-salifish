@@ -1,12 +1,10 @@
 #include "excercisemodel.h"
 #include <QDebug>
 
-ExcerciseModel::ExcerciseModel(QObject *parent) :
+ExcerciseModel::ExcerciseModel(QObject *parent, DatabaseManager *dbmanager) :
     QAbstractListModel(parent) {
 
-    mydbmanager = new DatabaseManager(this);
-    mydbmanager->setUpDB();
-
+    mydbmanager = dbmanager;
 }
 
 int ExcerciseModel::rowCount(const QModelIndex &index) const {
@@ -42,6 +40,10 @@ QVariant ExcerciseModel::data(const QModelIndex &index, int role) const {
 }
 
 void ExcerciseModel::populate(QString selectedMuscle) {
+
+    beginResetModel();
+    myExcercises.clear();
+    endResetModel();
 
     QList<QMap<QString,QString> > excercises = mydbmanager->getExcercises(selectedMuscle);
     int size = excercises.size();

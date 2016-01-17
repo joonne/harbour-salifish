@@ -7,6 +7,8 @@ Page {
 
     property string selectedMuscle: ""
 
+    Component.onCompleted: controller.excerciseModel.populate(selectedMuscle.toLowerCase())
+
     SilicaFlickable {
         anchors.fill: parent
 
@@ -18,42 +20,35 @@ Page {
         }
 
         PageHeader {
+            id: pageheader
             title: selectedMuscle
         }
 
-        SearchField {
-            id: searchfield
-            y: 100
-            placeholderText: qsTr("Search")
-            width: excercisepage.width
-            EnterKey.enabled: text.length > 0
-            EnterKey.onClicked: focus = false
-        }
+        Column {
+            spacing: Theme.paddinglarge
+            anchors.top: pageheader.bottom
 
-        SilicaListView {
-            id: listView
-            width: 540
-            height: 960
-            anchors.top: searchfield.bottom
-
-            model: ExcerciseModel {
-                id: excerciseModel
-                Component.onCompleted: excerciseModel.populate(selectedMuscle.toLowerCase())
+            SearchField {
+                id: searchfield
+                placeholderText: qsTr("Search")
+                width: excercisepage.width
+                EnterKey.enabled: text.length > 0
+                EnterKey.onClicked: focus = false
             }
 
-            delegate: TextSwitch {
-                text: name
-                onClicked: {
-//                    checked ? GymModel.SelectedExcercise = text : GymModel.SelectedExcercise = ""
-//                    checked ? GymModel.addExcercise(text) : GymModel.removeExcercise(text)
-                }
-                onPressAndHold: {
-//                    GymModel.SelectedExcercise = text
-//                    GymModel.getExcercise(text)
-                    pageStack.push(Qt.resolvedUrl("ShowDescriptionPage.qml"), {excerciseName: name, excerciseDescription: description})
-                }
+            SilicaListView {
+                id: listView
+                width: excercisepage.width
+                height: excercisepage.height - pageheader.height - searchfield.height
 
-//                checked: GymModel.isExcerciseSelected(text) ? checked = true : checked = false
+                model: controller.excerciseModel
+
+                delegate: TextSwitch {
+                    text: name
+                    onPressAndHold: {
+                        pageStack.push(Qt.resolvedUrl("ShowDescriptionPage.qml"), {excerciseName: name, excerciseDescription: description})
+                    }
+                }
             }
         }
     }
