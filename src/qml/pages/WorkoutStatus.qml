@@ -1,6 +1,5 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-//import QtCharts 2.0
 
 Item {
     id: workoutStatusItem
@@ -13,7 +12,6 @@ Item {
         Column {
             id: column
             spacing: Theme.paddingLarge
-            anchors.centerIn: parent
 
             Row {
                 id: seriesrow

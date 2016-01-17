@@ -6,13 +6,33 @@ Item {
     height: workoutView.height;
     width: workoutView.width;
 
+    property int series: 1
+    property int seriesFull: 1
+    property double weights: 80
+
     SilicaFlickable {
         anchors.fill: parent
 
         Column {
             id: column
+            anchors {
+                top: parent.top
+                topMargin: 5 * Theme.paddingLarge
+            }
             spacing: Theme.paddingLarge
-            anchors.centerIn: parent
+
+            Row {
+                id: excerciserow
+                anchors {
+                    left: parent.left
+                    leftMargin: (workoutItem.width - excerciserow.width) / 2
+                }
+
+                Label {
+                    text: "Bench Press"
+                    font.pixelSize: Theme.fontSizeHuge
+                }
+            }
 
             Row {
                 id: seriesrow
@@ -24,32 +44,30 @@ Item {
 
                 Image {
                     source: "image://theme/icon-m-remove"
+                    BackgroundItem {
+                        anchors.fill: parent
+                        onClicked: series -= 1
+                    }
                 }
 
                 Label {
                     text: qsTr("Series")
+                    font.pixelSize: Theme.fontSizeHuge
                 }
 
                 Label {
-                    text: "1/3"
+                    text: "1/" + series
+                    font.pixelSize: Theme.fontSizeHuge
                 }
 
                 Image {
                     source: "image://theme/icon-m-add"
+                    BackgroundItem {
+                        anchors.fill: parent
+                        onClicked: series += 1
+                    }
                 }
 
-            }
-
-            Row {
-                id: excerciserow
-                anchors {
-                    left: parent.left
-                    leftMargin: (workoutItem.width - excerciserow.width) / 2
-                }
-
-                Label {
-                    text: "Bench Press"
-                }
             }
 
             Row {
@@ -61,8 +79,8 @@ Item {
 
                 Label {
                     text: qsTr("Weights")
+                    font.pixelSize: Theme.fontSizeHuge
                 }
-
             }
 
             Row {
@@ -73,16 +91,34 @@ Item {
                 }
                 spacing: Theme.paddingLarge
 
+//                Slider {
+//                    id: weightSlider
+//                    width: parent.width
+//                    minimumValue: 1
+//                    maximumValue: 500
+//                    value: 80
+//                    valueText: value + " kg"
+//                }
+
                 Image {
                     source: "image://theme/icon-m-remove"
+                    BackgroundItem {
+                        anchors.fill: parent
+                        onClicked: weights -= 0.25
+                    }
                 }
 
                 Label {
-                    text: "80 kg"
+                    text: weights
+                    font.pixelSize: Theme.fontSizeHuge
                 }
 
                 Image {
                     source: "image://theme/icon-m-add"
+                    BackgroundItem {
+                        anchors.fill: parent
+                        onClicked: weights += 0.25
+                    }
                 }
             }
 

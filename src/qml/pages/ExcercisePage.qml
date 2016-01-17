@@ -51,7 +51,6 @@ Page {
 //                    GymModel.SelectedExcercise = text
 //                    GymModel.getExcercise(text)
                     pageStack.push(Qt.resolvedUrl("ShowDescriptionPage.qml"), {excerciseName: name, excerciseDescription: description})
-                    console.log(description);
                 }
 
 //                checked: GymModel.isExcerciseSelected(text) ? checked = true : checked = false

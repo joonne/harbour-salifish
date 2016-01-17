@@ -1,4 +1,5 @@
 #include "excercisedata.h"
+#include <QDebug>
 
 ExcerciseData::ExcerciseData(int excerciseId, QString excerciseName, QString excerciseDescription, QString excerciseCategory)
 {
