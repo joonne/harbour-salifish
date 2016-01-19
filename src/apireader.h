@@ -24,8 +24,13 @@ public:
     void startRequest(QUrl url);
 
     void getExcercises(QString muscle);
+    void getAllExcercises();
+    void getMuscles();
 
 signals:
+    void readyToStoreExcercises();
+    void readyToStoreMuscles();
+
 public slots:
     void replyFinished(QNetworkReply* reply);
 

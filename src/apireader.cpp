@@ -15,11 +15,13 @@ APIReader::APIReader(QObject *parent, DatabaseManager *dbmanager) :
             this,
             SLOT(replyFinished(QNetworkReply*)));
 
-    getExcercises("1");
-    getExcercises("2");
-    getExcercises("3");
-    getExcercises("4");
-    getExcercises("5");
+//    getExcercises("1");
+//    getExcercises("2");
+//    getExcercises("3");
+//    getExcercises("4");
+//    getExcercises("5");
+
+    getAllExcercises();
 }
 
 APIReader::~APIReader() {
@@ -39,8 +41,20 @@ void APIReader::startRequest(QUrl url) {
 
 void APIReader::getExcercises(QString muscle) {
 
-    QUrl finalUrl(QString(QString(APIURL) + "/exercise/?muscles=" + muscle + "&language=2&status=2"));
-    startRequest(finalUrl);
+    QUrl url(QString(QString(APIURL) + "/exercise/?muscles=" + muscle + "&language=2&status=2"));
+    startRequest(url);
+}
+
+void APIReader::getAllExcercises() {
+
+    QUrl url(QString(QString(APIURL) + "/exercise/&language=2&status=2&limit=200"));
+    startRequest(url);
+}
+
+void APIReader::getMuscles() {
+
+    QUrl url(QString(QString(APIURL) + "/muscle"));
+    startRequest(url);
 }
 
 // ---------------------------------------------------
@@ -80,6 +94,8 @@ void APIReader::replyFinished(QNetworkReply *reply) {
     for(int i = 0; i < size; ++i) {
         name = excercises.at(i).toObject().value("name").toString();
         description = excercises.at(i).toObject().value("description").toString();
+        qDebug() << name;
+        qDebug() << description;
 //        mydbmanager->insertExcercise(name,description,"biceps");
     }
 }

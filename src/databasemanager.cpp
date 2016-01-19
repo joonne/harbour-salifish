@@ -192,7 +192,7 @@ bool DatabaseManager::insertExcercise(QString name, QString description, QString
     if (db.isOpen()) {
 
         QSqlQuery query(db);
-        ret = query.exec(QString("INSERT INTO excercise values(NULL,'%1','%2',%3)")
+        ret = query.exec(QString("INSERT OR REPLACE INTO excercise values('%1','%2',%3)")
                          .arg(name).arg(description).arg(categoryid));
 
     }
