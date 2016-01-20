@@ -7,7 +7,7 @@ Page {
 
     property string selectedMuscle: ""
 
-    Component.onCompleted: controller.excerciseModel.populate(selectedMuscle.toLowerCase())
+    Component.onCompleted: controller.excerciseModel.populate(selectedMuscle)
 
     SilicaFlickable {
         anchors.fill: parent

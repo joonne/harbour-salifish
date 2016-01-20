@@ -1,6 +1,6 @@
 #include "apireader.h"
 
-#define APIURL "https://wger.de/api/v2/"
+#define APIURL "https://wger.de/api/v2"
 
 APIReader::APIReader(QObject *parent, DatabaseManager *dbmanager) :
     QObject(parent),
@@ -39,21 +39,27 @@ void APIReader::startRequest(QUrl url) {
 
 }
 
-void APIReader::getExcercises(QString muscle) {
+void APIReader::getExcercises(QString muscleId) {
 
-    QUrl url(QString(QString(APIURL) + "/exercise/?muscles=" + muscle + "&language=2&status=2"));
+    QUrl url(QString(QString(APIURL) + "/exercise/?muscles=" + muscleId + "&language=2&status=2"));
     startRequest(url);
 }
 
 void APIReader::getAllExcercises() {
 
-    QUrl url(QString(QString(APIURL) + "/exercise/&language=2&status=2&limit=200"));
+    QUrl url(QString(QString(APIURL) + "/exercise/?language=2&status=2&limit=200"));
     startRequest(url);
 }
 
 void APIReader::getMuscles() {
 
     QUrl url(QString(QString(APIURL) + "/muscle"));
+    startRequest(url);
+}
+
+void APIReader::getCategories() {
+
+    QUrl url(QString(QString(APIURL) + "/exercisecategory"));
     startRequest(url);
 }
 
@@ -79,23 +85,37 @@ void APIReader::replyFinished(QNetworkReply *reply) {
     } else {
         qDebug() << "Invalid JSON...\n" << response << endl;
     }
-    reply->deleteLater();
-
 
     qDebug() << obj.value("results");
 
+    QJsonValue resultsObj = obj.value("results");
+    QJsonArray resultsArray = resultsObj.toArray();
+
+    processExcercises(resultsArray);
+
+    reply->deleteLater();
+}
+
+void APIReader::processExcercises(QJsonArray excercises) {
+
+    int id = 0;
     QString name = "";
     QString description = "";
-
-    QJsonValue excercisesObj = obj.value("results");
-    QJsonArray excercises = excercisesObj.toArray();
+    int category = 0;
 
     int size = excercises.size();
     for(int i = 0; i < size; ++i) {
+
+        id = excercises.at(i).toObject().value("id").toInt();
         name = excercises.at(i).toObject().value("name").toString();
         description = excercises.at(i).toObject().value("description").toString();
+        category = excercises.at(i).toObject().value("category").toInt();
+
+        qDebug() << id;
         qDebug() << name;
         qDebug() << description;
-//        mydbmanager->insertExcercise(name,description,"biceps");
+        qDebug() << category;
+
+        mydbmanager->insertExcercise(id, name, description, category);
     }
 }

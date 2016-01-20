@@ -32,11 +32,11 @@ public:
     bool updateInfoTable(double version);
 
     bool createCategoryTable();
-    bool insertCategory(QString name);
+    bool insertCategory(int id, QString name);
     int findCategory(QString category);
 
     bool createExcerciseTable();
-    bool insertExcercise(QString name, QString description, QString category);
+    bool insertExcercise(int id, QString name, QString description, int category);
 
     bool createExcerciseMuscleTable();
     bool insertExcerciseMuscle(int muscle, int excercise);

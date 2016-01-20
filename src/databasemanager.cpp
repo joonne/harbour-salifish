@@ -134,14 +134,14 @@ bool DatabaseManager::createCategoryTable() {
     return ret;
 }
 
-bool DatabaseManager::insertCategory(QString name) {
+bool DatabaseManager::insertCategory(int id, QString name) {
 
     bool ret = false;
 
     if(db.isOpen()) {
 
         QSqlQuery query(db);
-        ret = query.exec(QString("INSERT INTO category VALUES(NULL,'%1')").arg(name));
+        ret = query.exec(QString("INSERT INTO category VALUES(%0,'%1')").arg(id).arg(name));
     }
     return ret;
 }
@@ -184,16 +184,15 @@ bool DatabaseManager::createExcerciseTable() {
     return ret;
 }
 
-bool DatabaseManager::insertExcercise(QString name, QString description, QString category) {
+bool DatabaseManager::insertExcercise(int id, QString name, QString description, int category) {
 
     bool ret = false;
-    int categoryid = findCategory(category);
 
     if (db.isOpen()) {
 
         QSqlQuery query(db);
-        ret = query.exec(QString("INSERT OR REPLACE INTO excercise values('%1','%2',%3)")
-                         .arg(name).arg(description).arg(categoryid));
+        ret = query.exec(QString("INSERT OR REPLACE INTO excercise values(%0,'%1','%2',%3)")
+                         .arg(id).arg(name).arg(description).arg(category));
 
     }
     return ret;
@@ -379,158 +378,166 @@ bool DatabaseManager::createDB() {
         //-----------------------------------------------------------------
 
 
-        if(insertCategory("chest") && insertCategory("shoulders") &&
-                insertCategory("abs") && insertCategory("biceps") &&
-                insertCategory("forearms") && insertCategory("quads") &&
-                insertCategory("calves") && insertCategory("trapezius") &&
-                insertCategory("lats") && insertCategory("triceps") &&
-                insertCategory("glutes") && insertCategory("hamstrings")) {
+//        if(insertCategory("chest") && insertCategory("shoulders") &&
+//                insertCategory("abs") && insertCategory("biceps") &&
+//                insertCategory("forearms") && insertCategory("quads") &&
+//                insertCategory("calves") && insertCategory("trapezius") &&
+//                insertCategory("lats") && insertCategory("triceps") &&
+//                insertCategory("glutes") && insertCategory("hamstrings")) {
+//            qDebug() << "Categories added";
+//        }
+
+        if(insertCategory(10, "Abs") && insertCategory(8, "Arms") &&
+                insertCategory(12, "Back") && insertCategory(14, "Calves") &&
+                insertCategory(11, "Chest") && insertCategory(9, "Legs") &&
+                insertCategory(13, "Shoulders")) {
+
             qDebug() << "Categories added";
         }
 
-        //-----------------------------------------------------------------
+//        //-----------------------------------------------------------------
 
-        if(insertExcercise("Bench Press", "Raise the bar.", "chest")) {
-            qDebug() << "Chest Excercise added.";
-        } else {
-            qDebug() << "Chest Excercise addition failed";
-        }
+//        if(insertExcercise("Bench Press", "Raise the bar.", "chest")) {
+//            qDebug() << "Chest Excercise added.";
+//        } else {
+//            qDebug() << "Chest Excercise addition failed";
+//        }
 
-        if(insertExcercise("Butterfly Machine", "Push the handles together slowly as you squeeze your chest in the middle.", "chest")) {
-            qDebug() << "Chest Excercise added.";
-        } else {
-            qDebug() << "Chest Excercise addition failed";
-        }
+//        if(insertExcercise("Butterfly Machine", "Push the handles together slowly as you squeeze your chest in the middle.", "chest")) {
+//            qDebug() << "Chest Excercise added.";
+//        } else {
+//            qDebug() << "Chest Excercise addition failed";
+//        }
 
-        //-----------------------------------------------------------------
+//        //-----------------------------------------------------------------
 
-        if(insertExcercise("Deadlift", "The deadlift is a weight training exercise where a loaded barbell is lifted off the ground from a stabilized, bent over position.", "trapezius")) {
-            qDebug() << "Trapezius Excercise added.";
-        } else {
-            qDebug() << "Trapezius Excercise addition failed";
-        }
+//        if(insertExcercise("Deadlift", "The deadlift is a weight training exercise where a loaded barbell is lifted off the ground from a stabilized, bent over position.", "trapezius")) {
+//            qDebug() << "Trapezius Excercise added.";
+//        } else {
+//            qDebug() << "Trapezius Excercise addition failed";
+//        }
 
-        if(insertExcercise("Back Extension Machine","Extend your back slowly up and return to starting position.", "trapezius")) {
-            qDebug() << "Trapezius Excercise added.";
-        } else {
-            qDebug() << "Trapezius Excercise addition failed";
-        }
+//        if(insertExcercise("Back Extension Machine","Extend your back slowly up and return to starting position.", "trapezius")) {
+//            qDebug() << "Trapezius Excercise added.";
+//        } else {
+//            qDebug() << "Trapezius Excercise addition failed";
+//        }
 
-        //-----------------------------------------------------------------
-        if(insertExcercise("Seated Arm Curl on Scott Bench","Lower weights slowly and lift them up.", "biceps") &&
-                insertExcercise("Seated Dumbbel Curl","Sit on a flat bench with a dumbbel on each hand. Lift dumbbels up to your shoulder level and hold a second. Then Bring dumbbels back to starting position.", "biceps")) {
-            qDebug() << "Bicep Excercises added." ;
-        } else {
-            qDebug() << "Bicep Excercise addition failed" ;
-        }
+//        //-----------------------------------------------------------------
+//        if(insertExcercise("Seated Arm Curl on Scott Bench","Lower weights slowly and lift them up.", "biceps") &&
+//                insertExcercise("Seated Dumbbel Curl","Sit on a flat bench with a dumbbel on each hand. Lift dumbbels up to your shoulder level and hold a second. Then Bring dumbbels back to starting position.", "biceps")) {
+//            qDebug() << "Bicep Excercises added." ;
+//        } else {
+//            qDebug() << "Bicep Excercise addition failed" ;
+//        }
 
-        //-----------------------------------------------------------------
+//        //-----------------------------------------------------------------
 
-        if(insertExcercise("Ab Roll", "Roll slowly down with your back a little curved. Then roll back up and squeeze your abdominals at the same time.", "abs")) {
-            qDebug() << "Ab Excercise added." ;
-        } else {
-            qDebug() << "Ab Excercise addition failed" ;
-        }
+//        if(insertExcercise("Ab Roll", "Roll slowly down with your back a little curved. Then roll back up and squeeze your abdominals at the same time.", "abs")) {
+//            qDebug() << "Ab Excercise added." ;
+//        } else {
+//            qDebug() << "Ab Excercise addition failed" ;
+//        }
 
-        //-----------------------------------------------------------------
+//        //-----------------------------------------------------------------
 
-        if(insertExcercise("Shoulder Press","Press bar/dumbbels upward until arms are extended overhead. Return to upper chest and repeat.", "shoulders")) {
-            qDebug() << "Shoulder Excercise added." ;
-        } else {
-            qDebug() << "Shoulder Excercise addition failed" ;
-        }
+//        if(insertExcercise("Shoulder Press","Press bar/dumbbels upward until arms are extended overhead. Return to upper chest and repeat.", "shoulders")) {
+//            qDebug() << "Shoulder Excercise added." ;
+//        } else {
+//            qDebug() << "Shoulder Excercise addition failed" ;
+//        }
 
-        if(insertExcercise("Dumbbel Front Raise","Raise dumbbells forward and upward with until upper arms are above horizontal. Lower and repeat.", "shoulders")) {
-            qDebug() << "Shoulder Excercise added." ;
-        } else {
-            qDebug() << "Shoulder Excercise addition failed" ;
-        }
+//        if(insertExcercise("Dumbbel Front Raise","Raise dumbbells forward and upward with until upper arms are above horizontal. Lower and repeat.", "shoulders")) {
+//            qDebug() << "Shoulder Excercise added." ;
+//        } else {
+//            qDebug() << "Shoulder Excercise addition failed" ;
+//        }
 
-        //-----------------------------------------------------------------
+//        //-----------------------------------------------------------------
 
-        if(insertExcercise("Barbell Incline Row","Pull shoulders back and push chest forward while arching back. Return until arms are extended, shoulders are stretched forward, and lower back is flexed forward. Repeat.", "lats")) {
-            qDebug() << "Lats Excercise added." ;
-        } else {
-            qDebug() << "Lats Excercise addition failed" ;
-        }
+//        if(insertExcercise("Barbell Incline Row","Pull shoulders back and push chest forward while arching back. Return until arms are extended, shoulders are stretched forward, and lower back is flexed forward. Repeat.", "lats")) {
+//            qDebug() << "Lats Excercise added." ;
+//        } else {
+//            qDebug() << "Lats Excercise addition failed" ;
+//        }
 
-        //-----------------------------------------------------------------
+//        //-----------------------------------------------------------------
 
-        if(insertExcercise("Calf Raises","Raise heels by extending ankles as high as possible. Lower heels by bending ankles until calves are stretched. Repeat.", "calves")) {
-            qDebug() << "Calves Excercise added." ;
-        } else {
-            qDebug() << "Calves Excercise addition failed" ;
-        }
+//        if(insertExcercise("Calf Raises","Raise heels by extending ankles as high as possible. Lower heels by bending ankles until calves are stretched. Repeat.", "calves")) {
+//            qDebug() << "Calves Excercise added." ;
+//        } else {
+//            qDebug() << "Calves Excercise addition failed" ;
+//        }
 
-        //-----------------------------------------------------------------
+//        //-----------------------------------------------------------------
 
-        if(insertExcercise("Squat","Bend knees forward while allowing hips to bend back behind, keeping back straight and knees pointed same direction as feet. Descend until knees and hips are fully bent. Extend knees and hips until legs are straight. Return and repeat.", "quads")) {
-            qDebug() << "Quads Excercise added." ;
-        } else {
-            qDebug() << "Quads Excercise addition failed" ;
-        }
+//        if(insertExcercise("Squat","Bend knees forward while allowing hips to bend back behind, keeping back straight and knees pointed same direction as feet. Descend until knees and hips are fully bent. Extend knees and hips until legs are straight. Return and repeat.", "quads")) {
+//            qDebug() << "Quads Excercise added." ;
+//        } else {
+//            qDebug() << "Quads Excercise addition failed" ;
+//        }
 
-        if(insertExcercise("Leg Extension","Move lever forward and upward by extending knees until leg are straight. Return lever to original position by bending knees. Repeat.", "quads")) {
-            qDebug() << "Quads Excercise added." ;
-        } else {
-            qDebug() << "Quads Excercise addition failed" ;
-        }
+//        if(insertExcercise("Leg Extension","Move lever forward and upward by extending knees until leg are straight. Return lever to original position by bending knees. Repeat.", "quads")) {
+//            qDebug() << "Quads Excercise added." ;
+//        } else {
+//            qDebug() << "Quads Excercise addition failed" ;
+//        }
 
-        if(insertExcercise("Leg Press Machine","Push platform(s) away by extending knees and hips until knees are fully extended. Return until hips are completely flexed. Repeat.", "quads")) {
-            qDebug() << "Quads Excercise added." ;
-        } else {
-            qDebug() << "Quads Excercise addition failed" ;
-        }
+//        if(insertExcercise("Leg Press Machine","Push platform(s) away by extending knees and hips until knees are fully extended. Return until hips are completely flexed. Repeat.", "quads")) {
+//            qDebug() << "Quads Excercise added." ;
+//        } else {
+//            qDebug() << "Quads Excercise addition failed" ;
+//        }
 
-        //-----------------------------------------------------------------
+//        //-----------------------------------------------------------------
 
-        if(insertExcercise("Barbell Roll","Roll barbell slowly down towards your fingertips and roll it back up.", "forearms")) {
-            qDebug() << "Forearms Excercise added." ;
-        } else {
-            qDebug() << "Forearms Excercise addition failed" ;
-        }
+//        if(insertExcercise("Barbell Roll","Roll barbell slowly down towards your fingertips and roll it back up.", "forearms")) {
+//            qDebug() << "Forearms Excercise added." ;
+//        } else {
+//            qDebug() << "Forearms Excercise addition failed" ;
+//        }
 
-        //-----------------------------------------------------------------
+//        //-----------------------------------------------------------------
 
-        if(insertExcercise("Straight Leg Deadlift","With knees straight, lower bar toward top of feet by bending hips. After hips can no longer flex, bend waist as bar approaches top of feet. Lift bar by extending waist and hip until standing upright. Pull shoulders back slightly if rounded. Repeat.", "hamstrings")) {
-            qDebug() << "Hamstrings Excercise added." ;
-        } else {
-            qDebug() << "Hamstrings Excercise addition failed" ;
-        }
+//        if(insertExcercise("Straight Leg Deadlift","With knees straight, lower bar toward top of feet by bending hips. After hips can no longer flex, bend waist as bar approaches top of feet. Lift bar by extending waist and hip until standing upright. Pull shoulders back slightly if rounded. Repeat.", "hamstrings")) {
+//            qDebug() << "Hamstrings Excercise added." ;
+//        } else {
+//            qDebug() << "Hamstrings Excercise addition failed" ;
+//        }
 
-        if(insertExcercise("Seated Leg Curl","Pull lever to back of thighs by flexing knees. Return lever until knees are straight. Repeat.", "hamstrings")) {
-            qDebug() << "Hamstrings Excercise added." ;
-        } else {
-            qDebug() << "Hamstrings Excercise addition failed" ;
-        }
+//        if(insertExcercise("Seated Leg Curl","Pull lever to back of thighs by flexing knees. Return lever until knees are straight. Repeat.", "hamstrings")) {
+//            qDebug() << "Hamstrings Excercise added." ;
+//        } else {
+//            qDebug() << "Hamstrings Excercise addition failed" ;
+//        }
 
-        //-----------------------------------------------------------------
+//        //-----------------------------------------------------------------
 
-        if(insertExcercise("Dip","Lower body until slight stretch is felt in shoulders. Push body up until arms are straight. Repeat.", "triceps")) {
-            qDebug() << "Triceps Excercise added." ;
-        } else {
-            qDebug() << "Triceps Excercise addition failed" ;
-        }
+//        if(insertExcercise("Dip","Lower body until slight stretch is felt in shoulders. Push body up until arms are straight. Repeat.", "triceps")) {
+//            qDebug() << "Triceps Excercise added." ;
+//        } else {
+//            qDebug() << "Triceps Excercise addition failed" ;
+//        }
 
-        if(insertExcercise("Pushdown","Extend arms down. Return until forearm is close to upper arm. Repeat.", "triceps")) {
-            qDebug() << "Triceps Excercise added." ;
-        } else {
-            qDebug() << "Triceps Excercise addition failed" ;
-        }
+//        if(insertExcercise("Pushdown","Extend arms down. Return until forearm is close to upper arm. Repeat.", "triceps")) {
+//            qDebug() << "Triceps Excercise added." ;
+//        } else {
+//            qDebug() << "Triceps Excercise addition failed" ;
+//        }
 
-        if(insertExcercise("Kneeling Triceps Extension","Extend forearms overhead until elbow are fully extended. Return and repeat.", "triceps")) {
-            qDebug() << "Triceps Excercise added." ;
-        } else {
-            qDebug() << "Triceps Excercise addition failed" ;
-        }
+//        if(insertExcercise("Kneeling Triceps Extension","Extend forearms overhead until elbow are fully extended. Return and repeat.", "triceps")) {
+//            qDebug() << "Triceps Excercise added." ;
+//        } else {
+//            qDebug() << "Triceps Excercise addition failed" ;
+//        }
 
-        //-----------------------------------------------------------------
+//        //-----------------------------------------------------------------
 
-        if(insertExcercise("Lunge","Lunge forward with first leg. Land on heel then forefoot. Lower body by flexing knee and hip of front leg until knee of rear leg is almost in contact with floor. Return to original standing position by forcibly extending hip and knee of forward leg. Repeat by alternating lunge with opposite leg.", "glutes")) {
-            qDebug() << "Glutes Excercise added." ;
-        } else {
-            qDebug() << "Glutes Excercise addition failed" ;
-        }
+//        if(insertExcercise("Lunge","Lunge forward with first leg. Land on heel then forefoot. Lower body by flexing knee and hip of front leg until knee of rear leg is almost in contact with floor. Return to original standing position by forcibly extending hip and knee of forward leg. Repeat by alternating lunge with opposite leg.", "glutes")) {
+//            qDebug() << "Glutes Excercise added." ;
+//        } else {
+//            qDebug() << "Glutes Excercise addition failed" ;
+//        }
     }
 
     return true;

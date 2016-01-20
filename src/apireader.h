@@ -23,9 +23,12 @@ public:
 
     void startRequest(QUrl url);
 
-    void getExcercises(QString muscle);
+    void getExcercises(QString muscleId);
     void getAllExcercises();
     void getMuscles();
+    void getCategories();
+
+    void processExcercises(QJsonArray excercises);
 
 signals:
     void readyToStoreExcercises();
