@@ -15,12 +15,6 @@ APIReader::APIReader(QObject *parent, DatabaseManager *dbmanager) :
             this,
             SLOT(replyFinished(QNetworkReply*)));
 
-//    getExcercises("1");
-//    getExcercises("2");
-//    getExcercises("3");
-//    getExcercises("4");
-//    getExcercises("5");
-
     getAllExcercises();
 }
 
@@ -118,4 +112,8 @@ void APIReader::processExcercises(QJsonArray excercises) {
 
         mydbmanager->insertExcercise(id, name, description, category);
     }
+}
+
+void APIReader::populateDatabase() {
+
 }

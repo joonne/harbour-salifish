@@ -28,6 +28,7 @@ public:
     void getMuscles();
     void getCategories();
 
+    void populateDatabase();
     void processExcercises(QJsonArray excercises);
 
 signals:

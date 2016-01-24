@@ -4,8 +4,7 @@
 DatabaseManager::DatabaseManager(QObject *parent) :
     QObject(parent)
 {
-    setUpDB();
-    close();
+    qDebug() << "Creating dbmanager...";
 }
 
 DatabaseManager::~DatabaseManager() {
@@ -188,6 +187,8 @@ bool DatabaseManager::insertExcercise(int id, QString name, QString description,
 
     bool ret = false;
 
+    db.transaction();
+
     if (db.isOpen()) {
 
         QSqlQuery query(db);
@@ -195,6 +196,9 @@ bool DatabaseManager::insertExcercise(int id, QString name, QString description,
                          .arg(id).arg(name).arg(description).arg(category));
 
     }
+
+    db.commit();
+
     return ret;
 }
 
