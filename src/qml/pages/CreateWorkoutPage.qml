@@ -179,11 +179,11 @@ Page {
                 id: listview
                 width: 540
                 height: 960
-                spacing: 10 //Theme.paddingSmall
+                spacing: Theme.paddingSmall
 
-                model: 1
+                model: controller.workoutModel
                 delegate: Label {
-                    text: "PENA"
+                    text: name
                     font.pixelSize: Theme.fontSizeSmall
                     anchors.left: parent.left
                     anchors.leftMargin: Theme.paddingMedium

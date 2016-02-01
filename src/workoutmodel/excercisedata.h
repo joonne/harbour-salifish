@@ -28,6 +28,7 @@ private:
     QString myExcerciseDescription;
     QString myExcerciseCategory;
 
+
 };
 
 #endif // EXCERCISEDATA_H

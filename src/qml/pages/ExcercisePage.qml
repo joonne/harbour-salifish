@@ -48,6 +48,9 @@ Page {
                     onPressAndHold: {
                         pageStack.push(Qt.resolvedUrl("ShowDescriptionPage.qml"), {excerciseName: name, excerciseDescription: description})
                     }
+                    onClicked: {
+                        controller.workoutModel.addExcercise("1", name, description, category, 80, 7);
+                    }
                 }
             }
         }

@@ -1,7 +1,13 @@
 #include "workoutdata.h"
 
-WorkoutData::WorkoutData(QObject *parent) : QObject(parent)
+WorkoutData::WorkoutData(int excerciseId, QString excerciseName, QString excerciseDescription, QString excerciseCategory, double weigths, int reps)
 {
+    myExcerciseId = excerciseId;
+    myExcerciseName = excerciseName;
+    myExcerciseDescription = excerciseDescription;
+    myExcerciseCategory = excerciseCategory;
+    myExcerciseWeights = weigths;
+    myExcerciseReps = reps;
 
 }
 

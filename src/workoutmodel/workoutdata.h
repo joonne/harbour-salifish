@@ -7,7 +7,7 @@ class WorkoutData : public QObject
 {
     Q_OBJECT
 public:
-    explicit WorkoutData(QObject *parent = 0);
+    explicit WorkoutData(int excerciseId = 0, QString excerciseName = "", QString excerciseDescription = "", QString excerciseCategory = "", double weigths = 0, int reps = 0);
 
     int getExcerciseId();
     void setExcerciseId(int excerciseId);

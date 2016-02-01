@@ -15,6 +15,7 @@
 #include "user.h"
 #include "databasemanager.h"
 #include "workoutmodel/excercisemodel.h"
+#include "workoutmodel/workoutmodel.h"
 #include "apireader.h"
 #include "controller.h"
 
@@ -30,6 +31,7 @@ int main(int argc, char *argv[])
     context->setContextProperty("controller", controller.data());
 
     qmlRegisterType<ExcerciseModel>("harbour.salifish", 1, 0, "ExcerciseModel");
+    qmlRegisterType<WorkoutModel>("harbour.salifish", 1, 0, "ExcerciseModel");
 
     //    Here's how you will add QML components whenever you start using them
     //    Check https://github.com/amarchen/Wikipedia for a more full example
