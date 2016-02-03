@@ -8,6 +8,7 @@ Controller::Controller(QObject *parent) : QObject(parent)
     myExcerciseModel = new ExcerciseModel(this, mydbmanager);
     myWorkoutModel = new WorkoutModel(this, mydbmanager);
     myapireader = new APIReader(this, mydbmanager);
+    myUser = new User(this, mydbmanager);
 
 }
 
@@ -17,5 +18,9 @@ ExcerciseModel* Controller::getExcerciseModel() {
 
 WorkoutModel* Controller::getWorkoutModel() {
     return myWorkoutModel;
+}
+
+User* Controller::getUser() {
+    return myUser;
 }
 

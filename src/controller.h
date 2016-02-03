@@ -14,12 +14,14 @@ class Controller : public QObject
     Q_OBJECT
     Q_PROPERTY(ExcerciseModel* excerciseModel READ getExcerciseModel)
     Q_PROPERTY(WorkoutModel* workoutModel READ getWorkoutModel)
+    Q_PROPERTY(User* user READ getUser)
 
 public:
     explicit Controller(QObject *parent = 0);
 
     ExcerciseModel* getExcerciseModel();
     WorkoutModel* getWorkoutModel();
+    User* getUser();
 
 signals:
 
@@ -30,6 +32,7 @@ private:
     WorkoutModel* myWorkoutModel;
     DatabaseManager* mydbmanager;
     APIReader* myapireader;
+    User* myUser;
 
 };
 

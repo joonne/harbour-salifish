@@ -4,160 +4,109 @@ import Sailfish.Silica 1.0
 Page {
     id: profilepage
 
-    SilicaListView {
+    SilicaFlickable {
 
-        spacing: Theme.paddingMedium
+        PullDownMenu {
 
-        TextField {
-            id: name
-            y: 100
-            x: 20
-            text: "Name"
-            readOnly: true
-            color: Theme.highlightColor
-        } TextField {
-            id: nameEdit
-            y: 100
-            x: 250
-            text: User.name
-            readOnly: true
-            color: Theme.highlightColor
-
-        } TextField {
-            id: age
-            y: 200
-            x: 20
-            text: "Age"
-            readOnly: true
-            color: Theme.highlightColor
-        } TextField {
-            id: ageEdit
-            y: 200
-            x: 300
-            text: User.age
-            readOnly: true
-            color: Theme.highlightColor
-
-        } TextField {
-            id: gender
-            y: 300
-            x: 20
-            text: "Gender"
-            readOnly: true
-            color: Theme.highlightColor
-        } TextField {
-            id: genderEdit
-            y: 300
-            x: 300
-            text: User.gender
-            readOnly: true
-            color: Theme.highlightColor
-
-        } TextField {
-            id: height
-            y: 400
-            x: 20
-            text: "Height (cm)"
-            readOnly: true
-            color: Theme.highlightColor
-        } TextField {
-            id: heightEdit
-            y: 400
-            x: 300
-            text: User.height
-            readOnly: true
-            color: Theme.highlightColor
-
-        } TextField {
-            id: weight
-            y: 500
-            x: 20
-            text: "Weight (kg)"
-            readOnly: true
-            color: Theme.highlightColor
-        } TextField {
-            id: weightEdit
-            y: 500
-            x: 300
-            text: User.weight
-            readOnly: true
-            color: Theme.highlightColor
+            MenuItem {
+                text: qsTr("Edit profile")
+            }
         }
-    }
 
-    BackgroundItem {
+        Column {
+            spacing: Theme.paddingLarge
 
-        TextSwitch {
-            y: 600
-            id: editSwitch
-            text: "Edit"
-            description: "Edit profile"
-            onCheckedChanged: {
+            TextField {
+                id: name
+                text: controller.user.name
+                label: qsTr("Name")
+                readOnly: true
+            }
 
-                checked ? nameEdit.readOnly = false : nameEdit.readOnly = true
-                checked ? ageEdit.readOnly = false : ageEdit.readOnly = true
-                checked ? genderEdit.visible = false : genderEdit.visible = true
-                checked ? maleFemaleSwitch.visible = true : maleFemaleSwitch.visible = false
-                checked ? heightEdit.readOnly = false : heightEdit.readOnly = true
-                checked ? weightEdit.readOnly = false : weightEdit.readOnly = true
+            TextField {
+                id: age
+                text: controller.user.age
+                label: qsTr("Age")
+                readOnly: true
+            }
 
-                User.name = nameEdit.text
-                User.age = ageEdit.text
-                User.gender = genderEdit.text
-                User.height = heightEdit.text
-                User.weight = weightEdit.text
+            Row {
+                TextField {
+                    id: gender
+                    text: controller.user.gender
+                    label: qsTr("Gender")
+                    readOnly: true
+                }
+
+                TextSwitch {
+                    id: maleFemaleSwitch
+                    text: controller.user.gender
+                    description: qsTr("Changes gender")
+                    visible: false
+                    onCheckedChanged: {
+                        controller.user.gender === qsTr("Male") ? controller.user.gender = qsTr("Female") : controller.user.gender = qsTr("Male")
+                    }
+                }
+            }
+
+            TextField {
+                id: height
+                text: controller.user.height
+                label: qsTr("Height (cm)")
+                readOnly: true
+            }
+
+            TextField {
+                id: weight
+                label: qsTr("Weight (kg)")
+                readOnly: true
+            }
+        }
+
+        BackgroundItem {
+
+            TextSwitch {
+                id: editSwitch
+                text: qsTr("Edit")
+                description: qsTr("Edit profile")
+                onCheckedChanged: {
+
+                    checked ? name.readOnly = false : name.readOnly = true
+                    checked ? age.readOnly = false : age.readOnly = true
+                    checked ? gender.visible = false : gender.visible = true
+                    checked ? maleFemaleSwitch.visible = true : maleFemaleSwitch.visible = false
+                    checked ? height.readOnly = false : height.readOnly = true
+                    checked ? weight.readOnly = false : weight.readOnly = true
+
+                    controller.user.name = name.text
+                    controller.user.age = age.text
+                    controller.user.gender = gender.text
+                    controller.user.height = height.text
+                    controller.user.weight = weight.text
+
+                }
+            }
+
+            TextField {
+                id: bmi
+                text: controller.user.BMI
+                label: qsTr("BMI")
+                readOnly: true
+            }
+
+            TextField {
+                id: bmidescription
+                text: controller.user.BMIdescription
+                label: qsTr("BMI description")
+                readOnly: true
 
             }
 
-        }
-
-        TextField {
-            y: 725
-            x: 20
-            text: "BMI"
-            readOnly: true
-            color: Theme.highlightColor
-
-        } TextField {
-            y: 725
-            x: 100
-            text: User.BMI
-            readOnly: true
-            color: Theme.highlightColor
-
-        } TextField {
-            id: bmidescription
-            y: 775
-            x: 20
-            text: User.BMIdescription
-            readOnly: true
-            color: Theme.highlightColor
-
-        } TextField {
-            y: 850
-            x: 20
-            text: "BMR"
-            readOnly: true
-            color: Theme.highlightColor
-
-        } TextField {
-            y: 850
-            x: 100
-            text: User.BMR + " kcal"
-            readOnly: true
-            color: Theme.highlightColor
-        }
-
-        TextSwitch {
-            y: 280
-            x: 250
-            id: maleFemaleSwitch
-            text: "Male"
-            description: "Changes gender"
-            visible: false
-            onCheckedChanged: {
-                checked ? text = "Female" : text = "Male"
-                genderEdit.text = text
+            TextField {
+                id: bmr
+                text: controller.user.BMR + " " + qsTr("kcal")
+                label: qsTr("Basal Metabolic Rate (BMR)")
+                readOnly: true
             }
         }
     }

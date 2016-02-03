@@ -184,7 +184,7 @@ Page {
                 model: controller.workoutModel
                 delegate: Label {
                     text: name
-                    font.pixelSize: Theme.fontSizeSmall
+                    font.pixelSize: Theme.fontSizeExtraSmall
                     anchors.left: parent.left
                     anchors.leftMargin: Theme.paddingMedium
                 }
