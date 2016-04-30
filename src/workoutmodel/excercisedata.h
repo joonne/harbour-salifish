@@ -3,8 +3,7 @@
 
 #include <QString>
 
-class ExcerciseData
-{
+class ExcerciseData {
 
 public:
     explicit ExcerciseData(int excerciseId = 0, QString excerciseName = "", QString excerciseDescription = "", QString excerciseCategory = "");
@@ -27,7 +26,6 @@ private:
     QString myExcerciseName;
     QString myExcerciseDescription;
     QString myExcerciseCategory;
-
 
 };
 

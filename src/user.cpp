@@ -1,7 +1,9 @@
 #include "user.h"
 #include <QDebug>
 
-User::User(QObject *parent) : QObject(parent) {}
+User::User(QObject *parent, DatabaseManager* dbmanager) : QObject(parent) {
+    mydbmanager = dbmanager;
+}
 
 User::~User() {
     qDebug() << "Destroying User..";
@@ -76,7 +78,7 @@ void User::setWeight(double weight) {
 
 bool User::getUser() {
 
-    QMap<QString,QString> user = mydbmanager.getUser();
+    QMap<QString,QString> user = mydbmanager->getUser();
 
     QMap<QString, QString>::iterator itr = user.begin();
     while(itr != user.end()) {
@@ -103,35 +105,35 @@ bool User::getUser() {
 
 bool User::insertUser(QString name, int age, QString gender, double height, double weight) {
 
-    return mydbmanager.insertUser(name, age, gender, height, weight);
+    return mydbmanager->insertUser(name, age, gender, height, weight);
 }
 
 
 
 bool User::updateName(QString name) {
 
-    return mydbmanager.updateName(name);
+    return mydbmanager->updateName(name);
 }
 
 bool User::updateAge(int age) {
 
-    return mydbmanager.updateAge(age);
+    return mydbmanager->updateAge(age);
 
 }
 
 bool User::updateGender(QString gender) {
 
-    return mydbmanager.updateGender(gender);
+    return mydbmanager->updateGender(gender);
 }
 
 bool User::updateHeight(double height) {
 
-    return mydbmanager.updateHeight(height);
+    return mydbmanager->updateHeight(height);
 }
 
 bool User::updateWeight(double weight) {
 
-    return mydbmanager.updateWeight(weight);
+    return mydbmanager->updateWeight(weight);
 }
 
 void User::calculateBMI() {
@@ -182,7 +184,6 @@ void User::clean() {
     myBMI = 0;
     myBMIdescription.clear();
     myBMR = 0;
-    mydbmanager.close();
 }
 
 void User::calculateBMR() {

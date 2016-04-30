@@ -24,16 +24,15 @@ Page {
             }
         }
 
-        PageHeader {
-            id: header
-            title: qsTr("Choose muscle group")
-        }
-
         Column {
             id: column
             anchors.top: parent.top
-            anchors.topMargin: 150
             spacing: Theme.paddingMedium
+
+            PageHeader {
+                id: header
+                title: qsTr("Choose muscle group")
+            }
 
             Row {
                 anchors.left: parent.left

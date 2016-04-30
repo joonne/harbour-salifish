@@ -27,7 +27,7 @@ class User : public QObject
     Q_PROPERTY(double BMR READ getBMR NOTIFY BMRChanged)
 
 public:
-    User(QObject *parent = 0);
+    User(QObject *parent = 0, DatabaseManager* dbmanager = 0);
     ~User();
     Q_INVOKABLE void clean();
 
@@ -80,7 +80,7 @@ private:
     double myBMI;
     QString myBMIdescription;
     double myBMR;
-    DatabaseManager mydbmanager;
+    DatabaseManager* mydbmanager;
 
 };
 

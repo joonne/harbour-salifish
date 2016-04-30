@@ -47,8 +47,9 @@ void ExcerciseModel::populate(QString selectedMuscle) {
 
     QList<QMap<QString,QString> > excercises = mydbmanager->getExcercises(selectedMuscle);
     int size = excercises.size();
+    QMap<QString,QString> temp;
     for(int i = 0; i < size; ++i) {
-        QMap<QString,QString> temp = excercises.at(i);
+        temp = excercises.at(i);
         beginInsertRows(QModelIndex(), 0, 0);
         ExcerciseData* data = new ExcerciseData(temp["id"].toInt(), temp["name"], temp["description"], temp["category"]);
         myExcercises.append(data);

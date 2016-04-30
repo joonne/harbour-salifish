@@ -102,7 +102,7 @@ void APIReader::processExcercises(QJsonArray excercises) {
 
         id = excercises.at(i).toObject().value("id").toInt();
         name = excercises.at(i).toObject().value("name").toString();
-        description = excercises.at(i).toObject().value("description").toString();
+        description = excercises.at(i).toObject().value("description").toString().remove(QRegExp("<[^>]*>"));
         category = excercises.at(i).toObject().value("category").toInt();
 
         qDebug() << id;

@@ -5,6 +5,8 @@ Page {
     id: profilepage
 
     SilicaFlickable {
+        anchors.fill: parent
+        contentHeight: parent.height
 
         PullDownMenu {
 
@@ -15,6 +17,29 @@ Page {
 
         Column {
             spacing: Theme.paddingLarge
+            width: parent.width
+
+            TextSwitch {
+                id: editSwitch
+                text: qsTr("Edit")
+                description: qsTr("Edit profile")
+                onCheckedChanged: {
+
+                    name.readOnly = checked ? false : true
+                    age.readOnly = checked ? false : true
+                    gender.visible = checked ? false : true
+                    maleFemaleSwitch.visible = checked ? true : false
+                    height.readOnly = checked ? false : true
+                    weight.readOnly = checked ?  false : true
+
+                    controller.user.name = name.text
+                    controller.user.age = age.text
+                    controller.user.gender = gender.text
+                    controller.user.height = height.text
+                    controller.user.weight = weight.text
+
+                }
+            }
 
             TextField {
                 id: name
@@ -31,6 +56,8 @@ Page {
             }
 
             Row {
+                width: profilepage.width
+
                 TextField {
                     id: gender
                     text: controller.user.gender
@@ -40,11 +67,11 @@ Page {
 
                 TextSwitch {
                     id: maleFemaleSwitch
-                    text: controller.user.gender
+                    text: controller.user.gender === "Male" ? qsTr("Male") : qsTr("Female")
                     description: qsTr("Changes gender")
                     visible: false
                     onCheckedChanged: {
-                        controller.user.gender === qsTr("Male") ? controller.user.gender = qsTr("Female") : controller.user.gender = qsTr("Male")
+                        controller.user.gender === qsTr("Male") ? controller.user.gender = "Female" : controller.user.gender = "Male"
                     }
                 }
             }
@@ -58,33 +85,9 @@ Page {
 
             TextField {
                 id: weight
+                text: controller.user.weight
                 label: qsTr("Weight (kg)")
                 readOnly: true
-            }
-        }
-
-        BackgroundItem {
-
-            TextSwitch {
-                id: editSwitch
-                text: qsTr("Edit")
-                description: qsTr("Edit profile")
-                onCheckedChanged: {
-
-                    checked ? name.readOnly = false : name.readOnly = true
-                    checked ? age.readOnly = false : age.readOnly = true
-                    checked ? gender.visible = false : gender.visible = true
-                    checked ? maleFemaleSwitch.visible = true : maleFemaleSwitch.visible = false
-                    checked ? height.readOnly = false : height.readOnly = true
-                    checked ? weight.readOnly = false : weight.readOnly = true
-
-                    controller.user.name = name.text
-                    controller.user.age = age.text
-                    controller.user.gender = gender.text
-                    controller.user.height = height.text
-                    controller.user.weight = weight.text
-
-                }
             }
 
             TextField {
