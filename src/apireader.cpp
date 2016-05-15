@@ -16,6 +16,7 @@ APIReader::APIReader(QObject *parent, DatabaseManager *dbmanager) :
             SLOT(replyFinished(QNetworkReply*)));
 
 //    getAllExcercises();
+    getMuscles();
 }
 
 APIReader::~APIReader() {
@@ -80,12 +81,12 @@ void APIReader::replyFinished(QNetworkReply *reply) {
         qDebug() << "Invalid JSON...\n" << response << endl;
     }
 
-    qDebug() << obj.value("results");
+//    qDebug() << obj.value("results");
 
     QJsonValue resultsObj = obj.value("results");
     QJsonArray resultsArray = resultsObj.toArray();
 
-    processExcercises(resultsArray);
+//    processExcercises(resultsArray);
 
     reply->deleteLater();
 }
@@ -105,10 +106,10 @@ void APIReader::processExcercises(QJsonArray excercises) {
         description = excercises.at(i).toObject().value("description").toString().remove(QRegExp("<[^>]*>"));
         category = excercises.at(i).toObject().value("category").toInt();
 
-        qDebug() << id;
-        qDebug() << name;
-        qDebug() << description;
-        qDebug() << category;
+//        qDebug() << id;
+//        qDebug() << name;
+//        qDebug() << description;
+//        qDebug() << category;
 
         mydbmanager->insertExcercise(id, name, description, category);
     }

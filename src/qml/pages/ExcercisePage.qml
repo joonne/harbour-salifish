@@ -28,18 +28,18 @@ Page {
             spacing: Theme.paddinglarge
             anchors.top: pageheader.bottom
 
-            SearchField {
-                id: searchfield
-                placeholderText: qsTr("Search")
-                width: excercisepage.width
-                EnterKey.enabled: text.length > 0
-                EnterKey.onClicked: focus = false
-            }
+//            SearchField {
+//                id: searchfield
+//                placeholderText: qsTr("Search")
+//                width: excercisepage.width
+//                EnterKey.enabled: text.length > 0
+//                EnterKey.onClicked: focus = false
+//            }
 
             SilicaListView {
                 id: listView
                 width: excercisepage.width
-                height: excercisepage.height - pageheader.height - searchfield.height
+                height: excercisepage.height - pageheader.height
 
                 model: controller.excerciseModel
 

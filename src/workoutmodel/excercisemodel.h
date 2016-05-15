@@ -29,7 +29,7 @@ public:
     Q_INVOKABLE void populate(QString selectedMuscle);
 
 private:
-    QList<ExcerciseData*> myExcercises;
+    QVector<ExcerciseData*> myExcercises;
     DatabaseManager* mydbmanager;
 
 };

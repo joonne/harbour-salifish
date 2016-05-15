@@ -1,4 +1,5 @@
 #include "workoutmodel.h"
+#include <QDebug>
 
 WorkoutModel::WorkoutModel(QObject *parent, DatabaseManager *dbmanager) : QAbstractListModel(parent)
 {
@@ -64,8 +65,9 @@ void WorkoutModel::populate(QString workoutId) {
 }
 
 void WorkoutModel::addExcercise(QString id, QString name, QString description, QString category, double weights, int reps) {
+
     beginInsertRows(QModelIndex(), 0, 0);
     WorkoutData* data = new WorkoutData(id.toInt(), name, description, category, weights, reps);
-    myExcercises.append(data);
+    myExcercises.insert(0, data);
     endInsertRows();
 }

@@ -32,7 +32,7 @@ public:
     Q_INVOKABLE void addExcercise(QString id, QString name, QString description, QString category, double weights, int reps);
 
 private:
-    QList<WorkoutData*> myExcercises;
+    QVector<WorkoutData*> myExcercises;
     DatabaseManager* mydbmanager;
 };
 

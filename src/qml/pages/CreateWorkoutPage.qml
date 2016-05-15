@@ -5,6 +5,16 @@ import harbour.salifish 1.0
 Page {
     id: createworkoutpage
 
+    Component.onCompleted: timer.start()
+
+    Timer {
+        id: timer
+        interval: 500
+        onTriggered: {
+            pageStack.pushAttached(Qt.resolvedUrl("SelectedExcercisesPage.qml"))
+        }
+    }
+
     SilicaFlickable {
         id: flick
         anchors.fill: parent
@@ -22,6 +32,10 @@ Page {
                 text: qsTr("Continue")
                 onClicked: pageStack.push(Qt.resolvedUrl("EditWorkoutPage.qml"))
             }
+
+            MenuItem {
+                text: qsTr("Filter by Muscles")
+            }
         }
 
         Column {
@@ -31,7 +45,7 @@ Page {
 
             PageHeader {
                 id: header
-                title: qsTr("Choose muscle group")
+                title: qsTr("Choose excercise group")
             }
 
             Row {
@@ -160,7 +174,9 @@ Page {
                         pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"), {selectedMuscle: text})
                     }
 
-                } Button {
+                }
+
+                Button {
                     id: hamstrings
                     text: qsTr("Hamstrings")
                     onClicked: {
@@ -169,33 +185,13 @@ Page {
                 }
             }
 
-            SectionHeader {
-                text: "Selected excercises"
-                visible: listview.count > 0
-            }
-
-            SilicaListView {
-                id: listview
-                width: 540
-                height: 960
-                spacing: Theme.paddingSmall
-
-                model: controller.workoutModel
-                delegate: Label {
-                    text: name
-                    font.pixelSize: Theme.fontSizeExtraSmall
-                    anchors.left: parent.left
-                    anchors.leftMargin: Theme.paddingMedium
+            Label {
+                id: aid
+                text: qsTr("Selected excercises appear in the next page.")
+                anchors {
+                    left: parent.left
+                    leftMargin: (parent.width - aid.width) / 2
                 }
-
-                ViewPlaceholder {
-                    enabled: listview.count === 0
-                    text: qsTr("Selected excercises will appear here.")
-                    anchors.centerIn: listview
-
-                }
-
-                VerticalScrollDecorator {}
             }
         }
     }

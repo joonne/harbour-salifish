@@ -1,4 +1,5 @@
 #include "controller.h"
+#include <QDebug>
 
 Controller::Controller(QObject *parent) : QObject(parent)
 {
@@ -9,7 +10,6 @@ Controller::Controller(QObject *parent) : QObject(parent)
     myWorkoutModel = new WorkoutModel(this, mydbmanager);
     myapireader = new APIReader(this, mydbmanager);
     myUser = new User(this, mydbmanager);
-
 }
 
 ExcerciseModel* Controller::getExcerciseModel() {

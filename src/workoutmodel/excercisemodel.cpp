@@ -52,7 +52,7 @@ void ExcerciseModel::populate(QString selectedMuscle) {
         temp = excercises.at(i);
         beginInsertRows(QModelIndex(), 0, 0);
         ExcerciseData* data = new ExcerciseData(temp["id"].toInt(), temp["name"], temp["description"], temp["category"]);
-        myExcercises.append(data);
+        myExcercises.insert(0, data);
         endInsertRows();
     }
 }

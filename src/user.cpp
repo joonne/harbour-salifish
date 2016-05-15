@@ -108,8 +108,6 @@ bool User::insertUser(QString name, int age, QString gender, double height, doub
     return mydbmanager->insertUser(name, age, gender, height, weight);
 }
 
-
-
 bool User::updateName(QString name) {
 
     return mydbmanager->updateName(name);

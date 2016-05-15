@@ -10,7 +10,6 @@ Page {
         anchors.fill: parent
         contentHeight: column.height
 
-        // PullDownMenu and PushUpMenu must be declared in SilicaFlickable, SilicaListView or SilicaGridView
         PullDownMenu {
 
             MenuItem {

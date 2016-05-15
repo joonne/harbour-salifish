@@ -60,4 +60,6 @@ DISTFILES += \
     qml/pages/WorkoutStartPage.qml \
     qml/pages/WorkoutViewPage.qml \
     qml/pages/Workout.qml \
-    qml/pages/WorkoutStatus.qml
+    qml/pages/WorkoutStatus.qml \
+    qml/pages/SelectedExcercisesPage.qml \
+    qml/components/HorizontalSeparator.qml

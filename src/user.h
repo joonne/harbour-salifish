@@ -50,8 +50,7 @@ public:
     void setWeight(double weight);
 
     bool getUser();
-    bool insertUser(QString name, int age, QString gender,
-                 double height, double weight);
+    bool insertUser(QString name, int age, QString gender, double height, double weight);
     bool updateName(QString name);
     bool updateAge(int age);
     bool updateGender(QString gender);
