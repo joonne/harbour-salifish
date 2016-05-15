@@ -3,6 +3,8 @@
 
 User::User(QObject *parent, DatabaseManager* dbmanager) : QObject(parent) {
     mydbmanager = dbmanager;
+
+    getUser();
 }
 
 User::~User() {
@@ -11,6 +13,7 @@ User::~User() {
 }
 
 QString User::getName() {
+    qDebug() << myName;
     return myName;
 }
 
@@ -19,10 +22,12 @@ void User::setName(QString name) {
     if(myName != name) {
         myName = name;
         updateName(name);
+        emit nameChanged();
     }
 }
 
 int User::getAge() {
+    qDebug() << myAge;
     return myAge;
 }
 
@@ -32,6 +37,7 @@ void User::setAge(int age) {
         myAge = age;
         updateAge(age);
         calculateBMR();
+        emit ageChanged();
     }
 }
 
@@ -45,6 +51,7 @@ void User::setGender(QString gender) {
         myGender = gender;
         updateGender(gender);
         calculateBMR();
+        emit genderChanged();
     }
 }
 
@@ -59,6 +66,7 @@ void User::setHeight(double height) {
         updateHeight(height);
         calculateBMI();
         calculateBMR();
+        emit heightChanged();
     }
 }
 
@@ -73,29 +81,21 @@ void User::setWeight(double weight) {
         updateWeight(weight);
         calculateBMI();
         calculateBMR();
+        emit weightChanged();
     }
 }
 
 bool User::getUser() {
 
-    QMap<QString,QString> user = mydbmanager->getUser();
+    auto user = mydbmanager->getUser();
 
-    QMap<QString, QString>::iterator itr = user.begin();
-    while(itr != user.end()) {
-        if(itr.key() == "name") {
-            myName = itr.value();
-        } else if(itr.key() == "age") {
-            myAge = itr.value().toInt();
-        } else if(itr.key() == "gender") {
-            myGender = itr.value();
-        } else if(itr.key() == "height") {
-            myHeight = itr.value().toDouble();
-        } else if(itr.key() == "weight") {
-            myWeight = itr.value().toDouble();
-        }
+    qDebug() << user;
 
-        ++itr;
-    }
+    myName = user["name"];
+    myAge = user["age"].toInt();
+    myGender = user["gender"];
+    myHeight = user["height"].toDouble();
+    myWeight = user["weight"].toDouble();
 
     calculateBMI();
     calculateBMR();
@@ -189,7 +189,7 @@ void User::clean() {
 void User::calculateBMR() {
 
     if(myGender == "Male") {
-        myBMR = 66 + (13.8*myWeight) + (5 * myHeight) - (6.8 * myAge);
+        myBMR = 66 + (13.8 * myWeight) + (5 * myHeight) - (6.8 * myAge);
     } else if(myGender == "Female") {
         myBMR = 655 + (9.6 * myWeight) + (1.8 * myHeight) - (4.7 * myAge);
     }

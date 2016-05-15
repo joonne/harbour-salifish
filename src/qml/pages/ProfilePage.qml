@@ -6,7 +6,7 @@ Page {
 
     SilicaFlickable {
         anchors.fill: parent
-        contentHeight: parent.height
+        contentHeight: column.height
 
         PullDownMenu {
 
@@ -16,8 +16,12 @@ Page {
         }
 
         Column {
-            spacing: Theme.paddingLarge
+            id: column
             width: parent.width
+
+            PageHeader {
+                title: qsTr("My Profile")
+            }
 
             TextSwitch {
                 id: editSwitch
@@ -46,6 +50,7 @@ Page {
                 text: controller.user.name
                 label: qsTr("Name")
                 readOnly: true
+                width: parent.width
             }
 
             TextField {
@@ -53,16 +58,18 @@ Page {
                 text: controller.user.age
                 label: qsTr("Age")
                 readOnly: true
+                width: parent.width
             }
 
             Row {
-                width: profilepage.width
+                width: parent.width
 
                 TextField {
                     id: gender
                     text: controller.user.gender
                     label: qsTr("Gender")
                     readOnly: true
+                    width: parent.width / 2
                 }
 
                 TextSwitch {
@@ -73,6 +80,7 @@ Page {
                     onCheckedChanged: {
                         controller.user.gender === qsTr("Male") ? controller.user.gender = "Female" : controller.user.gender = "Male"
                     }
+                    width: parent.width / 2
                 }
             }
 
@@ -81,6 +89,7 @@ Page {
                 text: controller.user.height
                 label: qsTr("Height (cm)")
                 readOnly: true
+                width: parent.width
             }
 
             TextField {
@@ -88,6 +97,7 @@ Page {
                 text: controller.user.weight
                 label: qsTr("Weight (kg)")
                 readOnly: true
+                width: parent.width
             }
 
             TextField {
@@ -95,6 +105,7 @@ Page {
                 text: controller.user.BMI
                 label: qsTr("BMI")
                 readOnly: true
+                width: parent.width
             }
 
             TextField {
@@ -102,6 +113,7 @@ Page {
                 text: controller.user.BMIdescription
                 label: qsTr("BMI description")
                 readOnly: true
+                width: parent.width
 
             }
 
@@ -110,6 +122,7 @@ Page {
                 text: controller.user.BMR + " " + qsTr("kcal")
                 label: qsTr("Basal Metabolic Rate (BMR)")
                 readOnly: true
+                width: parent.width
             }
         }
     }

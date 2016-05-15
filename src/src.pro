@@ -5,6 +5,7 @@ TARGET = harbour-salifish
 
 # In the bright future this config line will do a lot of stuff to you
 CONFIG += sailfishapp
+CONFIG += c++11
 
 QT += sql
 
