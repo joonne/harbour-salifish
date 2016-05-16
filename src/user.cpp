@@ -5,6 +5,8 @@ User::User(QObject *parent, DatabaseManager* dbmanager) : QObject(parent) {
     mydbmanager = dbmanager;
 
     getUser();
+
+    qDebug() << "user created";
 }
 
 User::~User() {

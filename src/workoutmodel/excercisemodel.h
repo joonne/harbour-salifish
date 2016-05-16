@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QAbstractListModel>
+#include <QUuid>
 
 #include "excercisedata.h"
 #include "databasemanager.h"
@@ -27,6 +28,8 @@ public:
     virtual QHash<int, QByteArray> roleNames() const;
 
     Q_INVOKABLE void populate(QString selectedMuscle);
+
+    Q_INVOKABLE void createNewExcercise(QString name, QString description, int category);
 
 private:
     QVector<ExcerciseData*> myExcercises;

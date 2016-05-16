@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import harbour.salifish 1.0
+
+import '../components'
 
 Page {
     id: createworkoutpage
@@ -21,7 +22,6 @@ Page {
         contentHeight: parent.height
 
         PullDownMenu {
-            visible: listview.count > 0
 
             MenuItem {
                 text: qsTr("Clear")
@@ -185,12 +185,14 @@ Page {
                 }
             }
 
+            HorizontalSeparator { }
+
             Label {
-                id: aid
-                text: qsTr("Selected excercises appear in the next page.")
+                id: advice
+                text: qsTr("Selected excercises ->")
                 anchors {
                     left: parent.left
-                    leftMargin: (parent.width - aid.width) / 2
+                    leftMargin: (parent.width - advice.width) / 2
                 }
             }
         }

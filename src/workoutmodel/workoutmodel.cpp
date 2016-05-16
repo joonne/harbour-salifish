@@ -71,3 +71,43 @@ void WorkoutModel::addExcercise(QString id, QString name, QString description, Q
     myExcercises.insert(0, data);
     endInsertRows();
 }
+
+void WorkoutModel::removeExcerciseByIndex(const int i) {
+
+    if(i < 0 || i >= myExcercises.size()) {
+        return;
+    }
+
+    beginRemoveRows(QModelIndex(), i, i);
+    myExcercises.erase(myExcercises.begin() + i);
+    endRemoveRows();
+
+}
+
+bool WorkoutModel::isSelected(QString name) {
+
+    bool ret = false;
+    foreach (auto data, myExcercises) {
+        if(name == data->getExcerciseName()) {
+            ret = true;
+        }
+    }
+    return ret;
+}
+
+void WorkoutModel::removeExcerciseByName(QString name) {
+
+    for (auto i = 0; i < myExcercises.size(); ++i) {
+        if(name == myExcercises.at(i)->getExcerciseName()) {
+            beginRemoveRows(QModelIndex(), i, i);
+            myExcercises.erase(myExcercises.begin() + i);
+            endRemoveRows();
+        }
+    }
+}
+
+void WorkoutModel::clearExcercises() {
+    beginResetModel();
+    myExcercises.clear();
+    endResetModel();
+}

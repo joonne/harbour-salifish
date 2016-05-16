@@ -16,7 +16,7 @@ APIReader::APIReader(QObject *parent, DatabaseManager *dbmanager) :
             SLOT(replyFinished(QNetworkReply*)));
 
 //    getAllExcercises();
-    getMuscles();
+//    getMuscles();
 }
 
 APIReader::~APIReader() {

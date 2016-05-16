@@ -56,3 +56,9 @@ void ExcerciseModel::populate(QString selectedMuscle) {
         endInsertRows();
     }
 }
+
+void ExcerciseModel::createNewExcercise(QString name, QString description, int category) {
+
+    auto uuid = QUuid::createUuid().toString();
+//    mydbmanager->insertExcercise(uuid, name, description, category);
+}

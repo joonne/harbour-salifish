@@ -25,16 +25,8 @@ Page {
         }
 
         Column {
-            spacing: Theme.paddinglarge
+            spacing: Theme.paddingLarge
             anchors.top: pageheader.bottom
-
-//            SearchField {
-//                id: searchfield
-//                placeholderText: qsTr("Search")
-//                width: excercisepage.width
-//                EnterKey.enabled: text.length > 0
-//                EnterKey.onClicked: focus = false
-//            }
 
             SilicaListView {
                 id: listView
@@ -45,12 +37,11 @@ Page {
 
                 delegate: TextSwitch {
                     text: name
+                    checked: controller.workoutModel.isSelected(name)
                     onPressAndHold: {
                         pageStack.push(Qt.resolvedUrl("ShowDescriptionPage.qml"), {excerciseName: name, excerciseDescription: description})
                     }
-                    onClicked: {
-                        controller.workoutModel.addExcercise("1", name, description, category, 80, 7);
-                    }
+                    onClicked: checked ? controller.workoutModel.addExcercise("1", name, description, category, 80, 7) : controller.workoutModel.removeExcerciseByName(name)
                 }
             }
         }

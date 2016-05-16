@@ -7,6 +7,13 @@ Page {
     SilicaFlickable {
         anchors.fill: parent
 
+        PullDownMenu {
+            MenuItem {
+                text: qsTr("Clear")
+                onClicked: controller.workoutModel.clearExcercises()
+            }
+        }
+
         Column {
             id: column
             anchors.fill: parent
@@ -19,7 +26,9 @@ Page {
                 id: listview
                 width: parent.width
                 height: parent.height
-                spacing: Theme.paddingSmall
+                spacing: Theme.paddingMedium
+                clip: true
+
                 model: controller.workoutModel
 
                 section {
@@ -34,6 +43,11 @@ Page {
                     text: name
                     anchors.left: parent.left
                     anchors.leftMargin: Theme.paddingLarge
+
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: controller.workoutModel.removeExcerciseByIndex(index)
+                    }
                 }
 
                 ViewPlaceholder {

@@ -29,7 +29,12 @@ public:
     virtual QHash<int, QByteArray> roleNames() const;
 
     Q_INVOKABLE void populate(QString workoutId);
+
     Q_INVOKABLE void addExcercise(QString id, QString name, QString description, QString category, double weights, int reps);
+    Q_INVOKABLE void removeExcerciseByIndex(const int i);
+    Q_INVOKABLE void removeExcerciseByName(QString name);
+    Q_INVOKABLE void clearExcercises();
+    Q_INVOKABLE bool isSelected(QString name);
 
 private:
     QVector<WorkoutData*> myExcercises;
