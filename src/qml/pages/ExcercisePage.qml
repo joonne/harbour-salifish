@@ -41,7 +41,7 @@ Page {
                     onPressAndHold: {
                         pageStack.push(Qt.resolvedUrl("ShowDescriptionPage.qml"), {excerciseName: name, excerciseDescription: description})
                     }
-                    onClicked: checked ? controller.workoutModel.addExcercise("1", name, description, category, 80, 7) : controller.workoutModel.removeExcerciseByName(name)
+                    onClicked: checked ? controller.workoutModel.addExcercise(0, "1", name, description, category, 80, 7) : controller.workoutModel.removeExcerciseByName(name)
                 }
             }
         }

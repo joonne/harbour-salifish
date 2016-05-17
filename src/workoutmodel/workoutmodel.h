@@ -25,12 +25,13 @@ public:
 
     virtual int rowCount(const QModelIndex &index) const;
     virtual QVariant data(const QModelIndex &index, int role) const;
+    virtual bool setData(const QModelIndex &index, const QVariant &value, int role);
 
     virtual QHash<int, QByteArray> roleNames() const;
 
     Q_INVOKABLE void populate(QString workoutId);
 
-    Q_INVOKABLE void addExcercise(QString id, QString name, QString description, QString category, double weights, int reps);
+    Q_INVOKABLE void addExcercise(int index, QString id, QString name, QString description, QString category, double weights, int reps);
     Q_INVOKABLE void removeExcerciseByIndex(const int i);
     Q_INVOKABLE void removeExcerciseByName(QString name);
     Q_INVOKABLE void clearExcercises();

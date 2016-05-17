@@ -45,6 +45,33 @@ QVariant WorkoutModel::data(const QModelIndex &index, int role) const {
     return QVariant();
 }
 
+bool WorkoutModel::setData(const QModelIndex &index, const QVariant &value, int role) {
+
+    if(!index.isValid()) {
+        return false;
+    }
+
+    if(role == IdRole) {
+        myExcercises[index.row()]->setExcerciseId(value.toInt());
+        emit dataChanged(index, index);
+    } else if(role == NameRole) {
+        myExcercises[index.row()]->setExcerciseName(value.toString());
+        emit dataChanged(index, index);
+    } else if(role == DescriptionRole) {
+        myExcercises[index.row()]->setExcerciseDescription(value.toString());
+        emit dataChanged(index, index);
+    } else if(role == CategoryRole) {
+        myExcercises[index.row()]->setExcerciseCategory(value.toString());
+        emit dataChanged(index, index);
+    } else if(role == WeightsRole) {
+        myExcercises[index.row()]->setWeights(value.toDouble());
+        emit dataChanged(index, index);
+    } else if(role == RepsRole) {
+        myExcercises[index.row()]->setReps(value.toInt());
+        emit dataChanged(index, index);
+    }
+}
+
 void WorkoutModel::populate(QString workoutId) {
 
     Q_UNUSED(workoutId);
@@ -64,11 +91,11 @@ void WorkoutModel::populate(QString workoutId) {
 //    }
 }
 
-void WorkoutModel::addExcercise(QString id, QString name, QString description, QString category, double weights, int reps) {
+void WorkoutModel::addExcercise(int index, QString id, QString name, QString description, QString category, double weights, int reps) {
 
-    beginInsertRows(QModelIndex(), 0, 0);
+    beginInsertRows(QModelIndex(), index, index);
     WorkoutData* data = new WorkoutData(id.toInt(), name, description, category, weights, reps);
-    myExcercises.insert(0, data);
+    myExcercises.insert(index, data);
     endInsertRows();
 }
 
@@ -98,10 +125,13 @@ bool WorkoutModel::isSelected(QString name) {
 void WorkoutModel::removeExcerciseByName(QString name) {
 
     for (auto i = 0; i < myExcercises.size(); ++i) {
+        qDebug() << myExcercises.at(i)->getExcerciseName();
         if(name == myExcercises.at(i)->getExcerciseName()) {
+            qDebug() << "found " << name << " at " << i;
             beginRemoveRows(QModelIndex(), i, i);
             myExcercises.erase(myExcercises.begin() + i);
             endRemoveRows();
+            i = 0;
         }
     }
 }

@@ -24,17 +24,7 @@ Page {
         PullDownMenu {
 
             MenuItem {
-                text: qsTr("Clear")
-                onClicked: GymModel.clearSelectedExcercises()
-            }
-
-            MenuItem {
-                text: qsTr("Continue")
-                onClicked: pageStack.push(Qt.resolvedUrl("EditWorkoutPage.qml"))
-            }
-
-            MenuItem {
-                text: qsTr("Filter by Muscles")
+                text: qsTr("Muscles")
             }
         }
 
