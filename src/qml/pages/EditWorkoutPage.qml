@@ -25,38 +25,18 @@ Page {
             anchors.fill: parent
 
             PageHeader {
-                title: qsTr("Edit Workout")
+                title: qsTr("Save workout")
             }
 
-            SilicaListView {
-                id: listview
-                width: parent.width
-                height: parent.height
-                spacing: Theme.paddingSmall
-                model: controller.workoutModel
-
-                section {
-                    property: "category"
-                    criteria: ViewSection.FullString
-                    delegate: SectionHeader {
-                        text: section
-                    }
+            TextField {
+                id: workoutName
+                anchors {
+                    left: column.left
+                    leftMargin: Theme.paddingLarge
                 }
-
-                delegate: Label {
-                    text: name
-                    anchors.left: parent.left
-                    anchors.leftMargin: Theme.paddingLarge
-                }
-
-                ViewPlaceholder {
-                    enabled: listview.count === 0
-                    text: qsTr("Selected excercises will appear here.")
-                    anchors.centerIn: listview
-
-                }
-
-                VerticalScrollDecorator {}
+                placeholderText: qsTr("New workout")
+                label: qsTr("Workout name")
+                width: column.width
             }
         }
     }

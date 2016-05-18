@@ -74,30 +74,8 @@ Page {
                     }
 
                 } Button {
-                    id: biceps
-                    text: qsTr("Biceps")
-                    onClicked: {
-                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"), {selectedMuscle: text})
-                    }
-                }
-            }
-
-            Row {
-                anchors.left: parent.left
-                anchors.leftMargin: (createworkoutpage.width - chest.width - shoulders.width) / 3
-                width: createworkoutpage.width
-                spacing: (createworkoutpage.width - chest.width - shoulders.width) / 3
-
-                Button {
-                    id: forearms
-                    text: qsTr("Forearms")
-                    onClicked: {
-                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"), {selectedMuscle: text})
-                    }
-
-                } Button {
-                    id: quads
-                    text: qsTr("Quads")
+                    id: arms
+                    text: qsTr("Arms")
                     onClicked: {
                         pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"), {selectedMuscle: text})
                     }
@@ -118,8 +96,8 @@ Page {
                     }
 
                 } Button {
-                    id: trapezius
-                    text: qsTr("Trapezius")
+                    id: back
+                    text: qsTr("Back")
                     onClicked: {
                         pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"), {selectedMuscle: text})
                     }
@@ -131,49 +109,73 @@ Page {
                 anchors.left: parent.left
                 anchors.leftMargin: (createworkoutpage.width - chest.width - shoulders.width) / 3
                 width: createworkoutpage.width
-                spacing: (createworkoutpage.width - chest.width - shoulders.width) / 3
+                spacing: (createworkoutpage.width - legs.width) / 2
 
-                Button {
-                    id: lats
-                    text: qsTr("Lats")
-                    onClicked: {
-                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"), {selectedMuscle: text})
-                    }
+//                Button {
+//                    id: forearms
+//                    text: qsTr("Forearms")
+//                    onClicked: {
+//                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"), {selectedMuscle: text})
+//                    }
 
-                }
+//                }
 
-                Button {
-                    id: triceps
-                    text: qsTr("Triceps")
-                    onClicked: {
-                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"), {selectedMuscle: text})
-                    }
-                }
-            }
-
-            Row {
-                anchors.left: parent.left
-                anchors.leftMargin: (createworkoutpage.width - chest.width - shoulders.width) / 3
-                width: createworkoutpage.width
-                spacing: (createworkoutpage.width - chest.width - shoulders.width) / 3
-
-                Button {
-                    id: glutes
-                    text: qsTr("Glutes")
-                    onClicked: {
-                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"), {selectedMuscle: text})
-                    }
-
-                }
-
-                Button {
-                    id: hamstrings
-                    text: qsTr("Hamstrings")
+            Button {
+                    id: legs
+                    text: qsTr("Legs")
                     onClicked: {
                         pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"), {selectedMuscle: text})
                     }
                 }
             }
+
+//            Row {
+//                anchors.left: parent.left
+//                anchors.leftMargin: (createworkoutpage.width - chest.width - shoulders.width) / 3
+//                width: createworkoutpage.width
+//                spacing: (createworkoutpage.width - chest.width - shoulders.width) / 3
+
+//                Button {
+//                    id: lats
+//                    text: qsTr("Lats")
+//                    onClicked: {
+//                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"), {selectedMuscle: text})
+//                    }
+
+//                }
+
+//                Button {
+//                    id: triceps
+//                    text: qsTr("Triceps")
+//                    onClicked: {
+//                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"), {selectedMuscle: text})
+//                    }
+//                }
+//            }
+
+//            Row {
+//                anchors.left: parent.left
+//                anchors.leftMargin: (createworkoutpage.width - chest.width - shoulders.width) / 3
+//                width: createworkoutpage.width
+//                spacing: (createworkoutpage.width - chest.width - shoulders.width) / 3
+
+//                Button {
+//                    id: glutes
+//                    text: qsTr("Glutes")
+//                    onClicked: {
+//                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"), {selectedMuscle: text})
+//                    }
+
+//                }
+
+//                Button {
+//                    id: hamstrings
+//                    text: qsTr("Hamstrings")
+//                    onClicked: {
+//                        pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"), {selectedMuscle: text})
+//                    }
+//                }
+//            }
 
             HorizontalSeparator { }
 
