@@ -10,13 +10,16 @@ Page {
         PullDownMenu {
 
             MenuItem {
-                id: savebutton
-                text: qsTr("Save")
+                text: qsTr("Save as a template")
                 onClicked: {
                     //GymModel.setWorkoutName(workoutname.text)
                     //GymModel.createWorkout()
                     //GymModel.insertWorkoutExcercises()
                 }
+            }
+
+            MenuItem {
+                text: qsTr("I did this already")
             }
         }
 
@@ -37,6 +40,24 @@ Page {
                 placeholderText: qsTr("New workout")
                 label: qsTr("Workout name")
                 width: column.width
+            }
+
+            Label {
+                id: totalWeights
+                anchors {
+                    left: column.left
+                    leftMargin: (column.width - totalWeights.width) / 2
+                }
+                text: qsTr("%1 kg").arg(controller.workoutModel.calculateTotalWeights())
+            }
+
+            Label {
+                id: time
+                anchors {
+                    left: column.left
+                    leftMargin: (column.width - timeWeights.width) / 2
+                }
+                text: qsTr("%1 minutes").arg(190)
             }
         }
     }

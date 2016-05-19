@@ -141,3 +141,21 @@ void WorkoutModel::clearExcercises() {
     myExcercises.clear();
     endResetModel();
 }
+
+double WorkoutModel::calculateTotalWeights() {
+
+    double weights = 0;
+    foreach (auto data, myExcercises) {
+       weights += data->getWeights();
+    }
+
+    return weights;
+}
+
+void WorkoutModel::saveWorkout() {
+    qDebug() << "save workout";
+}
+
+void WorkoutModel::saveWorkoutTemplate() {
+    qDebug() << "save workout template";
+}

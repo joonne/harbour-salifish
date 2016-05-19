@@ -97,6 +97,10 @@ Page {
                         topMargin: (background.height - excerciseName.height - repeatsRow.height - weightsRow.height) / 4
                     }
 
+                    Label {
+                        text: qsTr("Repeats")
+                    }
+
                     Image {
                         source: "image://theme/icon-m-remove"
 
@@ -129,6 +133,10 @@ Page {
                         leftMargin: (background.width - weightsRow.width) / 2
                         top: repeatsRow.bottom
                         topMargin: (background.height - excerciseName.height - repeatsRow.height - weightsRow.height) / 4
+                    }
+
+                    Label {
+                        text: qsTr("Weights")
                     }
 
                     Image {

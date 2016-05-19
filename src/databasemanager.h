@@ -45,7 +45,7 @@ public:
     bool insertMuscle(QString name);
 
     bool createWorkoutTable();
-    bool insertWorkout(QString name, double calories);
+    bool insertWorkout(QString name, double calories, int isTemplate);
 
     bool createWorkoutEntryTable();
     bool insertWorkoutEntry(int excercise, int user, int  workout, QString date, int repeats, double weights, int equipment);
@@ -64,6 +64,7 @@ public:
     bool updateWeight(double weight);
 
     QList<QMap<QString, QString> > getExcercises(QString category);
+    QList<QMap<QString, QString> > getCategories();
 
 private:
     QSqlDatabase db;

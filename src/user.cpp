@@ -5,6 +5,7 @@ User::User(QObject *parent, DatabaseManager* dbmanager) : QObject(parent) {
     mydbmanager = dbmanager;
 
     getUser();
+    qDebug() << "calories in 60min gym workout: " << calculateBurntCalories(60);
 
     qDebug() << "user created";
 }
@@ -199,4 +200,16 @@ void User::calculateBMR() {
 double User::getBMR() {
 
     return myBMR;
+}
+
+
+double User::calculateBurntCalories(int time) {
+
+    int myHeartRate = 150;
+
+    if (myGender == "Male") {
+        return ((myAge * 0.2017) - (myWeight * 0.09036) + (myHeartRate * 0.6309) - 55.0969 * time / 4.184);
+    } else if (myGender == "Female") {
+        return ((myAge * 0.074) - (myWeight * 0.05741) + (myHeartRate * 0.4472) - 20.4022 * time / 4.184);
+    }
 }

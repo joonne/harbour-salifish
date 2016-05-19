@@ -16,7 +16,7 @@ APIReader::APIReader(QObject *parent, DatabaseManager *dbmanager) :
             SLOT(replyFinished(QNetworkReply*)));
 
 //    getAllExcercises();
-//    getMuscles();
+    getMuscles();
 }
 
 APIReader::~APIReader() {
@@ -48,7 +48,7 @@ void APIReader::getAllExcercises() {
 
 void APIReader::getMuscles() {
 
-    QUrl url(QString(QString(APIURL) + "/muscle"));
+    QUrl url(QString(QString(APIURL) + "/muscle/"));
     startRequest(url);
 }
 
@@ -105,11 +105,6 @@ void APIReader::processExcercises(QJsonArray excercises) {
         name = excercises.at(i).toObject().value("name").toString();
         description = excercises.at(i).toObject().value("description").toString().remove(QRegExp("<[^>]*>"));
         category = excercises.at(i).toObject().value("category").toInt();
-
-//        qDebug() << id;
-//        qDebug() << name;
-//        qDebug() << description;
-//        qDebug() << category;
 
         mydbmanager->insertExcercise(id, name, description, category);
     }

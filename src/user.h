@@ -42,6 +42,7 @@ public:
     QString getBMIdescription();
     void calculateBMI();
     void calculateBMR();
+    double calculateBurntCalories(int time);
 
     void setName(QString name);
     void setAge(int age);

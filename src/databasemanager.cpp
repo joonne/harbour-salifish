@@ -273,21 +273,22 @@ bool DatabaseManager::createWorkoutTable() {
         ret = query.exec("CREATE TABLE workout"
                          "(id INTEGER PRIMARY KEY, "
                          "name VARCHAR(160), "
-                         "calories REAL)");
+                         "calories REAL, "
+                         "isTemplate INTEGER DEFAULT 0)");
 
         qDebug() << query.lastError();
     }
     return ret;
 }
 
-bool DatabaseManager::insertWorkout(QString name, double calories) {
+bool DatabaseManager::insertWorkout(QString name, double calories, int isTemplate) {
 
     bool ret = false;
 
     if (db.isOpen()) {
 
         QSqlQuery query(db);
-        ret = query.exec(QString("INSERT INTO workout VALUES(NULL,'%1'").arg(name).arg(calories));
+        ret = query.exec(QString("INSERT INTO workout VALUES(NULL,'%1', %2").arg(name).arg(calories).arg(isTemplate));
 
     }
     return ret;
@@ -588,4 +589,25 @@ QList<QMap<QString, QString> > DatabaseManager::getExcercises(QString category) 
     }
     qDebug() << excercises;
     return excercises;
+}
+
+QList<QMap<QString, QString> > DatabaseManager::getCategories() {
+
+    QList<QMap<QString, QString> > categories;
+
+    if(db.isOpen()) {
+
+        QSqlQuery query(db);
+        query.exec(QString("SELECT * FROM category ORDER BY name;"));
+
+        if(query.isSelect()) {
+            while(query.next()) {
+                QMap<QString,QString> temp;
+                temp.insert("id", query.value(0).toString());
+                temp.insert("name", query.value(1).toString());
+                categories.append(temp);
+            }
+        }
+    }
+    return categories;
 }
