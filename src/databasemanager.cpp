@@ -244,7 +244,8 @@ bool DatabaseManager::createMuscleTable() {
         QSqlQuery query(db);
         ret = query.exec("CREATE TABLE muscle"
                          "(id INTEGER PRIMARY KEY, "
-                         "name VARCHAR(50))");
+                         "name VARCHAR(50), "
+                         "is_front INTEGER DEFAULT 0)");
 
         qDebug() << query.lastError();
     }
@@ -252,14 +253,15 @@ bool DatabaseManager::createMuscleTable() {
     return ret;
 }
 
-bool DatabaseManager::insertMuscle(QString name) {
+bool DatabaseManager::insertMuscle(int id, QString name, int is_front) {
 
     bool ret = false;
 
     if(db.isOpen()) {
 
         QSqlQuery query(db);
-        ret = query.exec(QString("INSERT INTO muscle VALUES(NULL, '%1')").arg(name));
+        ret = query.exec(QString("INSERT OR REPLACE INTO muscle VALUES(%1, '%2', %3)").arg(id).arg(name).arg(is_front));
+        qDebug() << query.lastError();
     }
     return ret;
 }

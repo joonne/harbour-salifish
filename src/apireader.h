@@ -28,8 +28,8 @@ public:
     void getMuscles();
     void getCategories();
 
-    void populateDatabase();
     void processExcercises(QJsonArray excercises);
+    void processMuscles(QJsonArray muscles);
 
 signals:
     void readyToStoreExcercises();
@@ -42,6 +42,10 @@ private:
     QNetworkAccessManager* myNetWorkAccessManager;
     DatabaseManager* mydbmanager;
 
+    // flags
+    bool m_excercises;
+    bool m_muscles;
+    bool m_categories;
 
 };
 

@@ -15,6 +15,10 @@ APIReader::APIReader(QObject *parent, DatabaseManager *dbmanager) :
             this,
             SLOT(replyFinished(QNetworkReply*)));
 
+    m_excercises = false;
+    m_muscles = true;
+    m_categories = false;
+
 //    getAllExcercises();
     getMuscles();
 }
@@ -81,12 +85,15 @@ void APIReader::replyFinished(QNetworkReply *reply) {
         qDebug() << "Invalid JSON...\n" << response << endl;
     }
 
-//    qDebug() << obj.value("results");
+    QJsonValue resultsArray = obj.value("results").toArray();
 
-    QJsonValue resultsObj = obj.value("results");
-    QJsonArray resultsArray = resultsObj.toArray();
-
-//    processExcercises(resultsArray);
+    if (m_excercises) {
+        processExcercises(resultsArray);
+    } else if (m_muscles) {
+        processMuscles(resultsArray);
+    } else if (m_categories) {
+        qDebug() << "processCategories()";
+    }
 
     reply->deleteLater();
 }
@@ -110,6 +117,19 @@ void APIReader::processExcercises(QJsonArray excercises) {
     }
 }
 
-void APIReader::populateDatabase() {
+void APIReader::processMuscles(QJsonArray muscles) {
 
+    int id = 0;
+    QString name = "";
+    int is_front = 0;
+
+    int size = muscles.size();
+    for(int i = 0; i < size; ++i) {
+
+        id = muscles.at(i).toObject().value("id").toInt();
+        name = muscles.at(i).toObject().value("name").toString();
+        is_front = muscles.at(i).toObject().value("is_front").toBool() === true ? 1 : 0;
+
+        mydbmanager->insertMuscle(id,name, is_front);
+    }
 }

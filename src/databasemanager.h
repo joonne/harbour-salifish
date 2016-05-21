@@ -42,7 +42,7 @@ public:
     bool insertExcerciseMuscle(int muscle, int excercise);
 
     bool createMuscleTable();
-    bool insertMuscle(QString name);
+    bool insertMuscle(int id, QString name, int is_front);
 
     bool createWorkoutTable();
     bool insertWorkout(QString name, double calories, int isTemplate);
