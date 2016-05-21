@@ -65,6 +65,7 @@ public:
 
     QList<QMap<QString, QString> > getExcercises(QString category);
     QList<QMap<QString, QString> > getCategories();
+    QList<QMap<QString, QString> > getMuscles();
 
 private:
     QSqlDatabase db;

@@ -30,6 +30,7 @@ public:
 
     void processExcercises(QJsonArray excercises);
     void processMuscles(QJsonArray muscles);
+    void processCategories(QJsonArray categories);
 
 signals:
     void readyToStoreExcercises();

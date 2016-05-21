@@ -16,11 +16,12 @@ APIReader::APIReader(QObject *parent, DatabaseManager *dbmanager) :
             SLOT(replyFinished(QNetworkReply*)));
 
     m_excercises = false;
-    m_muscles = true;
+    m_muscles = false;
     m_categories = false;
 
 //    getAllExcercises();
     getMuscles();
+//    getCategories();
 }
 
 APIReader::~APIReader() {
@@ -46,11 +47,15 @@ void APIReader::getExcercises(QString muscleId) {
 
 void APIReader::getAllExcercises() {
 
+    m_excercises = true;
+
     QUrl url(QString(QString(APIURL) + "/exercise/?language=2&status=2&limit=200"));
     startRequest(url);
 }
 
 void APIReader::getMuscles() {
+
+    m_muscles = true;
 
     QUrl url(QString(QString(APIURL) + "/muscle/"));
     startRequest(url);
@@ -58,7 +63,9 @@ void APIReader::getMuscles() {
 
 void APIReader::getCategories() {
 
-    QUrl url(QString(QString(APIURL) + "/exercisecategory"));
+    m_categories = true;
+
+    QUrl url(QString(QString(APIURL) + "/exercisecategory/"));
     startRequest(url);
 }
 
@@ -85,15 +92,17 @@ void APIReader::replyFinished(QNetworkReply *reply) {
         qDebug() << "Invalid JSON...\n" << response << endl;
     }
 
-    QJsonValue resultsArray = obj.value("results").toArray();
+    QJsonArray resultsArray = obj.value("results").toArray();
 
     if (m_excercises) {
         processExcercises(resultsArray);
     } else if (m_muscles) {
         processMuscles(resultsArray);
     } else if (m_categories) {
-        qDebug() << "processCategories()";
+        processCategories(resultsArray);
     }
+
+    m_excercises, m_muscles, m_categories = false;
 
     reply->deleteLater();
 }
@@ -128,8 +137,23 @@ void APIReader::processMuscles(QJsonArray muscles) {
 
         id = muscles.at(i).toObject().value("id").toInt();
         name = muscles.at(i).toObject().value("name").toString();
-        is_front = muscles.at(i).toObject().value("is_front").toBool() === true ? 1 : 0;
+        is_front = muscles.at(i).toObject().value("is_front").toBool() == true ? 1 : 0;
 
-        mydbmanager->insertMuscle(id,name, is_front);
+        mydbmanager->insertMuscle(id, name, is_front);
+    }
+}
+
+void APIReader::processCategories(QJsonArray categories) {
+
+    int id = 0;
+    QString name = "";
+
+    int size = categories.size();
+    for(int i = 0; i < size; ++i) {
+
+        id = categories.at(i).toObject().value("id").toInt();
+        name = categories.at(i).toObject().value("name").toString();
+
+        mydbmanager->insertCategory(id, name);
     }
 }

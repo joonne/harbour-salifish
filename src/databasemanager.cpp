@@ -140,7 +140,7 @@ bool DatabaseManager::insertCategory(int id, QString name) {
     if(db.isOpen()) {
 
         QSqlQuery query(db);
-        ret = query.exec(QString("INSERT INTO category VALUES(%0,'%1')").arg(id).arg(name));
+        ret = query.exec(QString("INSERT OR REPLACE INTO category VALUES(%0,'%1')").arg(id).arg(name));
     }
     return ret;
 }
@@ -260,7 +260,7 @@ bool DatabaseManager::insertMuscle(int id, QString name, int is_front) {
     if(db.isOpen()) {
 
         QSqlQuery query(db);
-        ret = query.exec(QString("INSERT OR REPLACE INTO muscle VALUES(%1, '%2', %3)").arg(id).arg(name).arg(is_front));
+        ret = query.exec(QString("INSERT OR REPLACE INTO muscle VALUES(%0, '%1', %2)").arg(id).arg(name).arg(is_front));
         qDebug() << query.lastError();
     }
     return ret;
@@ -388,7 +388,13 @@ bool DatabaseManager::createDB() {
 
         //-----------------------------------------------------------------
 
-        if(createCategoryTable() && createExcerciseTable() && createMuscleTable() && createExcerciseMuscleTable() && createWorkoutTable() && createWorkoutEntryTable() && createEquipmentTable()) {
+        if(createCategoryTable() &&
+                createExcerciseTable() &&
+                createMuscleTable() &&
+                createExcerciseMuscleTable() &&
+                createWorkoutTable() &&
+                createWorkoutEntryTable() &&
+                createEquipmentTable()) {
             qDebug() << "Tables created";
         }
 
@@ -400,13 +406,13 @@ bool DatabaseManager::createDB() {
 
         //-----------------------------------------------------------------
 
-        if(insertCategory(10, "Abs") && insertCategory(8, "Arms") &&
-                insertCategory(12, "Back") && insertCategory(14, "Calves") &&
-                insertCategory(11, "Chest") && insertCategory(9, "Legs") &&
-                insertCategory(13, "Shoulders")) {
+//        if(insertCategory(10, "Abs") && insertCategory(8, "Arms") &&
+//                insertCategory(12, "Back") && insertCategory(14, "Calves") &&
+//                insertCategory(11, "Chest") && insertCategory(9, "Legs") &&
+//                insertCategory(13, "Shoulders")) {
 
-            qDebug() << "Categories added";
-        }
+//            qDebug() << "Categories added";
+//        }
     }
 
     return true;
@@ -612,4 +618,26 @@ QList<QMap<QString, QString> > DatabaseManager::getCategories() {
         }
     }
     return categories;
+}
+
+QList<QMap<QString, QString> > DatabaseManager::getMuscles() {
+
+    QList<QMap<QString, QString> > muscles;
+
+    if(db.isOpen()) {
+
+        QSqlQuery query(db);
+        query.exec(QString("SELECT * FROM muscle ORDER BY name;"));
+
+        if(query.isSelect()) {
+            while(query.next()) {
+                QMap<QString,QString> temp;
+                temp.insert("id", query.value(0).toString());
+                temp.insert("name", query.value(1).toString());
+                temp.insert("name", query.value(2).toString());
+                muscles.append(temp);
+            }
+        }
+    }
+    return muscles;
 }
