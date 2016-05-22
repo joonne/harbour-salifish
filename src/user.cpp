@@ -8,6 +8,8 @@ User::User(QObject *parent, DatabaseManager* dbmanager) : QObject(parent) {
     qDebug() << "calories in 60min gym workout: " << calculateBurntCalories(60);
 
     qDebug() << "user created";
+
+    setPause(100);
 }
 
 User::~User() {
@@ -202,6 +204,18 @@ double User::getBMR() {
     return myBMR;
 }
 
+int User::getPause() {
+    return myPause;
+}
+
+void User::setPause(int pause) {
+
+    if(myPause != pause) {
+        myPause = pause;
+        emit pauseChanged();
+    }
+}
+
 
 double User::calculateBurntCalories(int time) {
 
@@ -213,3 +227,4 @@ double User::calculateBurntCalories(int time) {
         return ((myAge * 0.074) - (myWeight * 0.05741) + (myHeartRate * 0.4472) - 20.4022 * time / 4.184);
     }
 }
+

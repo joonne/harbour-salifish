@@ -36,7 +36,9 @@ public:
     Q_INVOKABLE void removeExcerciseByName(QString name);
     Q_INVOKABLE void clearExcercises();
     Q_INVOKABLE bool isSelected(QString name);
+
     Q_INVOKABLE double calculateTotalWeights();
+    Q_INVOKABLE int calculateDuration(int pause);
 
     Q_INVOKABLE void saveWorkout();
     Q_INVOKABLE void saveWorkoutTemplate();

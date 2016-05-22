@@ -12,9 +12,7 @@ Page {
             MenuItem {
                 text: qsTr("Save as a template")
                 onClicked: {
-                    //GymModel.setWorkoutName(workoutname.text)
-                    //GymModel.createWorkout()
-                    //GymModel.insertWorkoutExcercises()
+                    console.log("save as a template")
                 }
             }
 
@@ -55,9 +53,9 @@ Page {
                 id: time
                 anchors {
                     left: column.left
-                    leftMargin: (column.width - timeWeights.width) / 2
+                    leftMargin: (column.width - time.width) / 2
                 }
-                text: qsTr("%1 minutes").arg(190)
+                text: qsTr("%1 minutes").arg(controller.workoutModel.calculateDuration(controller.user.pause))
             }
         }
     }

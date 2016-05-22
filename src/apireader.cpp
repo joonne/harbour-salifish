@@ -20,7 +20,7 @@ APIReader::APIReader(QObject *parent, DatabaseManager *dbmanager) :
     m_categories = false;
 
 //    getAllExcercises();
-    getMuscles();
+//    getMuscles();
 //    getCategories();
 }
 
@@ -141,6 +141,8 @@ void APIReader::processMuscles(QJsonArray muscles) {
 
         mydbmanager->insertMuscle(id, name, is_front);
     }
+
+    qDebug() << mydbmanager->getMuscles();
 }
 
 void APIReader::processCategories(QJsonArray categories) {

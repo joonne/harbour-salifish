@@ -146,10 +146,15 @@ double WorkoutModel::calculateTotalWeights() {
 
     double weights = 0;
     foreach (auto data, myExcercises) {
-       weights += data->getWeights();
+       weights += data->getReps() * data->getWeights();
     }
 
     return weights;
+}
+
+int WorkoutModel::calculateDuration(int pause) {
+
+    return pause * pause * (myExcercises.size() - 1);
 }
 
 void WorkoutModel::saveWorkout() {

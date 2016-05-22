@@ -83,10 +83,10 @@ Page {
                 width: parent.width
                 height: parent.height
 
-                model: 2
+                model: controller.getMuscleModel()
 
                 delegate: Label {
-                    text: "PENKKIHAUKKA"
+                    text: modelData.name
                 }
             }
         }

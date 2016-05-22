@@ -634,7 +634,7 @@ QList<QMap<QString, QString> > DatabaseManager::getMuscles() {
                 QMap<QString,QString> temp;
                 temp.insert("id", query.value(0).toString());
                 temp.insert("name", query.value(1).toString());
-                temp.insert("name", query.value(2).toString());
+                temp.insert("is_front", query.value(2).toString());
                 muscles.append(temp);
             }
         }

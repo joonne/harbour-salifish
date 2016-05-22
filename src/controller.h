@@ -23,6 +23,9 @@ public:
     WorkoutModel* getWorkoutModel();
     User* getUser();
 
+    Q_INVOKABLE QVariantList getMuscleModel();
+    Q_INVOKABLE QVariantList getCategoryModel();
+
 signals:
 
 public slots:
