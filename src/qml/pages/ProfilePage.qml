@@ -13,6 +13,10 @@ Page {
             MenuItem {
                 text: qsTr("Edit profile")
             }
+
+            MenuItem {
+                text: qsTr("Add entry")
+            }
         }
 
         Column {

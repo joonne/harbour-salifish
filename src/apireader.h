@@ -23,7 +23,6 @@ public:
 
     void startRequest(QUrl url);
 
-    void getExcercises(QString muscleId);
     void getAllExcercises();
     void getMuscles();
     void getCategories();

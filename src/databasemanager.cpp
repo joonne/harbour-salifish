@@ -400,7 +400,7 @@ bool DatabaseManager::createDB() {
 
         //-----------------------------------------------------------------
 
-        if(createUserTable()) {
+        if(createUserTable() && insertUser("Sali Fish", 25, "Male", 180, 85)) {
             qDebug() << "User table created";
         }
 
@@ -574,13 +574,12 @@ bool DatabaseManager::updateWeight(double weight) {
 
 QList<QMap<QString, QString> > DatabaseManager::getExcercises(QString category) {
 
-    int categoryId = findCategory(category);
     QList<QMap<QString, QString> > excercises;
 
     if(db.isOpen()) {
 
         QSqlQuery query(db);
-        query.exec(QString("SELECT * FROM excercise WHERE category = %0;").arg(categoryId));
+        query.exec(QString("SELECT excercise.id, excercise.name, excercise.description, category.name FROM excercise INNER JOIN category ON excercise.category = category.id AND category.name = '%1' ORDER BY excercise.name;").arg(category));
         qDebug() << query.lastError();
         qDebug() << query.lastQuery();
 

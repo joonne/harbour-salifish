@@ -59,14 +59,11 @@ Page {
 
                 BackgroundItem {
                     id: background
-                    height: 10 * Theme.paddingLarge
+                    height: 15 * Theme.paddingLarge
                     anchors.left: parent.left
                     anchors.leftMargin: Theme.paddingMedium
                     anchors.right: parent.right
                     anchors.rightMargin: Theme.paddingMedium
-                    onClicked: {
-                        controller.workoutModel.addExcercise(index, "1", name, description, category, weights, reps)
-                    }
                 }
 
                 Label {
@@ -78,23 +75,18 @@ Page {
                         left: background.left
                         leftMargin: Theme.paddingLarge
                         top: parent.top
-                        topMargin: Theme.paddingMedium
-                    }
-
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: controller.workoutModel.removeExcerciseByIndex(index)
+                        topMargin: (background.height - excerciseName.height - repeatsRow.height - weightsRow.height - buttonRow.height) / 5
                     }
                 }
 
                 Row {
                     id: repeatsRow
-                    spacing: Theme.paddingLarge
+                    spacing: Theme.paddingMedium
                     anchors {
                         left: background.left
-                        leftMargin: (background.width - repeatsRow.width) / 2
+                        leftMargin: Theme.paddingLarge
                         top: excerciseName.bottom
-                        topMargin: (background.height - excerciseName.height - repeatsRow.height - weightsRow.height) / 4
+                        topMargin: (background.height - excerciseName.height - repeatsRow.height - weightsRow.height - buttonRow.height) / 5
                     }
 
                     Label {
@@ -113,6 +105,8 @@ Page {
                     Label {
                         text: reps
                         font.pixelSize: Theme.fontSizeLarge
+                        width: (4 * Theme.paddingLarge)
+                        horizontalAlignment: TextEdit.AlignHCenter
                     }
 
                     Image {
@@ -127,12 +121,12 @@ Page {
 
                 Row {
                     id: weightsRow
-                    spacing: Theme.paddingLarge
+                    spacing: Theme.paddingMedium
                     anchors {
                         left: background.left
-                        leftMargin: (background.width - weightsRow.width) / 2
+                        leftMargin: Theme.paddingLarge
                         top: repeatsRow.bottom
-                        topMargin: (background.height - excerciseName.height - repeatsRow.height - weightsRow.height) / 4
+                        topMargin: (background.height - excerciseName.height - repeatsRow.height - weightsRow.height - buttonRow.height) / 5
                     }
 
                     Label {
@@ -142,15 +136,31 @@ Page {
                     Image {
                         source: "image://theme/icon-m-remove"
 
+                        Timer {
+                            id: weightsReducer
+                            interval: 200
+                            onTriggered: weights >= 0 ? weights = weights - 0.5 : weights = 0
+                            running: false
+                            repeat: true
+                        }
+
                         MouseArea {
                             anchors.fill: parent
                             onClicked: weights >= 0 ? weights = weights - 0.25 : weights = 0
+                            onPressAndHold: weightsReducer.running = true
+                            onPressedChanged: {
+                                if(!pressed) {
+                                    weightsReducer.running = false
+                                }
+                            }
                         }
                     }
 
                     Label {
                         text: weights
                         font.pixelSize: Theme.fontSizeLarge
+                        width: (4 * Theme.paddingLarge)
+                        horizontalAlignment: TextEdit.AlignVCenter
                     }
 
                     Image {
@@ -160,6 +170,29 @@ Page {
                             anchors.fill: parent
                             onClicked: weights = weights + 0.25
                         }
+                    }
+                }
+
+                Row {
+                    id: buttonRow
+                    spacing: (background.width - addButton.width - removeButton.width) / 3
+                    anchors {
+                        left: background.left
+                        leftMargin: (background.width - addButton.width - removeButton.width) / 3
+                        top: weightsRow.bottom
+                        topMargin: (background.height - excerciseName.height - repeatsRow.height - weightsRow.height - buttonRow.height) / 5
+                    }
+
+                    Button {
+                        id: addButton
+                        text: qsTr("Add")
+                        onClicked: controller.workoutModel.addExcercise(index, "1", name, description, category, weights, reps)
+                    }
+
+                    Button {
+                        id: removeButton
+                        text: qsTr("Remove")
+                        onClicked: controller.workoutModel.removeExcerciseByIndex(index)
                     }
                 }
             }

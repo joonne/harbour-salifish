@@ -26,7 +26,7 @@ Page {
             anchors.fill: parent
 
             PageHeader {
-                title: qsTr("Save workout")
+                title: qsTr("Save Workout")
             }
 
             TextField {

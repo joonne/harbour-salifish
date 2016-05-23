@@ -39,12 +39,6 @@ void APIReader::startRequest(QUrl url) {
 
 }
 
-void APIReader::getExcercises(QString muscleId) {
-
-    QUrl url(QString(QString(APIURL) + "/exercise/?muscles=" + muscleId + "&language=2&status=2"));
-    startRequest(url);
-}
-
 void APIReader::getAllExcercises() {
 
     m_excercises = true;
@@ -141,8 +135,6 @@ void APIReader::processMuscles(QJsonArray muscles) {
 
         mydbmanager->insertMuscle(id, name, is_front);
     }
-
-    qDebug() << mydbmanager->getMuscles();
 }
 
 void APIReader::processCategories(QJsonArray categories) {

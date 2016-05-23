@@ -5,6 +5,10 @@ import harbour.salifish 1.0
 Page {
     id: page
 
+    Component.onCompleted: {
+        var model = ["Chest 23.05.2016 670kcal", "Legs 25.05.2016 800kcal"];
+    }
+
     SilicaFlickable {
         anchors.fill: parent
         contentHeight: column.height
@@ -14,23 +18,18 @@ Page {
             MenuItem {
                 text: qsTr("About")
                 onClicked: {
-                    //GymModel.Mode = "normal"
                     pageStack.push(Qt.resolvedUrl("AboutPage.qml"))
                 }
             }
             MenuItem {
                 text: qsTr("Select a Workout")
                 onClicked: {
-                    //GymModel.Mode = "normal"
-                    //GymModel.getWorkouts()
                     pageStack.push(Qt.resolvedUrl("SavedWorkoutsPage.qml"))
                 }
             }
             MenuItem {
                 text: qsTr("Create a new Workout")
                 onClicked: {
-                    //GymModel.Mode = "normal"
-                    //GymModel.clearSelectedExcercises()
                     pageStack.push(Qt.resolvedUrl("CreateWorkoutPage.qml"))
                 }
             }
@@ -46,7 +45,6 @@ Page {
             MenuItem {
                 text: qsTr("Profile")
                 onClicked: {
-                    //GymModel.Mode = "normal"
                     pageStack.push(Qt.resolvedUrl("ProfilePage.qml"))
                 }
             }
@@ -67,7 +65,7 @@ Page {
             Label {
                 id: label
                 anchors.left: parent.left
-                anchors.leftMargin: 20
+                anchors.leftMargin: Theme.paddingLarge
                 text: qsTr("Choose action from pulldown menu")
                 color: Theme.secondaryColor
                 font.pixelSize: Theme.fontSizeMedium
@@ -82,11 +80,16 @@ Page {
             SilicaListView {
                 width: parent.width
                 height: parent.height
+                spacing: Theme.paddingLarge
 
-                model: controller.getMuscleModel()
+                model: model
 
                 delegate: Label {
-                    text: modelData.name
+                    text: modelData
+                    anchors {
+                        left: parent.left
+                        leftMargin: Theme.paddingLarge
+                    }
                 }
             }
         }

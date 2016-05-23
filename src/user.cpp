@@ -5,11 +5,11 @@ User::User(QObject *parent, DatabaseManager* dbmanager) : QObject(parent) {
     mydbmanager = dbmanager;
 
     getUser();
-    qDebug() << "calories in 60min gym workout: " << calculateBurntCalories(60);
+    qDebug() << "calories in 60min gym workout: " << calculateBurntCalories(110);
 
     qDebug() << "user created";
 
-    setPause(100);
+    setPause(2);
 }
 
 User::~User() {
