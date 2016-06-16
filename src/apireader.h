@@ -23,6 +23,8 @@ public:
 
     void startRequest(QUrl url);
 
+    void getPart();
+
     void getAllExcercises();
     void getMuscles();
     void getCategories();
@@ -37,10 +39,13 @@ signals:
 
 public slots:
     void replyFinished(QNetworkReply* reply);
+    void initRequested();
 
 private:
     QNetworkAccessManager* myNetWorkAccessManager;
     DatabaseManager* mydbmanager;
+
+    QList<QString> m_tasks;
 
     // flags
     bool m_excercises;

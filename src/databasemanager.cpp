@@ -22,6 +22,8 @@ void DatabaseManager::setUpDB() {
 
             createDB();
 
+            emit initDbWithData();
+
         } else {
 
             QSqlQuery query(db);
@@ -447,7 +449,7 @@ bool DatabaseManager::insertUser(QString name, int age, QString gender, double h
     if (db.isOpen()) {
 
         QSqlQuery query(db);
-        ret = query.exec(QString("INSERT OR REPLACE INTO user VALUES(NULL,'%1',%2,'%3', %4, %5);").arg(name).arg(age).arg(gender).arg(height).arg(weight));
+        ret = query.exec(QString("INSERT OR REPLACE INTO user VALUES(1,'%1',%2,'%3', %4, %5);").arg(name).arg(age).arg(gender).arg(height).arg(weight));
     }
     return ret;
 }

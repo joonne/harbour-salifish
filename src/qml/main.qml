@@ -5,10 +5,12 @@ import "pages"
 import "cover"
 import "components"
 
-ApplicationWindow
-{
-    initialPage: Component {FirstPage {}}
-    cover: CoverPage {}
+ApplicationWindow {
+
+    initialPage: Component {
+        FirstPage { }
+    }
+    cover: CoverPage { }
 }
 
 

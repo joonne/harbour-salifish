@@ -4,6 +4,18 @@ import Sailfish.Silica 1.0
 Page {
     id: profilepage
 
+    property bool editMode: false
+
+    function updateAll() {
+        controller.user.name = name.text
+        controller.user.age = age.text
+        controller.user.gender = gender.text
+        controller.user.height = height.text
+        controller.user.weight = weight.text
+    }
+
+    Component.onDestruction: updateAll()
+
     SilicaFlickable {
         anchors.fill: parent
         contentHeight: column.height
@@ -11,11 +23,17 @@ Page {
         PullDownMenu {
 
             MenuItem {
-                text: qsTr("Edit profile")
+                text: qsTr("Add entry")
             }
 
             MenuItem {
-                text: qsTr("Add entry")
+                text: editMode ? qsTr("Save") : qsTr("Edit")
+                onClicked: {
+                    if (editMode) {
+                        updateAll()
+                    }
+                    editMode = !editMode
+                }
             }
         }
 
@@ -27,33 +45,11 @@ Page {
                 title: qsTr("My Profile")
             }
 
-            TextSwitch {
-                id: editSwitch
-                text: qsTr("Edit")
-                description: qsTr("Edit profile")
-                onCheckedChanged: {
-
-                    name.readOnly = checked ? false : true
-                    age.readOnly = checked ? false : true
-                    gender.visible = checked ? false : true
-                    maleFemaleSwitch.visible = checked ? true : false
-                    height.readOnly = checked ? false : true
-                    weight.readOnly = checked ?  false : true
-
-                    controller.user.name = name.text
-                    controller.user.age = age.text
-                    controller.user.gender = gender.text
-                    controller.user.height = height.text
-                    controller.user.weight = weight.text
-
-                }
-            }
-
             TextField {
                 id: name
                 text: controller.user.name
                 label: qsTr("Name")
-                readOnly: true
+                readOnly: !editMode
                 width: parent.width
             }
 
@@ -61,7 +57,7 @@ Page {
                 id: age
                 text: controller.user.age
                 label: qsTr("Age")
-                readOnly: true
+                readOnly: !editMode
                 width: parent.width
             }
 
@@ -72,7 +68,7 @@ Page {
                     id: gender
                     text: controller.user.gender
                     label: qsTr("Gender")
-                    readOnly: true
+                    readOnly: !editMode
                     width: parent.width / 2
                 }
 
@@ -80,7 +76,7 @@ Page {
                     id: maleFemaleSwitch
                     text: controller.user.gender === "Male" ? qsTr("Male") : qsTr("Female")
                     description: qsTr("Changes gender")
-                    visible: false
+                    visible: editMode
                     onCheckedChanged: {
                         controller.user.gender === qsTr("Male") ? controller.user.gender = "Female" : controller.user.gender = "Male"
                     }
@@ -92,7 +88,7 @@ Page {
                 id: height
                 text: controller.user.height
                 label: qsTr("Height (cm)")
-                readOnly: true
+                readOnly: !editMode
                 width: parent.width
             }
 
@@ -100,7 +96,7 @@ Page {
                 id: weight
                 text: controller.user.weight
                 label: qsTr("Weight (kg)")
-                readOnly: true
+                readOnly: !editMode
                 width: parent.width
             }
 

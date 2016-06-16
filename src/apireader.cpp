@@ -15,6 +15,11 @@ APIReader::APIReader(QObject *parent, DatabaseManager *dbmanager) :
             this,
             SLOT(replyFinished(QNetworkReply*)));
 
+    connect(mydbmanager,
+            SIGNAL(initDbWithData()),
+            this,
+            SLOT(initRequested()));
+
     m_excercises = false;
     m_muscles = false;
     m_categories = false;
@@ -33,10 +38,31 @@ APIReader::~APIReader() {
 }
 
 void APIReader::startRequest(QUrl url) {
-
     QNetworkRequest request(url);
     myNetWorkAccessManager->get(request);
+}
 
+
+void APIReader::initRequested() {
+    m_tasks.append("excercises");
+    m_tasks.append("muscles");
+    m_tasks.append("categories");
+
+    getPart();
+}
+
+void APIReader::getPart() {
+    if(!m_tasks.isEmpty()) {
+        QString task = m_tasks.takeFirst();
+
+        if (task == "excercises") {
+            getAllExcercises();
+        } else if (task == "muscles") {
+            getMuscles();
+        } else if (task == "categories") {
+            getCategories();
+        }
+    }
 }
 
 void APIReader::getAllExcercises() {
@@ -99,6 +125,10 @@ void APIReader::replyFinished(QNetworkReply *reply) {
     m_excercises, m_muscles, m_categories = false;
 
     reply->deleteLater();
+
+    if(!m_tasks.isEmpty()) {
+        getPart();
+    }
 }
 
 void APIReader::processExcercises(QJsonArray excercises) {

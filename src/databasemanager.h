@@ -67,6 +67,9 @@ public:
     QList<QMap<QString, QString> > getCategories();
     QList<QMap<QString, QString> > getMuscles();
 
+signals:
+    void initDbWithData();
+
 private:
     QSqlDatabase db;
 };
