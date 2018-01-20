@@ -32,6 +32,7 @@ public:
     bool updateInfoTable(double version);
 
     bool createCategoryTable();
+    bool insertCategories(QList<QVariantMap> categories);
     bool insertCategory(int id, QString name);
     int findCategory(QString category);
 
@@ -43,6 +44,7 @@ public:
     bool insertExerciseMuscle(int muscle, int exercise);
 
     bool createMuscleTable();
+    bool insertMuscles(QList<QVariantMap> muscles);
     bool insertMuscle(int id, QString name, int is_front);
 
     bool createWorkoutTable();

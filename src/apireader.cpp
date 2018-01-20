@@ -14,10 +14,6 @@ APIReader::APIReader(QObject *parent, DatabaseManager *dbmanager) :
             SIGNAL(initDbWithData()),
             this,
             SLOT(initRequested()));
-
-    getAllExercises();
-//    getMuscles();
-//    getCategories();
 }
 
 APIReader::~APIReader()
@@ -29,10 +25,7 @@ APIReader::~APIReader()
 QNetworkReply* APIReader::get(QUrl url)
 {
     QNetworkRequest request(url);
-
     request.setRawHeader(QByteArray("Content-Type"), QByteArray("application/json"));
-//    request.setRawHeader(QByteArray("Authorization"), (QString("Bearer %1").arg(m_jwt)).toLocal8Bit());
-    request.setRawHeader(QByteArray("Accept-Language"), QByteArray("en"));
 
     qDebug() << "REQUESTING" << request.url().toString();
 
@@ -41,26 +34,9 @@ QNetworkReply* APIReader::get(QUrl url)
 
 void APIReader::initRequested()
 {
-    m_tasks.append("exercises");
-    m_tasks.append("muscles");
-    m_tasks.append("categories");
-
-    getPart();
-}
-
-void APIReader::getPart()
-{
-    if(!m_tasks.isEmpty()) {
-        QString task = m_tasks.takeFirst();
-
-        if (task == "exercises") {
-            getAllExercises();
-        } else if (task == "muscles") {
-            getMuscles();
-        } else if (task == "categories") {
-            getCategories();
-        }
-    }
+    getCategories();
+    getMuscles();
+    getAllExercises();
 }
 
 void APIReader::getAllExercises()
@@ -91,7 +67,8 @@ void APIReader::getMuscles()
         auto document = QJsonDocument::fromJson(reply->readAll());
 
         if (!document.isNull()) {
-            processMuscles(document.array());
+            auto muscles = processMuscles(document.object().value("results").toArray());
+            mydbmanager->insertMuscles(muscles);
         }
 
         reply->deleteLater();
@@ -108,7 +85,8 @@ void APIReader::getCategories()
         auto document = QJsonDocument::fromJson(reply->readAll());
 
         if (!document.isNull()) {
-            processCategories(document.array());
+            auto categories = processCategories(document.object().value("results").toArray());
+            mydbmanager->insertCategories(categories);
         }
 
         reply->deleteLater();
@@ -134,27 +112,37 @@ QList<QVariantMap> APIReader::processExercises(QJsonArray exercises)
     return result;
 }
 
-void APIReader::processMuscles(QJsonArray muscles)
+QList<QVariantMap> APIReader::processMuscles(QJsonArray muscles)
 {
+    QList<QVariantMap> result;
+
     for (auto muscle : muscles) {
+        QVariantMap temp;
+
         auto object = muscle.toObject();
+        temp.insert("id", object.value("id").toInt());
+        temp.insert("name", object.value("name").toString());
+        temp.insert("is_front", object.value("is_front").toBool() ? 1 : 0);
 
-        auto id = object.value("id").toInt();
-        auto name = object.value("name").toString();
-        auto is_front = object.value("is_front").toBool() ? 1 : 0;
-
-        mydbmanager->insertMuscle(id, name, is_front);
+        result.append(temp);
     }
+
+    return result;
 }
 
-void APIReader::processCategories(QJsonArray categories)
+QList<QVariantMap> APIReader::processCategories(QJsonArray categories)
 {
+    QList<QVariantMap> result;
+
     for(auto category : categories) {
+        QVariantMap temp;
+
         auto object = category.toObject();
+        temp.insert("id", object.value("id").toInt());
+        temp.insert("name", object.value("name").toString());
 
-        auto id = object.value("id").toInt();
-        auto name = object.value("name").toString();
-
-        mydbmanager->insertCategory(id, name);
+        result.append(temp);
     }
+
+    return result;
 }

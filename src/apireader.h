@@ -23,15 +23,13 @@ public:
 
     QNetworkReply* get(QUrl url);
 
-    void getPart();
-
     void getAllExercises();
     void getMuscles();
     void getCategories();
 
     QList<QVariantMap> processExercises(QJsonArray exercises);
-    void processMuscles(QJsonArray muscles);
-    void processCategories(QJsonArray categories);
+    QList<QVariantMap> processMuscles(QJsonArray muscles);
+    QList<QVariantMap> processCategories(QJsonArray categories);
 
 signals:
     void readyToStoreExercises();

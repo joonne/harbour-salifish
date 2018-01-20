@@ -24,7 +24,7 @@ void DatabaseManager::setUpDB()
         } else {
 
             QSqlQuery query(db);
-            query.exec("SELECT name,version FROM information;");
+            query.exec("SELECT name, version FROM information;");
             if(query.isSelect()) {
                 while(query.next()) {
                     QString name = query.value(0).toString();
@@ -126,10 +126,24 @@ bool DatabaseManager::createCategoryTable()
         ret = query.exec("CREATE TABLE category"
                          "(id INTEGER PRIMARY KEY, "
                          "name VARCHAR(50))");
-
     }
 
     return ret;
+}
+
+bool DatabaseManager::insertCategories(QList<QVariantMap> categories)
+{
+    db.transaction();
+
+    for (auto category: categories) {
+
+        auto id = category.value("id").toInt();
+        auto name = category.value("name").toString();
+
+        insertCategory(id, name);
+    }
+
+    return db.commit();
 }
 
 bool DatabaseManager::insertCategory(int id, QString name)
@@ -140,6 +154,7 @@ bool DatabaseManager::insertCategory(int id, QString name)
 
         QSqlQuery query(db);
         ret = query.exec(QString("INSERT OR REPLACE INTO category VALUES(%0,'%1')").arg(id).arg(name));
+        qDebug() << query.lastError();
     }
 
     return ret;
@@ -190,6 +205,7 @@ bool DatabaseManager::insertExercises(QList<QVariantMap> exercises)
     for (auto exercise : exercises) {
         auto id = exercise.value("id").toInt();
         auto name = exercise.value("name").toString();
+        name.replace("'", "''");
         auto description = exercise.value("description").toString();
         auto category = exercise.value("category").toInt();
 
@@ -208,6 +224,7 @@ bool DatabaseManager::insertExercise(int id, QString name, QString description, 
         QSqlQuery query(db);
         ret = query.exec(QString("INSERT OR REPLACE INTO exercise values(%0, '%1', '%2', %3)")
                          .arg(id).arg(name).arg(description).arg(category));
+        qDebug() << query.lastError();
 
     }
 
@@ -264,6 +281,21 @@ bool DatabaseManager::createMuscleTable()
     }
 
     return ret;
+}
+
+bool DatabaseManager::insertMuscles(QList<QVariantMap> muscles)
+{
+    db.transaction();
+
+    for (auto muscle : muscles) {
+        auto id = muscle.value("id").toInt();
+        auto name = muscle.value("name").toString();
+        auto isFront = muscle.value("is_front").toInt();
+
+        insertMuscle(id, name, isFront);
+    }
+
+    return db.commit();
 }
 
 bool DatabaseManager::insertMuscle(int id, QString name, int is_front)
@@ -382,7 +414,7 @@ bool DatabaseManager::insertEquipment(QString name)
     if (db.isOpen()) {
 
         QSqlQuery query(db);
-        query.exec(QString("INSERT INTO equipment VALUES(NULL, '%1')").arg(name));
+        ret = query.exec(QString("INSERT INTO equipment VALUES(NULL, '%1')").arg(name));
     }
 
     return ret;
@@ -466,7 +498,7 @@ bool DatabaseManager::insertUser(QString name, int age, QString gender, double h
     return ret;
 }
 
-bool DatabaseManager::updateDB() { }
+bool DatabaseManager::updateDB() { return false; }
 
 QMap<QString,QString> DatabaseManager::getUser()
 {
@@ -589,12 +621,17 @@ QList<QMap<QString, QString> > DatabaseManager::getExercises(QString category)
     if (db.isOpen()) {
 
         QSqlQuery query(db);
-        query.exec(QString("SELECT exercise.id, exercise.name, exercise.description, category.name FROM exercise INNER JOIN category ON exercise.category = category.id AND category.name = '%1' ORDER BY exercise.name;").arg(category));
+        query.exec(QString("SELECT exercise.id, exercise.name, exercise.description, category.name "
+                           "FROM exercise "
+                           "INNER JOIN category "
+                           "ON exercise.category = category.id AND category.name = '%1' "
+                           "ORDER BY exercise.name;").arg(category));
+
         qDebug() << query.lastError();
         qDebug() << query.lastQuery();
 
-        if(query.isSelect()) {
-            while(query.next()) {
+        if (query.isSelect()) {
+            while (query.next()) {
                 QMap<QString,QString> temp;
                 temp.insert("id", query.value(0).toString());
                 temp.insert("name", query.value(1).toString());
@@ -640,8 +677,8 @@ QList<QMap<QString, QString> > DatabaseManager::getMuscles()
         QSqlQuery query(db);
         query.exec(QString("SELECT * FROM muscle ORDER BY name;"));
 
-        if(query.isSelect()) {
-            while(query.next()) {
+        if (query.isSelect()) {
+            while (query.next()) {
                 QMap<QString,QString> temp;
                 temp.insert("id", query.value(0).toString());
                 temp.insert("name", query.value(1).toString());
