@@ -4,8 +4,8 @@ import Sailfish.Silica 1.0
 Page {
     id: showdescriptionpage
 
-    property string excerciseName: ""
-    property string excerciseDescription: ""
+    property string exerciseName: ""
+    property string exerciseDescription: ""
 
     SilicaFlickable {
         anchors.fill: parent
@@ -17,8 +17,8 @@ Page {
                 id: menuitem
                 text: qsTr("Delete")
                 onClicked: {
-                    remorse.execute(qsTr("Deleting excercise"), function() {
-                        //                        GymModel.getExcercises()
+                    remorse.execute(qsTr("Deleting exercise"), function() {
+                        //                        GymModel.getExercises()
                         pageStack.pop()
                     });
 
@@ -33,7 +33,7 @@ Page {
                     if(text === qsTr("Save")) {
                         //                        GymModel.Name = header.text
                         //                        GymModel.Description = description.text
-                        //                        GymModel.updateExcercise()
+                        //                        GymModel.updateExercise()
                     }
                     text == "Edit" ? text = "Save" : text = "Edit"
                 }
@@ -52,7 +52,7 @@ Page {
 
             TextField {
                 id: header
-                text: excerciseName
+                text: exerciseName
                 width: showdescriptionpage.width
                 readOnly: true
                 EnterKey.enabled: text.length > 0
@@ -63,7 +63,7 @@ Page {
 
             TextArea {
                 id: description
-                text: excerciseDescription
+                text: exerciseDescription
                 width: showdescriptionpage.width
                 readOnly: true
                 height: 500

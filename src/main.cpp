@@ -14,7 +14,7 @@
 #include "gymmodel.h"
 #include "user.h"
 #include "databasemanager.h"
-#include "workoutmodel/excercisemodel.h"
+#include "workoutmodel/exercisemodel.h"
 #include "workoutmodel/workoutmodel.h"
 #include "apireader.h"
 #include "controller.h"
@@ -30,8 +30,8 @@ int main(int argc, char *argv[])
     QQmlContext* context = view->rootContext();
     context->setContextProperty("controller", controller.data());
 
-    qmlRegisterType<ExcerciseModel>("harbour.salifish", 1, 0, "ExcerciseModel");
-    qmlRegisterType<WorkoutModel>("harbour.salifish", 1, 0, "ExcerciseModel");
+    qmlRegisterType<ExerciseModel>("harbour.salifish", 1, 0, "ExerciseModel");
+    qmlRegisterType<WorkoutModel>("harbour.salifish", 1, 0, "ExerciseModel");
     qmlRegisterType<User>("harbour.salifish", 1, 0, "User");
 
     view->engine()->addImportPath(SailfishApp::pathTo("qml/components").toString());

@@ -16,13 +16,13 @@ CoverBackground {
 //        id: workoutActions
 //        CoverAction {
 //            iconSource: "image://theme/icon-cover-previous"
-//            onTriggered: placeholder.text = GymModel.previousCoverExcercise()
+//            onTriggered: placeholder.text = GymModel.previousCoverExercise()
 //        }
 //        CoverAction {
 //            iconSource: "image://theme/icon-cover-next"
 //            onTriggered: {
-//                GymModel.removeWorkoutExcercise(placeholder.text)
-//                placeholder.text = GymModel.nextCoverExcercise()
+//                GymModel.removeWorkoutExercise(placeholder.text)
+//                placeholder.text = GymModel.nextCoverExercise()
 //            }
 //        }
 //    }

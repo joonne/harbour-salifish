@@ -50,7 +50,7 @@ Page {
             anchors.top: parent.top
             anchors.topMargin: 200
 
-            model: excercisesModel
+            model: exercisesModel
             delegate: TextField {
                 text: modelData
                 readOnly: true

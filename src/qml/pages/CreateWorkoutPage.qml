@@ -12,7 +12,7 @@ Page {
         id: timer
         interval: 500
         onTriggered: {
-            pageStack.pushAttached(Qt.resolvedUrl("SelectedExcercisesPage.qml"))
+            pageStack.pushAttached(Qt.resolvedUrl("SelectedExercisesPage.qml"))
         }
     }
 
@@ -50,7 +50,7 @@ Page {
                 width: gridView.cellWidth - Theme.paddingLarge
                 text: modelData.name
                 onClicked: {
-                    pageStack.push(Qt.resolvedUrl("ExcercisePage.qml"), {selectedMuscle: text})
+                    pageStack.push(Qt.resolvedUrl("ExercisePage.qml"), {selectedMuscle: text})
                 }
             }
         }

@@ -41,12 +41,12 @@ Page {
             }
 
             Label {
-                id: excercises
-                text: "12 excercises"
+                id: exercises
+                text: "12 exercises"
                 font.pixelSize: Theme.fontSizeLarge
                 anchors {
                     left: parent.left
-                    leftMargin: (workoutstartpage.width - excercises.width) / 2
+                    leftMargin: (workoutstartpage.width - exercises.width) / 2
                 }
             }
 

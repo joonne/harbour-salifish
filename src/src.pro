@@ -13,12 +13,12 @@ SOURCES += main.cpp \
     user.cpp \
     gymmodel.cpp \
     databasemanager.cpp \
-    workoutmodel/excercisemodel.cpp \
-    workoutmodel/excercisedata.cpp \
+    workoutmodel/exercisemodel.cpp \
+    workoutmodel/exercisedata.cpp \
     apireader.cpp \
     controller.cpp \
     workoutmodel/workoutdata.cpp \
-    workoutmodel/workoutmodel.cpp
+    workoutmodel/workoutmodel.cpp \
 
 OTHER_FILES = \
 # You DO NOT want .yaml be listed here as Qt Creator's editor is completely not ready for multi package .yaml's
@@ -36,10 +36,10 @@ OTHER_FILES = \
     qml/pages/SavedWorkoutsPage.qml \
     qml/pages/ProfilePage.qml \
     qml/pages/FirstPage.qml \
-    qml/pages/ExcercisePage.qml \
+    qml/pages/ExercisePage.qml \
     qml/pages/EditWorkoutPage.qml \
     qml/pages/CreateWorkoutPage.qml \
-    qml/pages/AddNewExcercise.qml \
+    qml/pages/AddNewExercise.qml \
     qml/pages/AboutPage.qml \
     qml/cover/CoverPage.qml
 
@@ -49,17 +49,17 @@ HEADERS += \
     user.h \
     gymmodel.h \
     databasemanager.h \
-    workoutmodel/excercisemodel.h \
-    workoutmodel/excercisedata.h \
+    workoutmodel/exercisemodel.h \
+    workoutmodel/exercisedata.h \
     apireader.h \
     controller.h \
     workoutmodel/workoutdata.h \
-    workoutmodel/workoutmodel.h
+    workoutmodel/workoutmodel.h \
 
 DISTFILES += \
     qml/pages/WorkoutStartPage.qml \
     qml/pages/WorkoutViewPage.qml \
     qml/pages/Workout.qml \
     qml/pages/WorkoutStatus.qml \
-    qml/pages/SelectedExcercisesPage.qml \
+    qml/pages/SelectedExercisesPage.qml \
     qml/components/HorizontalSeparator.qml

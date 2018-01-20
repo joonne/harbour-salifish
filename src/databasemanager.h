@@ -35,11 +35,12 @@ public:
     bool insertCategory(int id, QString name);
     int findCategory(QString category);
 
-    bool createExcerciseTable();
-    bool insertExcercise(int id, QString name, QString description, int category);
+    bool createExerciseTable();
+    bool insertExercises(QList<QVariantMap> exercises);
+    bool insertExercise(int id, QString name, QString description, int category);
 
-    bool createExcerciseMuscleTable();
-    bool insertExcerciseMuscle(int muscle, int excercise);
+    bool createExerciseMuscleTable();
+    bool insertExerciseMuscle(int muscle, int exercise);
 
     bool createMuscleTable();
     bool insertMuscle(int id, QString name, int is_front);
@@ -48,7 +49,7 @@ public:
     bool insertWorkout(QString name, double calories, int isTemplate);
 
     bool createWorkoutEntryTable();
-    bool insertWorkoutEntry(int excercise, int user, int  workout, QString date, int repeats, double weights, int equipment);
+    bool insertWorkoutEntry(int exercise, int user, int  workout, QString date, int repeats, double weights, int equipment);
 
     bool createEquipmentTable();
     bool insertEquipment(QString name);
@@ -63,7 +64,7 @@ public:
     bool updateHeight(double height);
     bool updateWeight(double weight);
 
-    QList<QMap<QString, QString> > getExcercises(QString category);
+    QList<QMap<QString, QString> > getExercises(QString category);
     QList<QMap<QString, QString> > getCategories();
     QList<QMap<QString, QString> > getMuscles();
 

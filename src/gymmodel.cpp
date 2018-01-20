@@ -17,9 +17,9 @@ QString GymModel::getName() {
     return name_;
 }
 
-QString GymModel::getExcerciseName() {
+QString GymModel::getExerciseName() {
 
-    return excerciseName_;
+    return exerciseName_;
 }
 
 QString GymModel::getDescription() {
@@ -27,9 +27,9 @@ QString GymModel::getDescription() {
     return description_;
 }
 
-QString GymModel::getExcerciseDescription() {
+QString GymModel::getExerciseDescription() {
 
-    return excerciseDescription_;
+    return exerciseDescription_;
 }
 
 QString GymModel::getSelectedMuscle() {
@@ -37,27 +37,27 @@ QString GymModel::getSelectedMuscle() {
     return selectedMuscle_;
 }
 
-QString GymModel::getSelectedExcercise() {
+QString GymModel::getSelectedExercise() {
 
-    return selectedExcercise_;
+    return selectedExercise_;
 }
 
 QString GymModel::getMode() {
     return mode_;
 }
 
-void GymModel::setName(QString excerciseName) {
+void GymModel::setName(QString exerciseName) {
 
-    if(excerciseName != name_ and excerciseName != "") {
-        name_ = excerciseName;
+    if(exerciseName != name_ and exerciseName != "") {
+        name_ = exerciseName;
         emit nameChanged();
     }
 }
 
-void GymModel::setExcerciseName(QString excerciseName) {
+void GymModel::setExerciseName(QString exerciseName) {
 
-    excerciseName_ = excerciseName;
-    emit excerciseNameChanged();
+    exerciseName_ = exerciseName;
+    emit exerciseNameChanged();
 }
 
 void GymModel::setDescription(QString description) {
@@ -68,10 +68,10 @@ void GymModel::setDescription(QString description) {
     }
 }
 
-void GymModel::setExcerciseDescription(QString excerciseDescription) {
+void GymModel::setExerciseDescription(QString exerciseDescription) {
 
-    excerciseDescription_ = excerciseDescription;
-    emit excerciseDescriptionChanged();
+    exerciseDescription_ = exerciseDescription;
+    emit exerciseDescriptionChanged();
 }
 
 void GymModel::setSelectedMuscle(QString selectedMuscle) {
@@ -80,10 +80,10 @@ void GymModel::setSelectedMuscle(QString selectedMuscle) {
     emit SelectedMuscleChanged();
 }
 
-void GymModel::setSelectedExcercise(QString selectedExcercise) {
+void GymModel::setSelectedExercise(QString selectedExercise) {
 
-    selectedExcercise_ = selectedExcercise;
-    emit SelectedExcerciseChanged();
+    selectedExercise_ = selectedExercise;
+    emit SelectedExerciseChanged();
 }
 
 void GymModel::setMode(QString mode) {
@@ -92,10 +92,10 @@ void GymModel::setMode(QString mode) {
     emit modeChanged();
 }
 
-bool GymModel::getExcercises() {
+bool GymModel::getExercises() {
 
-    excerciseNames_.clear();
-    excerciseCount_ = 0;
+    exerciseNames_.clear();
+    exerciseCount_ = 0;
 
     bool ret = false;
 
@@ -109,15 +109,15 @@ bool GymModel::getExcercises() {
 
         while(query.next()) {
 
-            excerciseNames_ << query.value(1).toString();
-            ++excerciseCount_;
+            exerciseNames_ << query.value(1).toString();
+            ++exerciseCount_;
 
         }
 
-        qDebug() << excerciseNames_;
+        qDebug() << exerciseNames_;
     }
 
-    context_->setContextProperty("excerciseNamesModel",QVariant::fromValue(excerciseNames_));
+    context_->setContextProperty("exerciseNamesModel",QVariant::fromValue(exerciseNames_));
     return ret;
 }
 
@@ -177,13 +177,13 @@ bool GymModel::getWorkout(QString workout) {
 
     workoutName_ = workout;
     bool ret = false;
-    excercises_.clear();
-    excerciseNames_.clear();
+    exercises_.clear();
+    exerciseNames_.clear();
     series_.clear();
     repeats_.clear();
     weights_.clear();
     comments_.clear();
-    coverExcerciseIndex_ = 0;
+    coverExerciseIndex_ = 0;
 
     // figures out the index of the workout and then the table that contains the information,
     // TODO: make a good error check later for all of these!
@@ -200,10 +200,10 @@ bool GymModel::getWorkout(QString workout) {
 
         while(query.next()) {
 
-            excercises_ << query.value(1).toString() + "         " + query.value(2).toString() + " x " +
+            exercises_ << query.value(1).toString() + "         " + query.value(2).toString() + " x " +
                            query.value(3).toString() + " x " + query.value(4).toString() + " kg";
 
-            excerciseNames_ << query.value(1).toString();
+            exerciseNames_ << query.value(1).toString();
             series_ << query.value(2).toString();
             repeats_ << query.value(3).toString();
             weights_ << query.value(4).toString();
@@ -212,55 +212,55 @@ bool GymModel::getWorkout(QString workout) {
         }
     }
 
-    workout_ = excerciseNames_;
+    workout_ = exerciseNames_;
     context_->setContextProperty("workoutModel",QVariant::fromValue(workout_));
-    context_->setContextProperty("excerciseNamesModel",QVariant::fromValue(excerciseNames_));
+    context_->setContextProperty("exerciseNamesModel",QVariant::fromValue(exerciseNames_));
     context_->setContextProperty("seriesModel",QVariant::fromValue(series_));
     context_->setContextProperty("repeatsModel",QVariant::fromValue(repeats_));
     context_->setContextProperty("weightsModel",QVariant::fromValue(weights_));
-    context_->setContextProperty("excercisesModel",QVariant::fromValue(excercises_));
-    context_->setContextProperty("selectedExcercisesModel",QVariant::fromValue(excerciseNames_));
+    context_->setContextProperty("exercisesModel",QVariant::fromValue(exercises_));
+    context_->setContextProperty("selectedExercisesModel",QVariant::fromValue(exerciseNames_));
 
 
     return ret;
 
 }
 
-bool GymModel::getExcercise(QString excercise) {
+bool GymModel::getExercise(QString exercise) {
 
     bool ret = false;
 
     if(db_.isOpen()) {
 
         QSqlQuery query(db_);
-        ret = query.exec(QString("SELECT * FROM '%1' WHERE name = '%2'").arg(selectedMuscle_.toLower()).arg(excercise));
+        ret = query.exec(QString("SELECT * FROM '%1' WHERE name = '%2'").arg(selectedMuscle_.toLower()).arg(exercise));
         qDebug() << query.lastError();
 
         if(query.next()) {
 
-            setExcerciseName(query.value(1).toString());
-            setExcerciseDescription(query.value(2).toString());
+            setExerciseName(query.value(1).toString());
+            setExerciseDescription(query.value(2).toString());
         }
     }
 
     return ret;
 }
 
-bool GymModel::insertExcerciseName(QString excerciseName) {
+bool GymModel::insertExerciseName(QString exerciseName) {
 
     bool ret = false;
 
     if (db_.isOpen()) {
 
         QSqlQuery query(db_);
-        ret = query.exec(QString("INSERT INTO '%1' VALUES(NULL,'%2');").arg(selectedMuscle_).arg(excerciseName));
+        ret = query.exec(QString("INSERT INTO '%1' VALUES(NULL,'%2');").arg(selectedMuscle_).arg(exerciseName));
         qDebug() << query.lastError();
 
     }
     return ret;
 }
 
-bool GymModel::insertExcerciseDescription(QString description) {
+bool GymModel::insertExerciseDescription(QString description) {
 
     bool ret = false;
 
@@ -274,7 +274,7 @@ bool GymModel::insertExcerciseDescription(QString description) {
     return ret;
 }
 
-bool GymModel::insertExcercise() {
+bool GymModel::insertExercise() {
 
     bool ret = false;
 
@@ -285,27 +285,27 @@ bool GymModel::insertExcercise() {
                          .arg(selectedMuscle_.toLower()).arg(name_).arg(description_));
     }
 
-    excerciseNames_ << name_;
-    context_->setContextProperty("excerciseNamesModel",QVariant::fromValue(excerciseNames_));
+    exerciseNames_ << name_;
+    context_->setContextProperty("exerciseNamesModel",QVariant::fromValue(exerciseNames_));
 
 
     return ret;
 }
 
-bool GymModel::insertWorkoutExcercises() {
+bool GymModel::insertWorkoutExercises() {
 
     bool ret = false;
 
-    for(int i = 0; i < selectedExcercises_.size(); ++i) {
+    for(int i = 0; i < selectedExercises_.size(); ++i) {
 
-        qDebug() << "adding " << selectedExcercises_.at(i) << " to " << workoutName_;
-        QString excercise = selectedExcercises_.at(i);
+        qDebug() << "adding " << selectedExercises_.at(i) << " to " << workoutName_;
+        QString exercise = selectedExercises_.at(i);
 
         if(db_.isOpen()) {
 
             QSqlQuery query(db_);
             ret = query.exec(QString("INSERT INTO '%1' VALUES(NULL,'%2',%3,%4,%5,'%6');")
-                             .arg(workoutName_).arg(excercise)
+                             .arg(workoutName_).arg(exercise)
                              .arg(3).arg(12).arg(70));
             qDebug() << query.lastError();
         }
@@ -314,22 +314,22 @@ bool GymModel::insertWorkoutExcercises() {
     return ret;
 }
 
-// Finds and deletes an excercise from the database.
-bool GymModel::deleteExcerciseFromDB() {
+// Finds and deletes an exercise from the database.
+bool GymModel::deleteExerciseFromDB() {
 
     bool ret = false;
 
-    getExcercises();
-    if(findExcerciseIndex()) {
+    getExercises();
+    if(findExerciseIndex()) {
 
         if(db_.isOpen()) {
 
             QSqlQuery query(db_);
-            ret = query.exec(QString("DELETE FROM '%1' WHERE ID = %2").arg(selectedMuscle_).arg(excerciseIndex_));
+            ret = query.exec(QString("DELETE FROM '%1' WHERE ID = %2").arg(selectedMuscle_).arg(exerciseIndex_));
         }
 
         if(ret) {
-            removeExcercise(selectedExcercise_);
+            removeExercise(selectedExercise_);
         }
     }
 
@@ -384,7 +384,7 @@ bool GymModel::createWorkout() {
         QSqlQuery query(db_);
         ret1 = query.exec(QString("CREATE TABLE IF NOT EXISTS '%1'"
                                   "(id integer primary key, "
-                                  "excercisename varchar(50), "
+                                  "exercisename varchar(50), "
                                   "series integer, "
                                   "repeats1 integer, "
                                   "weights1 real, "
@@ -415,11 +415,11 @@ bool GymModel::createWorkout() {
 
         if(ret1 and ret2) {
 
-            for( int i = 0; i < selectedExcercises_.size(); ++i ) {
+            for( int i = 0; i < selectedExercises_.size(); ++i ) {
 
                 ret3 = query.exec(QString("INSERT INTO '%1' VALUES(NULL,'%2',%3,%4,%5,%6,%7,%8,%9,%10,%11,%12,%13,%14,%15)")
                                   .arg(workoutName_)
-                                  .arg(selectedExcercises_.at(i))
+                                  .arg(selectedExercises_.at(i))
                                   .arg(3)
                                   .arg(12).arg(40)
                                   .arg(12).arg(40)
@@ -467,7 +467,7 @@ bool GymModel::createPreviousWorkout() {
         QSqlQuery query(db_);
         ret1 = query.exec(QString("CREATE TABLE IF NOT EXISTS '%1'"
                                   "(id integer primary key, "
-                                  "excercisename varchar(50), "
+                                  "exercisename varchar(50), "
                                   "series integer, "
                                   "repeats1 integer, "
                                   "weights1 real, "
@@ -510,71 +510,71 @@ bool GymModel::createPreviousWorkout() {
     return ret;
 }
 
-bool GymModel::updateExcercise() {
+bool GymModel::updateExercise() {
 
     bool ret = false;
     bool ret1 = false;
     bool ret2 = false;
 
-    if(findExcerciseIndex()) {
+    if(findExerciseIndex()) {
 
         if (db_.isOpen()) {
 
             QSqlQuery query(db_);
 
             ret1 = query.exec(QString("UPDATE '%1' SET name = '%2' WHERE Id = %3;")
-                              .arg(selectedMuscle_).arg(name_).arg(excerciseIndex_));
+                              .arg(selectedMuscle_).arg(name_).arg(exerciseIndex_));
             qDebug() << query.lastError();
 
             ret2 = query.exec(QString("UPDATE '%1' SET description = '%2' WHERE Id = %3;")
-                              .arg(selectedMuscle_).arg(description_).arg(excerciseIndex_));
+                              .arg(selectedMuscle_).arg(description_).arg(exerciseIndex_));
             qDebug() << query.lastError();
 
             if(ret1 and ret2) ret = true;
         }
     }
 
-    getExcercises();
+    getExercises();
 
     return ret;
 }
 
-QStringList GymModel::excerciseNames() {
+QStringList GymModel::exerciseNames() {
 
-    qDebug() << "names: " << excerciseNames_;
-    return excerciseNames_;
+    qDebug() << "names: " << exerciseNames_;
+    return exerciseNames_;
 }
 
-void GymModel::addExcercise(QString excercise) {
+void GymModel::addExercise(QString exercise) {
 
-    selectedExcercises_ << excercise;
-    emit selectedExcercisesCountChanged();
-    context_->setContextProperty("selectedExcercisesModel",QVariant::fromValue(selectedExcercises_));
+    selectedExercises_ << exercise;
+    emit selectedExercisesCountChanged();
+    context_->setContextProperty("selectedExercisesModel",QVariant::fromValue(selectedExercises_));
 
-    qDebug() << "excercise added.";
+    qDebug() << "exercise added.";
 }
 
-void GymModel::removeExcercise(QString excercise) {
+void GymModel::removeExercise(QString exercise) {
 
-    int index = selectedExcercises_.indexOf(excercise);
-    if(index != -1 ) selectedExcercises_.removeAt(index);
-    context_->setContextProperty("selectedExcercisesModel",QVariant::fromValue(selectedExcercises_));
+    int index = selectedExercises_.indexOf(exercise);
+    if(index != -1 ) selectedExercises_.removeAt(index);
+    context_->setContextProperty("selectedExercisesModel",QVariant::fromValue(selectedExercises_));
 
-    qDebug() << "after delete" << selectedExcercises_;
+    qDebug() << "after delete" << selectedExercises_;
 }
 
-void GymModel::removeWorkout(QString excercise) {
+void GymModel::removeWorkout(QString exercise) {
 
-    int index = workoutNames_.indexOf(excercise);
+    int index = workoutNames_.indexOf(exercise);
     if(index != -1 ) workoutNames_.removeAt(index);
     context_->setContextProperty("workoutsModel",QVariant::fromValue(workoutNames_));
 
     qDebug() << "after delete" << workoutNames_;
 }
 
-bool GymModel::isExcerciseSelected(QString excercise) {
+bool GymModel::isExerciseSelected(QString exercise) {
 
-    int index = selectedExcercises_.indexOf(excercise);
+    int index = selectedExercises_.indexOf(exercise);
     if(index != -1) {
         return true;
     }
@@ -592,25 +592,25 @@ QString GymModel::getWorkoutName() {
     return workoutName_;
 }
 
-int GymModel::getSelectedExcercisesCount() {
+int GymModel::getSelectedExercisesCount() {
 
-    qDebug() << selectedExcercises_.size();
-    return selectedExcercises_.size();
+    qDebug() << selectedExercises_.size();
+    return selectedExercises_.size();
 }
 
-//QString GymModel::getExcerciseDescription() {
+//QString GymModel::getExerciseDescription() {
 
-//    return excerciseDescription_;
+//    return exerciseDescription_;
 //}
 
 //QString GymModel::getEcerciseName() {
 
-//    return excerciseName_;
+//    return exerciseName_;
 //}
 
-int GymModel::getExcerciseCount() {
+int GymModel::getExerciseCount() {
 
-    return excerciseCount_;
+    return exerciseCount_;
 }
 
 void GymModel::clean() {
@@ -618,25 +618,25 @@ void GymModel::clean() {
     name_.clear();
     description_.clear();
     selectedMuscle_.clear();
-    selectedExcercise_.clear();
+    selectedExercise_.clear();
     db_.close();
-    excerciseNames_.clear();
-    excerciseName_.clear();
-    excerciseDescription_.clear();
-    selectedExcercises_.clear();
+    exerciseNames_.clear();
+    exerciseName_.clear();
+    exerciseDescription_.clear();
+    selectedExercises_.clear();
     workoutName_.clear();
-    excerciseCount_ = 0;
+    exerciseCount_ = 0;
     series_.clear();
     repeats_.clear();
     weights_.clear();
     comments_.clear();
-    excercises_.clear();
+    exercises_.clear();
     delete context_;
-    excerciseIndex_ = 0;
+    exerciseIndex_ = 0;
     workout_.clear();
     previousWorkouts_.clear();
     mode_.clear();
-    coverExcerciseIndex_ = 0;
+    coverExerciseIndex_ = 0;
 }
 
 void GymModel::setContext(QQmlContext *context) {
@@ -644,27 +644,27 @@ void GymModel::setContext(QQmlContext *context) {
     context_ = context;
 }
 
-void GymModel::clearSelectedExcercises() {
+void GymModel::clearSelectedExercises() {
 
     workoutName_.clear();
-    selectedExcercises_.clear();
-    context_->setContextProperty("selectedExcercisesModel",QVariant::fromValue(selectedExcercises_));
+    selectedExercises_.clear();
+    context_->setContextProperty("selectedExercisesModel",QVariant::fromValue(selectedExercises_));
 
 }
 
-bool GymModel::findExcerciseIndex() {
+bool GymModel::findExerciseIndex() {
 
-    int index = excerciseNames_.indexOf(selectedExcercise_);
+    int index = exerciseNames_.indexOf(selectedExercise_);
     if(index != -1) {
-        excerciseIndex_ = index+1; // Because database indexing starts from 1
+        exerciseIndex_ = index+1; // Because database indexing starts from 1
         return true;
     }
     return false;
 }
 
-void GymModel::removeWorkoutExcercise(QString excercise) {
+void GymModel::removeWorkoutExercise(QString exercise) {
 
-    int index = workout_.indexOf(excercise);
+    int index = workout_.indexOf(exercise);
     if(index != -1 ) workout_.removeAt(index);
     context_->setContextProperty("workoutModel",QVariant::fromValue(workout_));
 
@@ -678,14 +678,14 @@ void GymModel::clearWorkout() {
     context_->setContextProperty("workoutModel",QVariant::fromValue(workout_));
 }
 
-bool GymModel::findWorkoutExcerciseIndex(QString excerciseName) {
+bool GymModel::findWorkoutExerciseIndex(QString exerciseName) {
 
-    int index = excerciseNames_.indexOf(excerciseName);
+    int index = exerciseNames_.indexOf(exerciseName);
 
-    qDebug() << "index of excercise: " << index;
+    qDebug() << "index of exercise: " << index;
 
     if(index != -1) {
-        workoutExcerciseIndex_ = index+1; // Because database indexing starts from 1
+        workoutExerciseIndex_ = index+1; // Because database indexing starts from 1
         return true;
     }
     return false;
@@ -706,7 +706,7 @@ bool GymModel::findWorkoutIndex(QString workoutName) {
     return false;
 }
 
-int GymModel::getSeries(QString excerciseName) {
+int GymModel::getSeries(QString exerciseName) {
 
     int series = 1;
 
@@ -715,11 +715,11 @@ int GymModel::getSeries(QString excerciseName) {
         int workoutIndex = workoutIndex_ - 1;
         QString tablename = workoutTableNames_.at(workoutIndex);
 
-        qDebug() << "get series of " << excerciseName << " from " << tablename;
+        qDebug() << "get series of " << exerciseName << " from " << tablename;
 
         if(db_.isOpen()) {
             QSqlQuery query(db_);
-            query.exec(QString("SELECT series FROM '%1' WHERE excercisename = '%2';").arg(tablename).arg(excerciseName));
+            query.exec(QString("SELECT series FROM '%1' WHERE exercisename = '%2';").arg(tablename).arg(exerciseName));
 
             if(query.next()) series = query.value(1).toInt();
         }
@@ -729,7 +729,7 @@ int GymModel::getSeries(QString excerciseName) {
 
 }
 
-void GymModel::setSeries(QString excercisename,int series) {
+void GymModel::setSeries(QString exercisename,int series) {
 
     qDebug() << "Setting series";
 
@@ -738,18 +738,18 @@ void GymModel::setSeries(QString excercisename,int series) {
     //        int workoutIndex = workoutIndex_ - 1;
     //        QString tablename = workoutTableNames_.at(workoutIndex);
 
-    //        findWorkoutExcerciseIndex(excercisename);
+    //        findWorkoutExerciseIndex(exercisename);
 
     //        if(db_.isOpen()) {
     //            QSqlQuery query(db_);
     //            query.exec(QString("UPDATE '%1' SET series = '%2' WHERE ID = %3 ;")
-    //                       .arg(tablename).arg(series).arg(workoutExcerciseIndex_));
+    //                       .arg(tablename).arg(series).arg(workoutExerciseIndex_));
 
     //        }
     //    }
 }
 
-int GymModel::getRepeats(QString excerciseName, int currentSerie) {
+int GymModel::getRepeats(QString exerciseName, int currentSerie) {
 
     int repeats = 1;
 
@@ -758,14 +758,14 @@ int GymModel::getRepeats(QString excerciseName, int currentSerie) {
         int workoutIndex = workoutIndex_ - 1;
         QString tablename = workoutTableNames_.at(workoutIndex);
 
-        qDebug() << "get repeats of " << excerciseName << " from " << tablename;
+        qDebug() << "get repeats of " << exerciseName << " from " << tablename;
 
         QString serierepeats = "repeats";
         serierepeats = serierepeats + currentSerie;
 
         if(db_.isOpen()) {
             QSqlQuery query(db_);
-            query.exec(QString("SELECT '%1' FROM '%2' WHERE excercisename = '%3';").arg(serierepeats).arg(tablename).arg(excerciseName));
+            query.exec(QString("SELECT '%1' FROM '%2' WHERE exercisename = '%3';").arg(serierepeats).arg(tablename).arg(exerciseName));
 
             if(query.next()) repeats = query.value(1).toInt();
         }
@@ -774,7 +774,7 @@ int GymModel::getRepeats(QString excerciseName, int currentSerie) {
     return repeats;
 }
 
-void GymModel::setRepeats(QString excercisename, int repeats, int currentSerie) {
+void GymModel::setRepeats(QString exercisename, int repeats, int currentSerie) {
 
     qDebug() << "setting repeats";
 
@@ -786,18 +786,18 @@ void GymModel::setRepeats(QString excercisename, int repeats, int currentSerie) 
     //        int workoutIndex = workoutIndex_ - 1;
     //        QString tablename = workoutTableNames_.at(workoutIndex);
 
-    //        findWorkoutExcerciseIndex(excercisename);
+    //        findWorkoutExerciseIndex(exercisename);
 
     //        if(db_.isOpen()) {
     //            QSqlQuery query(db_);
     //            query.exec(QString("UPDATE '%1' SET '%2' = '%3' WHERE ID = %4 ;")
-    //                       .arg(tablename).arg(repeats).arg(serierepeats).arg(workoutExcerciseIndex_));
+    //                       .arg(tablename).arg(repeats).arg(serierepeats).arg(workoutExerciseIndex_));
 
     //        }
     //    }
 }
 
-double GymModel::getWeights(QString excerciseName, int currentSerie) {
+double GymModel::getWeights(QString exerciseName, int currentSerie) {
 
     double weights = 1;
 
@@ -806,14 +806,14 @@ double GymModel::getWeights(QString excerciseName, int currentSerie) {
         int workoutIndex = workoutIndex_ - 1;
         QString tablename = workoutTableNames_.at(workoutIndex);
 
-        qDebug() << "get weights of " << excerciseName << " from " << tablename;
+        qDebug() << "get weights of " << exerciseName << " from " << tablename;
 
         QString serieweights = "weights";
         serieweights = serieweights + currentSerie;
 
         if(db_.isOpen()) {
             QSqlQuery query(db_);
-            query.exec(QString("SELECT '%1' FROM '%2' WHERE excercisename = '%3';").arg(serieweights).arg(tablename).arg(excerciseName));
+            query.exec(QString("SELECT '%1' FROM '%2' WHERE exercisename = '%3';").arg(serieweights).arg(tablename).arg(exerciseName));
 
             if(query.next()) weights = query.value(1).toDouble();
         }
@@ -822,7 +822,7 @@ double GymModel::getWeights(QString excerciseName, int currentSerie) {
     return weights;
 }
 
-void GymModel::setWeights(QString excercisename, double weights, int currentSerie) {
+void GymModel::setWeights(QString exercisename, double weights, int currentSerie) {
 
     qDebug() << "setting weights";
 
@@ -834,18 +834,18 @@ void GymModel::setWeights(QString excercisename, double weights, int currentSeri
     //        int workoutIndex = workoutIndex_ - 1;
     //        QString tablename = workoutTableNames_.at(workoutIndex);
 
-    //        findWorkoutExcerciseIndex(excercisename);
+    //        findWorkoutExerciseIndex(exercisename);
 
     //        if(db_.isOpen()) {
     //            QSqlQuery query(db_);
     //            query.exec(QString("UPDATE '%1' SET '%2' = '%3' WHERE ID = %4 ;")
-    //                       .arg(tablename).arg(weights).arg(serieweights).arg(workoutExcerciseIndex_));
+    //                       .arg(tablename).arg(weights).arg(serieweights).arg(workoutExerciseIndex_));
 
     //        }
     //    }
 }
 
-QString GymModel::getComments(QString excerciseName) {
+QString GymModel::getComments(QString exerciseName) {
 
     QString comments = "";
 
@@ -854,11 +854,11 @@ QString GymModel::getComments(QString excerciseName) {
     //        int workoutIndex = workoutIndex_ - 1;
     //        QString tablename = workoutTableNames_.at(workoutIndex);
 
-    //        qDebug() << "get comments of " << excerciseName << " from " << tablename;
+    //        qDebug() << "get comments of " << exerciseName << " from " << tablename;
 
     //        if(db_.isOpen()) {
     //            QSqlQuery query(db_);
-    //            query.exec(QString("SELECT comments FROM '%1 WHERE excercisename = '%2';").arg(tablename).arg(excerciseName));
+    //            query.exec(QString("SELECT comments FROM '%1 WHERE exercisename = '%2';").arg(tablename).arg(exerciseName));
     //            if(query.next()) comments = query.value(1).toString();
     //        }
     //    }
@@ -866,7 +866,7 @@ QString GymModel::getComments(QString excerciseName) {
     return comments;
 }
 
-void GymModel::setComments(QString excercisename, QString comments) {
+void GymModel::setComments(QString exercisename, QString comments) {
 
     qDebug() << "setting comments";
 
@@ -875,43 +875,43 @@ void GymModel::setComments(QString excercisename, QString comments) {
     //        int workoutIndex = workoutIndex_ - 1;
     //        QString tablename = workoutTableNames_.at(workoutIndex);
 
-    //        findWorkoutExcerciseIndex(excercisename);
+    //        findWorkoutExerciseIndex(exercisename);
 
     //        if(db_.isOpen()) {
     //            QSqlQuery query(db_);
     //            query.exec(QString("UPDATE '%1' SET comments = '%2' WHERE ID = %3 ;")
-    //                       .arg(tablename).arg(comments).arg(workoutExcerciseIndex_));
+    //                       .arg(tablename).arg(comments).arg(workoutExerciseIndex_));
 
     //        }
     //    }
 }
 
-QString GymModel::nextCoverExcercise() {
+QString GymModel::nextCoverExercise() {
 
     QString text = "Done";
 
-    if(coverExcerciseIndex_ < workout_.size()) {
+    if(coverExerciseIndex_ < workout_.size()) {
 
-        if(coverExcerciseIndex_ == 0) {
+        if(coverExerciseIndex_ == 0) {
             text = workout_.at(0);
 
         } else {
-            text = workout_.at(coverExcerciseIndex_ - 1);
-            ++coverExcerciseIndex_;
+            text = workout_.at(coverExerciseIndex_ - 1);
+            ++coverExerciseIndex_;
         }
     }
     return text;
 }
 
-QString GymModel::previousCoverExcercise() {
+QString GymModel::previousCoverExercise() {
 
     if(workout_.size() == 0) return "Done";
 
-    if(coverExcerciseIndex_ > 0) {
-        --coverExcerciseIndex_;
-        return workout_.at(coverExcerciseIndex_);
+    if(coverExerciseIndex_ > 0) {
+        --coverExerciseIndex_;
+        return workout_.at(coverExerciseIndex_);
     } else {
-        coverExcerciseIndex_ = 0;
+        coverExerciseIndex_ = 0;
     }
     return "Wrong way";
 }

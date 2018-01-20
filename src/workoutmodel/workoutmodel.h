@@ -12,7 +12,7 @@ class WorkoutModel : public QAbstractListModel
     Q_OBJECT
 public:
 
-    enum ExcerciseRoles {
+    enum ExerciseRoles {
         IdRole = Qt::UserRole + 1,
         NameRole,
         DescriptionRole,
@@ -31,10 +31,10 @@ public:
 
     Q_INVOKABLE void populate(QString workoutId);
 
-    Q_INVOKABLE void addExcercise(int index, QString id, QString name, QString description, QString category, double weights, int reps);
-    Q_INVOKABLE void removeExcerciseByIndex(const int i);
-    Q_INVOKABLE void removeExcerciseByName(QString name);
-    Q_INVOKABLE void clearExcercises();
+    Q_INVOKABLE void addExercise(int index, QString id, QString name, QString description, QString category, double weights, int reps);
+    Q_INVOKABLE void removeExerciseByIndex(const int i);
+    Q_INVOKABLE void removeExerciseByName(QString name);
+    Q_INVOKABLE void clearExercises();
     Q_INVOKABLE bool isSelected(QString name);
 
     Q_INVOKABLE double calculateTotalWeights();
@@ -44,7 +44,7 @@ public:
     Q_INVOKABLE void saveWorkoutTemplate();
 
 private:
-    QVector<WorkoutData*> myExcercises;
+    QVector<WorkoutData*> myExercises;
     DatabaseManager* mydbmanager;
 };
 

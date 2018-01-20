@@ -1,26 +1,26 @@
-#ifndef EXCERCISEMODEL_H
-#define EXCERCISEMODEL_H
+#ifndef EXERCISEMODEL_H
+#define EXERCISEMODEL_H
 
 #include <QObject>
 #include <QAbstractListModel>
 #include <QUuid>
 
-#include "excercisedata.h"
+#include "exercisedata.h"
 #include "databasemanager.h"
 
-class ExcerciseModel : public QAbstractListModel
+class ExerciseModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
 
-    enum ExcerciseRoles {
+    enum ExerciseRoles {
         IdRole = Qt::UserRole + 1,
         NameRole,
         DescriptionRole,
         CategoryRole
     };
 
-    explicit ExcerciseModel(QObject *parent = 0, DatabaseManager* dbmanager = 0);
+    explicit ExerciseModel(QObject *parent = 0, DatabaseManager* dbmanager = 0);
 
     virtual int rowCount(const QModelIndex &index) const;
     virtual QVariant data(const QModelIndex &index, int role) const;
@@ -29,12 +29,12 @@ public:
 
     Q_INVOKABLE void populate(QString selectedMuscle);
 
-    Q_INVOKABLE void createNewExcercise(QString name, QString description, int category);
+    Q_INVOKABLE void createNewExercise(QString name, QString description, int category);
 
 private:
-    QVector<ExcerciseData*> myExcercises;
+    QVector<ExerciseData*> myExercises;
     DatabaseManager* mydbmanager;
 
 };
 
-#endif // EXCERCISEMODEL_H
+#endif // EXERCISEMODEL_H

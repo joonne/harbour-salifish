@@ -31,11 +31,11 @@ Page {
 
             model: workoutModel
             delegate: TextSwitch {
-                id: excercise
+                id: exercise
                 text: modelData
                 onClicked: {
-                    //GymModel.insertDoneExcercise(excercise.text)
-                    GymModel.removeWorkoutExcercise(text)
+                    //GymModel.insertDoneExercise(exercise.text)
+                    GymModel.removeWorkoutExercise(text)
                 }
 
             }

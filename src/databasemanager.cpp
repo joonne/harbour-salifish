@@ -3,18 +3,15 @@
 
 DatabaseManager::DatabaseManager(QObject *parent) :
     QObject(parent)
+{}
+
+DatabaseManager::~DatabaseManager()
 {
-    qDebug() << "Creating dbmanager...";
-}
-
-DatabaseManager::~DatabaseManager() {
-
-    qDebug() << "Destroying dbmanager...";
     db.close();
 }
 
-void DatabaseManager::setUpDB() {
-
+void DatabaseManager::setUpDB()
+{
     if(openDB()) {
 
         // check whether db is empty, if it is, create db
@@ -41,8 +38,8 @@ void DatabaseManager::setUpDB() {
     }
 }
 
-bool DatabaseManager::openDB() {
-
+bool DatabaseManager::openDB()
+{
     QString dbname = "salifish.db.sqlite";
     QString dbpath = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QDir::separator() + dbname;
     QDir dir(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
@@ -51,54 +48,52 @@ bool DatabaseManager::openDB() {
         dir.mkpath(".");
     }
 
-    // Find SQLite driver
-    db = QSqlDatabase::addDatabase("QSQLITE","databasemanager");
+    // find SQLite driver
+    db = QSqlDatabase::addDatabase("QSQLITE", "databasemanager");
     db.setDatabaseName(dbpath);
 
-    // Open databasee
+    // open databasee
     return db.open();
 }
 
-QSqlError DatabaseManager::lastError() {
-
-    // If opening database has failed user can ask
-    // error description by QSqlError::text()
+QSqlError DatabaseManager::lastError()
+{
     return db.lastError();
 }
 
-bool DatabaseManager::deleteDB() {
-
-    // Close database
+bool DatabaseManager::deleteDB()
+{
     db.close();
 
-    // Remove created database binary file
-    QString dbname = "DatabaseManager.db.sqlite";
+    QString dbname = "salifish.db.sqlite";
     QString dbpath = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QDir::separator() + dbname;
     return QFile::remove(dbpath);
 }
 
-void DatabaseManager::close() {
+void DatabaseManager::close()
+{
     db.close();
 }
 
-bool DatabaseManager::initializeInfoTable() {
-
+bool DatabaseManager::initializeInfoTable()
+{
     bool ret = createInfoTable();
 
-    if(ret) {
+    if (ret) {
 
         QSqlQuery query(db);
         return query.exec(QString("INSERT INTO information VALUES(%1,'%2')")
                           .arg(1.0).arg("SaliFish"));
     }
+
     return false;
 }
 
-bool DatabaseManager::createInfoTable() {
-
+bool DatabaseManager::createInfoTable()
+{
     bool ret = false;
 
-    if(db.isOpen()) {
+    if (db.isOpen()) {
 
         QSqlQuery query(db);
         ret = query.exec("CREATE TABLE information"
@@ -106,23 +101,24 @@ bool DatabaseManager::createInfoTable() {
                          "version REAL, "
                          "name varchar(50))");
     }
+
     return ret;
 }
 
-bool DatabaseManager::updateInfoTable(double version) {
-
+bool DatabaseManager::updateInfoTable(double version)
+{
     bool ret = false;
-    if(db.isOpen()) {
+    if (db.isOpen()) {
 
         QSqlQuery query(db);
         ret = query.exec(QString("UPDATE information SET version = %1;").arg(version));
     }
+
     return ret;
 }
 
-bool DatabaseManager::createCategoryTable() {
-
-    // Create table "category"
+bool DatabaseManager::createCategoryTable()
+{
     bool ret = false;
     if (db.isOpen()) {
 
@@ -132,32 +128,34 @@ bool DatabaseManager::createCategoryTable() {
                          "name VARCHAR(50))");
 
     }
+
     return ret;
 }
 
-bool DatabaseManager::insertCategory(int id, QString name) {
-
+bool DatabaseManager::insertCategory(int id, QString name)
+{
     bool ret = false;
 
-    if(db.isOpen()) {
+    if (db.isOpen()) {
 
         QSqlQuery query(db);
         ret = query.exec(QString("INSERT OR REPLACE INTO category VALUES(%0,'%1')").arg(id).arg(name));
     }
+
     return ret;
 }
 
-int DatabaseManager::findCategory(QString category) {
-
+int DatabaseManager::findCategory(QString category)
+{
     int categoryId = 0;
 
-    if(db.isOpen()) {
+    if (db.isOpen()) {
         QSqlQuery query(db);
         query.exec(QString("SELECT id FROM category WHERE name = '%1'").arg(category));
         qDebug() << query.lastError();
 
-        if(query.isSelect()) {
-            while(query.next()) {
+        if (query.isSelect()) {
+            while (query.next()) {
                 categoryId = query.value(0).toInt();
             }
         }
@@ -166,14 +164,13 @@ int DatabaseManager::findCategory(QString category) {
     return categoryId;
 }
 
-bool DatabaseManager::createExcerciseTable() {
-
-    // Create table "excercise"
+bool DatabaseManager::createExerciseTable()
+{
     bool ret = false;
     if (db.isOpen()) {
 
         QSqlQuery query(db);
-        ret = query.exec("CREATE TABLE excercise"
+        ret = query.exec("CREATE TABLE exercise"
                          "(id INTEGER PRIMARY KEY, "
                          "name VARCHAR(50), "
                          "description VARCHAR(160), "
@@ -182,63 +179,77 @@ bool DatabaseManager::createExcerciseTable() {
         qDebug() << query.lastError();
 
     }
+
     return ret;
 }
 
-bool DatabaseManager::insertExcercise(int id, QString name, QString description, int category) {
-
-    bool ret = false;
-
+bool DatabaseManager::insertExercises(QList<QVariantMap> exercises)
+{
     db.transaction();
+
+    for (auto exercise : exercises) {
+        auto id = exercise.value("id").toInt();
+        auto name = exercise.value("name").toString();
+        auto description = exercise.value("description").toString();
+        auto category = exercise.value("category").toInt();
+
+        insertExercise(id, name, description, category);
+    }
+
+    return db.commit();
+}
+
+bool DatabaseManager::insertExercise(int id, QString name, QString description, int category)
+{
+    bool ret = false;
 
     if (db.isOpen()) {
 
         QSqlQuery query(db);
-        ret = query.exec(QString("INSERT OR REPLACE INTO excercise values(%0,'%1','%2',%3)")
+        ret = query.exec(QString("INSERT OR REPLACE INTO exercise values(%0, '%1', '%2', %3)")
                          .arg(id).arg(name).arg(description).arg(category));
 
     }
 
-    db.commit();
-
     return ret;
 }
 
-bool DatabaseManager::createExcerciseMuscleTable() {
-
-    // Create table "excerciseMuscle"
+bool DatabaseManager::createExerciseMuscleTable()
+{
     bool ret = false;
     if (db.isOpen()) {
 
         QSqlQuery query(db);
-        ret = query.exec("CREATE TABLE excerciseMuscle"
+        ret = query.exec("CREATE TABLE exerciseMuscle"
                          "(id INTEGER PRIMARY KEY, "
                          "muscle INTEGER, "
-                         "excercise INTEGER, "
+                         "exercise INTEGER, "
                          "FOREIGN KEY(muscle) REFERENCES muscle(id), "
-                         "FOREIGN KEY(excercise) REFERENCES excercise(id))");
+                         "FOREIGN KEY(exercise) REFERENCES exercise(id))");
         qDebug() << query.lastError();
 
     }
+
     return ret;
 }
 
-bool DatabaseManager::insertExcerciseMuscle(int muscle, int excercise) {
-
+bool DatabaseManager::insertExerciseMuscle(int muscle, int exercise)
+{
     bool ret = false;
 
     if (db.isOpen()) {
 
         QSqlQuery query(db);
-        ret = query.exec(QString("INSERT INTO excerciseMuscle values(NULL, %1, %2)")
-                         .arg(muscle).arg(excercise));
+        ret = query.exec(QString("INSERT INTO exerciseMuscle values(NULL, %1, %2)")
+                         .arg(muscle).arg(exercise));
 
     }
+
     return ret;
 }
 
-bool DatabaseManager::createMuscleTable() {
-
+bool DatabaseManager::createMuscleTable()
+{
     bool ret = false;
 
     if(db.isOpen()) {
@@ -255,21 +266,22 @@ bool DatabaseManager::createMuscleTable() {
     return ret;
 }
 
-bool DatabaseManager::insertMuscle(int id, QString name, int is_front) {
-
+bool DatabaseManager::insertMuscle(int id, QString name, int is_front)
+{
     bool ret = false;
 
-    if(db.isOpen()) {
+    if (db.isOpen()) {
 
         QSqlQuery query(db);
         ret = query.exec(QString("INSERT OR REPLACE INTO muscle VALUES(%0, '%1', %2)").arg(id).arg(name).arg(is_front));
         qDebug() << query.lastError();
     }
+
     return ret;
 }
 
-bool DatabaseManager::createWorkoutTable() {
-
+bool DatabaseManager::createWorkoutTable()
+{
     bool ret = false;
     if (db.isOpen()) {
 
@@ -282,11 +294,12 @@ bool DatabaseManager::createWorkoutTable() {
 
         qDebug() << query.lastError();
     }
+
     return ret;
 }
 
-bool DatabaseManager::insertWorkout(QString name, double calories, int isTemplate) {
-
+bool DatabaseManager::insertWorkout(QString name, double calories, int isTemplate)
+{
     bool ret = false;
 
     if (db.isOpen()) {
@@ -295,49 +308,45 @@ bool DatabaseManager::insertWorkout(QString name, double calories, int isTemplat
         ret = query.exec(QString("INSERT INTO workout VALUES(NULL,'%1', %2").arg(name).arg(calories).arg(isTemplate));
 
     }
+
     return ret;
 }
 
-bool DatabaseManager::createWorkoutEntryTable() {
-
+bool DatabaseManager::createWorkoutEntryTable()
+{
     bool ret = false;
 
-    if(db.isOpen()) {
+    if (db.isOpen()) {
 
         QSqlQuery query(db);
         ret = query.exec("CREATE TABLE workoutEntry"
                          "(id INTEGER PRIMARY KEY, "
-                         "excercise INTEGER, "
+                         "exercise INTEGER, "
                          "user INTEGER, "
                          "workout INTEGER, "
                          "date VARCHAR(15), "
                          "repeats INTEGER, "
                          "weights REAL, "
                          "equipment INTEGER, "
-                         "FOREIGN KEY(excercise) REFERENCES excercise(id), "
+                         "FOREIGN KEY(exercise) REFERENCES exercise(id), "
                          "FOREIGN KEY(user) REFERENCES user(id), "
                          "FOREIGN KEY(workout) REFERENCES workout(id), "
                          "FOREIGN KEY(equipment) REFERENCES equipment(id))");
 
         qDebug() << query.lastError();
     }
+
     return ret;
 }
 
-bool DatabaseManager::insertWorkoutEntry(int excercise,
-                                         int user,
-                                         int workout,
-                                         QString date,
-                                         int repeats,
-                                         double weights,
-                                         int equipment) {
-
+bool DatabaseManager::insertWorkoutEntry(int exercise, int user, int workout, QString date, int repeats, double weights, int equipment)
+{
     bool ret = false;
 
-    if(db.isOpen()) {
+    if (db.isOpen()) {
         QSqlQuery query(db);
         ret = query.exec(QString("INSERT INTO workoutEntry VALUES(NULL, %1, %2, %3, '%4', %5, %6, %7)")
-                         .arg(excercise)
+                         .arg(exercise)
                          .arg(user)
                          .arg(workout)
                          .arg(date)
@@ -345,14 +354,15 @@ bool DatabaseManager::insertWorkoutEntry(int excercise,
                          .arg(weights)
                          .arg(equipment));
     }
+
     return ret;
 }
 
-bool DatabaseManager::createEquipmentTable() {
-
+bool DatabaseManager::createEquipmentTable()
+{
     bool ret = false;
 
-    if(db.isOpen()) {
+    if (db.isOpen()) {
 
         QSqlQuery query(db);
         query.exec("CREATE TABLE equipment"
@@ -361,26 +371,28 @@ bool DatabaseManager::createEquipmentTable() {
 
         qDebug() << query.lastError();
     }
+
     return ret;
 }
 
-bool DatabaseManager::insertEquipment(QString name) {
-
+bool DatabaseManager::insertEquipment(QString name)
+{
     bool ret = false;
 
-    if(db.isOpen()) {
+    if (db.isOpen()) {
 
         QSqlQuery query(db);
         query.exec(QString("INSERT INTO equipment VALUES(NULL, '%1')").arg(name));
     }
+
     return ret;
 }
 
 
 
-bool DatabaseManager::createDB() {
-
-    if(db.isOpen()) {
+bool DatabaseManager::createDB()
+{
+    if (db.isOpen()) {
 
         //-----------------------------------------------------------------
 
@@ -391,9 +403,9 @@ bool DatabaseManager::createDB() {
         //-----------------------------------------------------------------
 
         if(createCategoryTable() &&
-                createExcerciseTable() &&
+                createExerciseTable() &&
                 createMuscleTable() &&
-                createExcerciseMuscleTable() &&
+                createExerciseMuscleTable() &&
                 createWorkoutTable() &&
                 createWorkoutEntryTable() &&
                 createEquipmentTable()) {
@@ -420,10 +432,8 @@ bool DatabaseManager::createDB() {
     return true;
 }
 
-bool DatabaseManager::createUserTable() {
-
-    qDebug() << "create user table";
-
+bool DatabaseManager::createUserTable()
+{
     bool ret = false;
     if (db.isOpen()) {
 
@@ -438,12 +448,13 @@ bool DatabaseManager::createUserTable() {
 
         qDebug() << query.lastError();
     }
+
     qDebug() << db.lastError();
     return ret;
 }
 
-bool DatabaseManager::insertUser(QString name, int age, QString gender, double height, double weight) {
-
+bool DatabaseManager::insertUser(QString name, int age, QString gender, double height, double weight)
+{
     bool ret = false;
 
     if (db.isOpen()) {
@@ -451,22 +462,14 @@ bool DatabaseManager::insertUser(QString name, int age, QString gender, double h
         QSqlQuery query(db);
         ret = query.exec(QString("INSERT OR REPLACE INTO user VALUES(1,'%1',%2,'%3', %4, %5);").arg(name).arg(age).arg(gender).arg(height).arg(weight));
     }
+
     return ret;
 }
 
-// This function is used to update the database, upcoming changes are coming trough this.
-bool DatabaseManager::updateDB() {
+bool DatabaseManager::updateDB() { }
 
-    //updateInfoTable(2.0);
-
-    qDebug() << "Updating database...";
-    return true;
-
-}
-
-// returns all users from db
-QMap<QString,QString> DatabaseManager::getUser() {
-
+QMap<QString,QString> DatabaseManager::getUser()
+{
     QString name;
     QString age;
     QString gender;
@@ -475,7 +478,7 @@ QMap<QString,QString> DatabaseManager::getUser() {
 
     QMap<QString,QString> temp;
 
-    if(db.isOpen()) {
+    if (db.isOpen()) {
 
         QSqlQuery query(db);
         query.exec("SELECT * FROM user WHERE id = 1;");
@@ -509,8 +512,8 @@ QMap<QString,QString> DatabaseManager::getUser() {
     return temp;
 }
 
-bool DatabaseManager::updateName(QString name) {
-
+bool DatabaseManager::updateName(QString name)
+{
     bool ret = false;
 
     if (db.isOpen()) {
@@ -519,11 +522,12 @@ bool DatabaseManager::updateName(QString name) {
         ret = query.exec(QString("UPDATE user SET name = '%1' WHERE id = 1;").arg(name));
         qDebug() << query.lastError();
     }
+
     return ret;
 }
 
-bool DatabaseManager::updateAge(int age) {
-
+bool DatabaseManager::updateAge(int age)
+{
     bool ret = false;
 
     if (db.isOpen()) {
@@ -532,11 +536,12 @@ bool DatabaseManager::updateAge(int age) {
         ret = query.exec(QString("UPDATE user SET age = %1 WHERE id = 1;").arg(age));
         qDebug() << query.lastError();
     }
+
     return ret;
 }
 
-bool DatabaseManager::updateGender(QString gender) {
-
+bool DatabaseManager::updateGender(QString gender)
+{
     bool ret = false;
 
     if (db.isOpen()) {
@@ -545,11 +550,12 @@ bool DatabaseManager::updateGender(QString gender) {
         ret = query.exec(QString("UPDATE user SET gender = '%1' WHERE id = 1;").arg(gender));
         qDebug() << query.lastError();
     }
+
     return ret;
 }
 
-bool DatabaseManager::updateHeight(double height) {
-
+bool DatabaseManager::updateHeight(double height)
+{
     bool ret = false;
 
     if (db.isOpen()) {
@@ -558,11 +564,12 @@ bool DatabaseManager::updateHeight(double height) {
         ret = query.exec(QString("UPDATE user SET height = %1 WHERE id = 1;").arg(height));
         qDebug() << query.lastError();
     }
+
     return ret;
 }
 
-bool DatabaseManager::updateWeight(double weight) {
-
+bool DatabaseManager::updateWeight(double weight)
+{
     bool ret = false;
 
     if (db.isOpen()) {
@@ -571,17 +578,18 @@ bool DatabaseManager::updateWeight(double weight) {
         ret = query.exec(QString("UPDATE user SET weight = %1 WHERE id = 1;").arg(weight));
         qDebug() << query.lastError();
     }
+
     return ret;
 }
 
-QList<QMap<QString, QString> > DatabaseManager::getExcercises(QString category) {
+QList<QMap<QString, QString> > DatabaseManager::getExercises(QString category)
+{
+    QList<QMap<QString, QString> > exercises;
 
-    QList<QMap<QString, QString> > excercises;
-
-    if(db.isOpen()) {
+    if (db.isOpen()) {
 
         QSqlQuery query(db);
-        query.exec(QString("SELECT excercise.id, excercise.name, excercise.description, category.name FROM excercise INNER JOIN category ON excercise.category = category.id AND category.name = '%1' ORDER BY excercise.name;").arg(category));
+        query.exec(QString("SELECT exercise.id, exercise.name, exercise.description, category.name FROM exercise INNER JOIN category ON exercise.category = category.id AND category.name = '%1' ORDER BY exercise.name;").arg(category));
         qDebug() << query.lastError();
         qDebug() << query.lastQuery();
 
@@ -592,19 +600,20 @@ QList<QMap<QString, QString> > DatabaseManager::getExcercises(QString category) 
                 temp.insert("name", query.value(1).toString());
                 temp.insert("description", query.value(2).toString());
                 temp.insert("category", query.value(3).toString());
-                excercises.append(temp);
+                exercises.append(temp);
             }
         }
     }
-    qDebug() << excercises;
-    return excercises;
+
+    qDebug() << exercises;
+    return exercises;
 }
 
-QList<QMap<QString, QString> > DatabaseManager::getCategories() {
-
+QList<QMap<QString, QString> > DatabaseManager::getCategories()
+{
     QList<QMap<QString, QString> > categories;
 
-    if(db.isOpen()) {
+    if (db.isOpen()) {
 
         QSqlQuery query(db);
         query.exec(QString("SELECT * FROM category ORDER BY name;"));
@@ -618,14 +627,15 @@ QList<QMap<QString, QString> > DatabaseManager::getCategories() {
             }
         }
     }
+
     return categories;
 }
 
-QList<QMap<QString, QString> > DatabaseManager::getMuscles() {
-
+QList<QMap<QString, QString> > DatabaseManager::getMuscles()
+{
     QList<QMap<QString, QString> > muscles;
 
-    if(db.isOpen()) {
+    if (db.isOpen()) {
 
         QSqlQuery query(db);
         query.exec(QString("SELECT * FROM muscle ORDER BY name;"));
@@ -640,5 +650,6 @@ QList<QMap<QString, QString> > DatabaseManager::getMuscles() {
             }
         }
     }
+
     return muscles;
 }

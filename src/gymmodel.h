@@ -22,10 +22,10 @@ class GymModel : public QObject
                WRITE setDescription NOTIFY DescriptionChanged)
     Q_PROPERTY(QString SelectedMuscle READ getSelectedMuscle WRITE setSelectedMuscle
                NOTIFY SelectedMuscleChanged)
-    Q_PROPERTY(QString SelectedExcercise READ getSelectedExcercise WRITE setSelectedExcercise
-               NOTIFY SelectedExcerciseChanged)
-    Q_PROPERTY(QString ExcerciseName READ getExcerciseName WRITE setExcerciseName NOTIFY excerciseNameChanged)
-    Q_PROPERTY(QString ExcerciseDescription READ getExcerciseDescription WRITE setExcerciseDescription NOTIFY excerciseDescriptionChanged)
+    Q_PROPERTY(QString SelectedExercise READ getSelectedExercise WRITE setSelectedExercise
+               NOTIFY SelectedExerciseChanged)
+    Q_PROPERTY(QString ExerciseName READ getExerciseName WRITE setExerciseName NOTIFY exerciseNameChanged)
+    Q_PROPERTY(QString ExerciseDescription READ getExerciseDescription WRITE setExerciseDescription NOTIFY exerciseDescriptionChanged)
     Q_PROPERTY(QString Mode READ getMode WRITE setMode NOTIFY modeChanged)
     Q_PROPERTY(int currentSeriesIndex READ getCurrentSeriesIndex NOTIFY currentSeriesIndexChanged)
 
@@ -37,70 +37,70 @@ public:
 
     QString getName();
     QString getSelectedMuscle();
-    QString getSelectedExcercise();
+    QString getSelectedExercise();
     QString getDescription();
-    QString getExcerciseName();
-    QString getExcerciseDescription();
+    QString getExerciseName();
+    QString getExerciseDescription();
     QString getMode();
 
-    void setName(QString excerciseName);
+    void setName(QString exerciseName);
     void setSelectedMuscle(QString selectedMuscle);
-    void setSelectedExcercise(QString selectedExcercise);
+    void setSelectedExercise(QString selectedExercise);
     void setDescription(QString description);
-    void setExcerciseName(QString excerciseName);
-    void setExcerciseDescription(QString excerciseDescription);
+    void setExerciseName(QString exerciseName);
+    void setExerciseDescription(QString exerciseDescription);
     void setContext(QQmlContext* context);
     void setMode(QString mode);
 
     // These are for the database
     bool openDB();
     void closeDB();
-    bool insertExcerciseName(QString excerciseName);
-    bool insertExcerciseDescription(QString description);
-    Q_INVOKABLE bool getExcercises();
-    Q_INVOKABLE bool getExcercise(QString excercise);
-    Q_INVOKABLE bool insertExcercise();
-    Q_INVOKABLE bool insertWorkoutExcercises();
+    bool insertExerciseName(QString exerciseName);
+    bool insertExerciseDescription(QString description);
+    Q_INVOKABLE bool getExercises();
+    Q_INVOKABLE bool getExercise(QString exercise);
+    Q_INVOKABLE bool insertExercise();
+    Q_INVOKABLE bool insertWorkoutExercises();
     Q_INVOKABLE bool createWorkout();
     Q_INVOKABLE bool createPreviousWorkout();
-    Q_INVOKABLE bool deleteExcerciseFromDB();
+    Q_INVOKABLE bool deleteExerciseFromDB();
     Q_INVOKABLE bool deleteWorkoutFromDB(QString workoutName);
     Q_INVOKABLE bool getWorkouts();
     Q_INVOKABLE bool getWorkout(QString workout);
-    Q_INVOKABLE bool updateExcercise();
+    Q_INVOKABLE bool updateExercise();
     Q_INVOKABLE bool getPreviousWorkouts();
 
-    Q_INVOKABLE QStringList excerciseNames();
-    Q_INVOKABLE void addExcercise(QString excercise);
-    Q_INVOKABLE void removeExcercise(QString excercise);
-    //Q_INVOKABLE void removeExcercises();
+    Q_INVOKABLE QStringList exerciseNames();
+    Q_INVOKABLE void addExercise(QString exercise);
+    Q_INVOKABLE void removeExercise(QString exercise);
+    //Q_INVOKABLE void removeExercises();
     Q_INVOKABLE void removeWorkout(QString workout);
-    Q_INVOKABLE bool isExcerciseSelected(QString excercise);
+    Q_INVOKABLE bool isExerciseSelected(QString exercise);
     Q_INVOKABLE void setWorkoutName(QString workoutName);
     Q_INVOKABLE QString getWorkoutName();
-    //Q_INVOKABLE QString getExcerciseDescription();
+    //Q_INVOKABLE QString getExerciseDescription();
     //Q_INVOKABLE QString getEcerciseName();
-    Q_INVOKABLE int getExcerciseCount();
-    Q_INVOKABLE int getSelectedExcercisesCount();
-    Q_INVOKABLE void clearSelectedExcercises();
-    Q_INVOKABLE void removeWorkoutExcercise(QString excercise);
-    Q_INVOKABLE QString nextCoverExcercise();
-    Q_INVOKABLE QString previousCoverExcercise();
+    Q_INVOKABLE int getExerciseCount();
+    Q_INVOKABLE int getSelectedExercisesCount();
+    Q_INVOKABLE void clearSelectedExercises();
+    Q_INVOKABLE void removeWorkoutExercise(QString exercise);
+    Q_INVOKABLE QString nextCoverExercise();
+    Q_INVOKABLE QString previousCoverExercise();
 
-    bool findExcerciseIndex();
-    bool findWorkoutExcerciseIndex(QString excerciseName);
+    bool findExerciseIndex();
+    bool findWorkoutExerciseIndex(QString exerciseName);
     bool findWorkoutIndex(QString workoutName);
 
 
-    Q_INVOKABLE void setSeries(QString excercisename, int series);
-    Q_INVOKABLE void setRepeats(QString excercisename,int repeats, int currentSerie);
-    Q_INVOKABLE void setWeights(QString excercisename,double weights, int currentSerie);
-    Q_INVOKABLE void setComments(QString excercisename,QString comments);
+    Q_INVOKABLE void setSeries(QString exercisename, int series);
+    Q_INVOKABLE void setRepeats(QString exercisename,int repeats, int currentSerie);
+    Q_INVOKABLE void setWeights(QString exercisename,double weights, int currentSerie);
+    Q_INVOKABLE void setComments(QString exercisename,QString comments);
 
-    Q_INVOKABLE int getSeries(QString excerciseName);
-    Q_INVOKABLE int getRepeats(QString excerciseName, int currentSerie);
-    Q_INVOKABLE double getWeights(QString excerciseName, int currentSerie);
-    Q_INVOKABLE QString getComments(QString excerciseName);
+    Q_INVOKABLE int getSeries(QString exerciseName);
+    Q_INVOKABLE int getRepeats(QString exerciseName, int currentSerie);
+    Q_INVOKABLE double getWeights(QString exerciseName, int currentSerie);
+    Q_INVOKABLE QString getComments(QString exerciseName);
 
     Q_INVOKABLE void increaseCurrentSeriesIndex();
     Q_INVOKABLE void decreaseCurrentSeriesIndex();
@@ -112,11 +112,11 @@ signals:
 
     void nameChanged();
     void SelectedMuscleChanged();
-    void SelectedExcerciseChanged();
+    void SelectedExerciseChanged();
     void DescriptionChanged();
-    void selectedExcercisesCountChanged();
-    void excerciseNameChanged();
-    void excerciseDescriptionChanged();
+    void selectedExercisesCountChanged();
+    void exerciseNameChanged();
+    void exerciseDescriptionChanged();
     void modeChanged();
     void seriesChanged();
     void repeatsChanged();
@@ -126,34 +126,34 @@ signals:
 private:
 
     //User* user_;  // Mahdollinen ominaisuus lisätä useita käyttäjiä
-    QString name_;   // addNewExcercise
+    QString name_;   // addNewExercise
     QString description_; // addNewErcercise
     QString selectedMuscle_; // createWorkout
-    QString selectedExcercise_; // showDescription
+    QString selectedExercise_; // showDescription
     QSqlDatabase db_;
-    QStringList excerciseNames_; // All excercises of musclegroup
-    QString excerciseName_; // getting excercise with index
-    QString excerciseDescription_; // getting excercise with index
-    QStringList selectedExcercises_; // Workout's excercises
+    QStringList exerciseNames_; // All exercises of musclegroup
+    QString exerciseName_; // getting exercise with index
+    QString exerciseDescription_; // getting exercise with index
+    QStringList selectedExercises_; // Workout's exercises
     QString workoutName_; // Workout's name from createWorkoutPage and WorkoutPage
     QStringList workoutNames_; // All names of own workouts, with these we search from db.
     QStringList workoutTableNames_;
     //QStringList workouts_; // nothing yet.
-    int excerciseCount_;
+    int exerciseCount_;
     QStringList series_;
     QStringList repeats_;
     QStringList weights_;
     QStringList comments_;
-    QStringList excercises_;
+    QStringList exercises_;
     QQmlContext* context_;
-    int excerciseIndex_;
-    int workoutExcerciseIndex_;
+    int exerciseIndex_;
+    int workoutExerciseIndex_;
     int workoutIndex_;
     QStringList workout_;
     QStringList previousWorkouts_; // Earlier workouts in the FirstPage
     QStringList previousWorkoutTableNames_;
     QString mode_;
-    int coverExcerciseIndex_;
+    int coverExerciseIndex_;
     int currentSeriesIndex_;
 };
 

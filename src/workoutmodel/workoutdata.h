@@ -7,34 +7,34 @@ class WorkoutData : public QObject
 {
     Q_OBJECT
 public:
-    explicit WorkoutData(int excerciseId = 0, QString excerciseName = "", QString excerciseDescription = "", QString excerciseCategory = "", double weigths = 0, int reps = 0);
+    explicit WorkoutData(int exerciseId = 0, QString exerciseName = "", QString exerciseDescription = "", QString exerciseCategory = "", double weigths = 0, int reps = 0);
 
-    int getExcerciseId();
-    void setExcerciseId(int excerciseId);
+    int getExerciseId();
+    void setExerciseId(int exerciseId);
 
-    QString getExcerciseName();
-    void setExcerciseName(QString excerciseName);
+    QString getExerciseName();
+    void setExerciseName(QString exerciseName);
 
-    QString getExcerciseDescription();
-    void setExcerciseDescription(QString excerciseDescription);
+    QString getExerciseDescription();
+    void setExerciseDescription(QString exerciseDescription);
 
-    QString getExcerciseCategory();
-    void setExcerciseCategory(QString excerciseCategory);
+    QString getExerciseCategory();
+    void setExerciseCategory(QString exerciseCategory);
 
     double getWeights();
-    void setWeights(double excerciseWeights);
+    void setWeights(double exerciseWeights);
 
     int getReps();
-    void setReps(int excerciseReps);
+    void setReps(int exerciseReps);
 
 
 private:
-    int myExcerciseId;
-    QString myExcerciseName;
-    QString myExcerciseDescription;
-    QString myExcerciseCategory;
-    double myExcerciseWeights;
-    int myExcerciseReps;
+    int myExerciseId;
+    QString myExerciseName;
+    QString myExerciseDescription;
+    QString myExerciseCategory;
+    double myExerciseWeights;
+    int myExerciseReps;
 };
 
 #endif // WORKOUTDATA_H

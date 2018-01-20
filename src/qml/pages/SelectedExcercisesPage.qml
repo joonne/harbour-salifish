@@ -2,20 +2,20 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 Page {
-    id: selectedexcercicespage
+    id: selectedexercicespage
 
     SilicaFlickable {
         anchors.fill: parent
 
         PageHeader {
             id: header
-            title: qsTr("Selected Excercises")
+            title: qsTr("Selected Exercises")
         }
 
         PullDownMenu {
             MenuItem {
                 text: qsTr("Clear")
-                onClicked: controller.workoutModel.clearExcercises()
+                onClicked: controller.workoutModel.clearExercises()
             }
 
             MenuItem {
@@ -26,8 +26,8 @@ Page {
 
         SilicaListView {
             id: listview
-            width: selectedexcercicespage.width
-            height: selectedexcercicespage.height - header.height
+            width: selectedexercicespage.width
+            height: selectedexercicespage.height - header.height
             spacing: Theme.paddingMedium
             anchors {
                 top: header.bottom
@@ -67,7 +67,7 @@ Page {
                 }
 
                 Label {
-                    id: excerciseName
+                    id: exerciseName
                     text: name
                     width: background.width - 2 * Theme.paddingLarge
                     truncationMode: TruncationMode.Fade
@@ -75,7 +75,7 @@ Page {
                         left: background.left
                         leftMargin: Theme.paddingLarge
                         top: parent.top
-                        topMargin: (background.height - excerciseName.height - repeatsRow.height - weightsRow.height - buttonRow.height) / 5
+                        topMargin: (background.height - exerciseName.height - repeatsRow.height - weightsRow.height - buttonRow.height) / 5
                     }
                 }
 
@@ -85,8 +85,8 @@ Page {
                     anchors {
                         left: background.left
                         leftMargin: Theme.paddingLarge
-                        top: excerciseName.bottom
-                        topMargin: (background.height - excerciseName.height - repeatsRow.height - weightsRow.height - buttonRow.height) / 5
+                        top: exerciseName.bottom
+                        topMargin: (background.height - exerciseName.height - repeatsRow.height - weightsRow.height - buttonRow.height) / 5
                     }
 
                     Label {
@@ -126,7 +126,7 @@ Page {
                         left: background.left
                         leftMargin: Theme.paddingLarge
                         top: repeatsRow.bottom
-                        topMargin: (background.height - excerciseName.height - repeatsRow.height - weightsRow.height - buttonRow.height) / 5
+                        topMargin: (background.height - exerciseName.height - repeatsRow.height - weightsRow.height - buttonRow.height) / 5
                     }
 
                     Label {
@@ -180,26 +180,26 @@ Page {
                         left: background.left
                         leftMargin: (background.width - addButton.width - removeButton.width) / 3
                         top: weightsRow.bottom
-                        topMargin: (background.height - excerciseName.height - repeatsRow.height - weightsRow.height - buttonRow.height) / 5
+                        topMargin: (background.height - exerciseName.height - repeatsRow.height - weightsRow.height - buttonRow.height) / 5
                     }
 
                     Button {
                         id: addButton
                         text: qsTr("Add")
-                        onClicked: controller.workoutModel.addExcercise(index, "1", name, description, category, weights, reps)
+                        onClicked: controller.workoutModel.addExercise(index, "1", name, description, category, weights, reps)
                     }
 
                     Button {
                         id: removeButton
                         text: qsTr("Remove")
-                        onClicked: controller.workoutModel.removeExcerciseByIndex(index)
+                        onClicked: controller.workoutModel.removeExerciseByIndex(index)
                     }
                 }
             }
 
             ViewPlaceholder {
                 enabled: listview.count === 0
-                text: qsTr("Selected excercises will appear here.")
+                text: qsTr("Selected exercises will appear here.")
                 anchors.centerIn: listview
 
             }

@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-#include "workoutmodel/excercisemodel.h"
+#include "workoutmodel/exercisemodel.h"
 #include "workoutmodel/workoutmodel.h"
 #include "apireader.h"
 #include "databasemanager.h"
@@ -12,14 +12,14 @@
 class Controller : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(ExcerciseModel* excerciseModel READ getExcerciseModel)
+    Q_PROPERTY(ExerciseModel* exerciseModel READ getExerciseModel)
     Q_PROPERTY(WorkoutModel* workoutModel READ getWorkoutModel)
     Q_PROPERTY(User* user READ getUser)
 
 public:
     explicit Controller(QObject *parent = 0);
 
-    ExcerciseModel* getExcerciseModel();
+    ExerciseModel* getExerciseModel();
     WorkoutModel* getWorkoutModel();
     User* getUser();
 
@@ -31,7 +31,7 @@ signals:
 public slots:
 
 private:
-    ExcerciseModel* myExcerciseModel;
+    ExerciseModel* myExerciseModel;
     WorkoutModel* myWorkoutModel;
     DatabaseManager* mydbmanager;
     APIReader* myapireader;

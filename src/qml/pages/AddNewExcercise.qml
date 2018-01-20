@@ -2,7 +2,7 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 Page {
-    id: addexcercisepage
+    id: addexercisepage
 
     SilicaFlickable {
         anchors.fill: parent
@@ -13,9 +13,9 @@ Page {
                 id: savebutton
                 text: qsTr("Save")
                 onClicked: {
-                    //                    GymModel.Name = excercisename.text
+                    //                    GymModel.Name = exercisename.text
                     //                    GymModel.Description = description.text
-                    //                    GymModel.insertExcercise()
+                    //                    GymModel.insertExercise()
                 }
             }
         }
@@ -23,14 +23,14 @@ Page {
         Column {
 
             PageHeader {
-                title: qsTr("Add a new excercise")
+                title: qsTr("Add a new exercise")
             }
 
             TextField {
-                id: excercisename
-                placeholderText: qsTr("Enter a name for your excercise")
-                label: qsTr("Excercise name")
-                width: addexcercisepage.width
+                id: exercisename
+                placeholderText: qsTr("Enter a name for your exercise")
+                label: qsTr("Exercise name")
+                width: addexercisepage.width
                 EnterKey.enabled: text.length > 0
 //                EnterKey.iconSource: "image:/usr/share/themes/jolla-ambient/meegotouch/icons/icon­-m-­enter-­next"
                 EnterKey.onClicked: description.focus = true
@@ -38,9 +38,9 @@ Page {
 
             TextArea {
                 id: description
-                placeholderText: qsTr("Enter a name for your excercise")
+                placeholderText: qsTr("Enter a name for your exercise")
                 label: "Description"
-                width: addexcercisepage.width
+                width: addexercisepage.width
                 height: 300
                 EnterKey.enabled: text.length > 0
                 EnterKey.onClicked: focus = false

@@ -6,14 +6,14 @@ Controller::Controller(QObject *parent) : QObject(parent)
     mydbmanager = new DatabaseManager(this);
     mydbmanager->setUpDB();
 
-    myExcerciseModel = new ExcerciseModel(this, mydbmanager);
+    myExerciseModel = new ExerciseModel(this, mydbmanager);
     myWorkoutModel = new WorkoutModel(this, mydbmanager);
     myapireader = new APIReader(this, mydbmanager);
     myUser = new User(this, mydbmanager);
 }
 
-ExcerciseModel* Controller::getExcerciseModel() {
-    return myExcerciseModel;
+ExerciseModel* Controller::getExerciseModel() {
+    return myExerciseModel;
 }
 
 WorkoutModel* Controller::getWorkoutModel() {

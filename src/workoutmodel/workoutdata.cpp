@@ -1,78 +1,78 @@
 #include "workoutdata.h"
 
-WorkoutData::WorkoutData(int excerciseId, QString excerciseName, QString excerciseDescription, QString excerciseCategory, double weigths, int reps)
+WorkoutData::WorkoutData(int exerciseId, QString exerciseName, QString exerciseDescription, QString exerciseCategory, double weigths, int reps)
 {
-    myExcerciseId = excerciseId;
-    myExcerciseName = excerciseName;
-    myExcerciseDescription = excerciseDescription;
-    myExcerciseCategory = excerciseCategory;
-    myExcerciseWeights = weigths;
-    myExcerciseReps = reps;
+    myExerciseId = exerciseId;
+    myExerciseName = exerciseName;
+    myExerciseDescription = exerciseDescription;
+    myExerciseCategory = exerciseCategory;
+    myExerciseWeights = weigths;
+    myExerciseReps = reps;
 
 }
 
-int WorkoutData::getExcerciseId() {
-    return myExcerciseId;
+int WorkoutData::getExerciseId() {
+    return myExerciseId;
 }
 
-QString WorkoutData::getExcerciseName() {
-    return myExcerciseName;
+QString WorkoutData::getExerciseName() {
+    return myExerciseName;
 }
 
-QString WorkoutData::getExcerciseDescription() {
-    return myExcerciseDescription;
+QString WorkoutData::getExerciseDescription() {
+    return myExerciseDescription;
 }
 
-QString WorkoutData::getExcerciseCategory() {
-    return myExcerciseCategory;
+QString WorkoutData::getExerciseCategory() {
+    return myExerciseCategory;
 }
 
-void WorkoutData::setExcerciseId(int excerciseId) {
+void WorkoutData::setExerciseId(int exerciseId) {
 
-    if(myExcerciseId != excerciseId) {
-        myExcerciseId = excerciseId;
+    if(myExerciseId != exerciseId) {
+        myExerciseId = exerciseId;
     }
 }
 
-void WorkoutData::setExcerciseName(QString excerciseName) {
+void WorkoutData::setExerciseName(QString exerciseName) {
 
-    if(myExcerciseName != excerciseName) {
-        myExcerciseName = excerciseName;
+    if(myExerciseName != exerciseName) {
+        myExerciseName = exerciseName;
     }
 }
 
-void WorkoutData::setExcerciseDescription(QString excerciseDescription) {
+void WorkoutData::setExerciseDescription(QString exerciseDescription) {
 
-    if(myExcerciseDescription != excerciseDescription) {
-        myExcerciseDescription = excerciseDescription;
+    if(myExerciseDescription != exerciseDescription) {
+        myExerciseDescription = exerciseDescription;
     }
 }
 
-void WorkoutData::setExcerciseCategory(QString excerciseCategory) {
+void WorkoutData::setExerciseCategory(QString exerciseCategory) {
 
-    if(myExcerciseCategory != excerciseCategory) {
-        myExcerciseCategory = excerciseCategory;
+    if(myExerciseCategory != exerciseCategory) {
+        myExerciseCategory = exerciseCategory;
     }
 }
 
 double WorkoutData::getWeights() {
-    return myExcerciseWeights;
+    return myExerciseWeights;
 }
 
-void WorkoutData::setWeights(double excerciseWeights) {
+void WorkoutData::setWeights(double exerciseWeights) {
 
-    if(myExcerciseWeights != excerciseWeights) {
-        myExcerciseWeights = excerciseWeights;
+    if(myExerciseWeights != exerciseWeights) {
+        myExerciseWeights = exerciseWeights;
     }
 }
 
 int WorkoutData::getReps() {
-    return myExcerciseReps;
+    return myExerciseReps;
 }
 
-void WorkoutData::setReps(int excerciseReps) {
+void WorkoutData::setReps(int exerciseReps) {
 
-    if(myExcerciseReps != excerciseReps) {
-        myExcerciseReps = excerciseReps;
+    if(myExerciseReps != exerciseReps) {
+        myExerciseReps = exerciseReps;
     }
 }

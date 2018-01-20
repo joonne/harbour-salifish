@@ -22,10 +22,10 @@ Item {
             spacing: Theme.paddingLarge
 
             Row {
-                id: excerciserow
+                id: exerciserow
                 anchors {
                     left: parent.left
-                    leftMargin: (workoutItem.width - excerciserow.width) / 2
+                    leftMargin: (workoutItem.width - exerciserow.width) / 2
                 }
 
                 Label {

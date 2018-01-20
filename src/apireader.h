@@ -21,37 +21,30 @@ public:
     explicit APIReader(QObject *parent = 0, DatabaseManager* dbmanager = 0);
     ~APIReader();
 
-    void startRequest(QUrl url);
+    QNetworkReply* get(QUrl url);
 
     void getPart();
 
-    void getAllExcercises();
+    void getAllExercises();
     void getMuscles();
     void getCategories();
 
-    void processExcercises(QJsonArray excercises);
+    QList<QVariantMap> processExercises(QJsonArray exercises);
     void processMuscles(QJsonArray muscles);
     void processCategories(QJsonArray categories);
 
 signals:
-    void readyToStoreExcercises();
+    void readyToStoreExercises();
     void readyToStoreMuscles();
 
 public slots:
-    void replyFinished(QNetworkReply* reply);
     void initRequested();
 
 private:
     QNetworkAccessManager* myNetWorkAccessManager;
     DatabaseManager* mydbmanager;
 
-    QList<QString> m_tasks;
-
-    // flags
-    bool m_excercises;
-    bool m_muscles;
-    bool m_categories;
-
+    QStringList m_tasks;
 };
 
 #endif // APIREADER_H

@@ -126,7 +126,7 @@ Page {
                 readOnly: true
                 color: Theme.primaryColor
                 font.pixelSize: Theme.fontSizeSmall
-                text: qsTr("Excercise data comes from wger API.")
+                text: qsTr("Exercise data comes from wger API.")
             }
 
             SectionHeader {
