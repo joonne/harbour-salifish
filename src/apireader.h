@@ -26,8 +26,10 @@ public:
     void getAllExercises();
     void getMuscles();
     void getCategories();
+    void getExerciseImages();
 
     QList<QVariantMap> processExercises(QJsonArray exercises);
+    QList<QVariantMap> processExerciseImages (QJsonArray exerciseImages);
     QList<QVariantMap> processMuscles(QJsonArray muscles);
     QList<QVariantMap> processCategories(QJsonArray categories);
 

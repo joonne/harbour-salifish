@@ -12,48 +12,55 @@ Controller::Controller(QObject *parent) : QObject(parent)
     myUser = new User(this, mydbmanager);
 }
 
-ExerciseModel* Controller::getExerciseModel() {
+ExerciseModel* Controller::getExerciseModel()
+{
     return myExerciseModel;
 }
 
-WorkoutModel* Controller::getWorkoutModel() {
+WorkoutModel* Controller::getWorkoutModel()
+{
     return myWorkoutModel;
 }
 
-User* Controller::getUser() {
+User* Controller::getUser()
+{
     return myUser;
 }
 
-QVariantList Controller::getMuscleModel() {
-    QVariantList temp;
+QVariantList Controller::getMuscleModel()
+{
+    QVariantList result;
     auto muscles = mydbmanager->getMuscles();
 
-    foreach (auto muscle, muscles) {
-        QVariantMap muscleMap;
+    for (auto muscle : muscles) {
+        QVariantMap temp;
         QMap<QString, QString>::const_iterator itr = muscle.constBegin();
         while (itr != muscle.constEnd()) {
-            muscleMap.insert(itr.key(), QVariant(itr.value()));
+            temp.insert(itr.key(), QVariant(itr.value()));
             ++itr;
         }
-        temp.append(muscleMap);
+
+        result.append(temp);
     }
 
-    return temp;
+    return result;
 }
 
-QVariantList Controller::getCategoryModel() {
-
-    QVariantList temp;
+QVariantList Controller::getCategoryModel()
+{
+    QVariantList result;
     auto categories = mydbmanager->getCategories();
 
-    foreach (auto category, categories) {
-        QVariantMap categoryMap;
+    for (auto category : categories) {
+        QVariantMap temp;
         QMap<QString, QString>::const_iterator itr = category.constBegin();
         while (itr != category.constEnd()) {
-            categoryMap.insert(itr.key(), QVariant(itr.value()));
+            temp.insert(itr.key(), QVariant(itr.value()));
             ++itr;
         }
-        temp.append(categoryMap);
+
+        result.append(temp);
     }
-    return temp;
+
+    return result;
 }

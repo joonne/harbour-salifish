@@ -12,26 +12,26 @@ DatabaseManager::~DatabaseManager()
 
 void DatabaseManager::setUpDB()
 {
-    if(openDB()) {
+    if (openDB()) {
 
-        // check whether db is empty, if it is, create db
-        if(db.tables().size() == 0) {
+        if (db.tables().size() == 0) {
 
             createDB();
 
+            qDebug() << "emit";
+            // TODO: here
             emit initDbWithData();
 
         } else {
 
             QSqlQuery query(db);
             query.exec("SELECT name, version FROM information;");
-            if(query.isSelect()) {
-                while(query.next()) {
-                    QString name = query.value(0).toString();
-                    double version = query.value(1).toDouble();
+            if (query.isSelect()) {
+                while (query.next()) {
+                    auto name = query.value(0).toString();
+                    auto version = query.value(1).toDouble();
                     qDebug() << "App name: " << name;
                     qDebug() << "Database version : " << version;
-
                 }
             }
         }
@@ -44,7 +44,7 @@ bool DatabaseManager::openDB()
     QString dbpath = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QDir::separator() + dbname;
     QDir dir(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
 
-    if(!dir.exists()) {
+    if (!dir.exists()) {
         dir.mkpath(".");
     }
 
@@ -77,16 +77,17 @@ void DatabaseManager::close()
 
 bool DatabaseManager::initializeInfoTable()
 {
-    bool ret = createInfoTable();
+    bool ret = false;
 
-    if (ret) {
+    if (createInfoTable()) {
 
         QSqlQuery query(db);
-        return query.exec(QString("INSERT INTO information VALUES(%1,'%2')")
-                          .arg(1.0).arg("SaliFish"));
+        ret = query.exec(QString("INSERT INTO information VALUES(NULL, %1, '%2')")
+                          .arg(1.0).arg("harbour-salifish"));
+        qDebug() << query.lastError();
     }
 
-    return false;
+    return ret;
 }
 
 bool DatabaseManager::createInfoTable()
@@ -100,6 +101,7 @@ bool DatabaseManager::createInfoTable()
                          "(id INTEGER PRIMARY KEY, "
                          "version REAL, "
                          "name varchar(50))");
+        qDebug() << query.lastError();
     }
 
     return ret;
@@ -112,6 +114,7 @@ bool DatabaseManager::updateInfoTable(double version)
 
         QSqlQuery query(db);
         ret = query.exec(QString("UPDATE information SET version = %1;").arg(version));
+        qDebug() << query.lastError();
     }
 
     return ret;
@@ -120,12 +123,14 @@ bool DatabaseManager::updateInfoTable(double version)
 bool DatabaseManager::createCategoryTable()
 {
     bool ret = false;
+
     if (db.isOpen()) {
 
         QSqlQuery query(db);
         ret = query.exec("CREATE TABLE category"
                          "(id INTEGER PRIMARY KEY, "
                          "name VARCHAR(50))");
+        qDebug() << query.lastError();
     }
 
     return ret;
@@ -424,44 +429,41 @@ bool DatabaseManager::insertEquipment(QString name)
 
 bool DatabaseManager::createDB()
 {
+    bool info, tables, user = false;
+
     if (db.isOpen()) {
 
         //-----------------------------------------------------------------
 
-        if(initializeInfoTable()) {
+        if (initializeInfoTable()) {
+            info = true;
             qDebug() << "information table created";
         }
 
         //-----------------------------------------------------------------
 
-        if(createCategoryTable() &&
+        if (createCategoryTable() &&
                 createExerciseTable() &&
                 createMuscleTable() &&
                 createExerciseMuscleTable() &&
                 createWorkoutTable() &&
                 createWorkoutEntryTable() &&
                 createEquipmentTable()) {
+            tables = true;
             qDebug() << "Tables created";
         }
 
         //-----------------------------------------------------------------
 
-        if(createUserTable() && insertUser("Sali Fish", 25, "Male", 180, 85)) {
+        if (createUserTable() && insertUser("Sali Fish", 25, "Male", 180, 85)) {
+            user = true;
             qDebug() << "User table created";
         }
 
         //-----------------------------------------------------------------
-
-//        if(insertCategory(10, "Abs") && insertCategory(8, "Arms") &&
-//                insertCategory(12, "Back") && insertCategory(14, "Calves") &&
-//                insertCategory(11, "Chest") && insertCategory(9, "Legs") &&
-//                insertCategory(13, "Shoulders")) {
-
-//            qDebug() << "Categories added";
-//        }
     }
 
-    return true;
+    return info && tables && user;
 }
 
 bool DatabaseManager::createUserTable()
@@ -481,7 +483,6 @@ bool DatabaseManager::createUserTable()
         qDebug() << query.lastError();
     }
 
-    qDebug() << db.lastError();
     return ret;
 }
 

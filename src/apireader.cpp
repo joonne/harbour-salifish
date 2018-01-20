@@ -4,12 +4,9 @@
 
 APIReader::APIReader(QObject *parent, DatabaseManager *dbmanager) :
     QObject(parent),
-    myNetWorkAccessManager(0),
-    mydbmanager(0)
+    myNetWorkAccessManager(new QNetworkAccessManager(this)),
+    mydbmanager(dbmanager)
 {
-    myNetWorkAccessManager = new QNetworkAccessManager(this);
-    mydbmanager = dbmanager;
-
     connect(mydbmanager,
             SIGNAL(initDbWithData()),
             this,
@@ -34,9 +31,12 @@ QNetworkReply* APIReader::get(QUrl url)
 
 void APIReader::initRequested()
 {
+    qDebug() << "initRequested";
+
     getCategories();
     getMuscles();
     getAllExercises();
+    getExerciseImages();
 }
 
 void APIReader::getAllExercises()
@@ -93,6 +93,25 @@ void APIReader::getCategories()
     });
 }
 
+void APIReader::getExerciseImages()
+{
+    QUrl url(QString(QString(APIURL) + "/exerciseimage/"));
+    auto reply = get(url);
+
+    connect(reply, &QNetworkReply::finished, [this, reply]()
+    {
+        auto document = QJsonDocument::fromJson(reply->readAll());
+
+        if (!document.isNull()) {
+            auto exerciseImages = processExerciseImages(document.object().value("results").toArray());
+            qDebug() << exerciseImages;
+//            mydbmanager->insertExerciseImages(exerciseImages);
+        }
+
+        reply->deleteLater();
+    });
+}
+
 QList<QVariantMap> APIReader::processExercises(QJsonArray exercises)
 {
     QList<QVariantMap> result;
@@ -105,6 +124,28 @@ QList<QVariantMap> APIReader::processExercises(QJsonArray exercises)
         temp.insert("name", object.value("name").toString());
         temp.insert("description", object.value("description").toString().remove(QRegExp("<[^>]*>")));
         temp.insert("category", object.value("category").toInt());
+
+        result.append(temp);
+    }
+
+    return result;
+}
+
+QList<QVariantMap> APIReader::processExerciseImages(QJsonArray exerciseImages)
+{
+    QList<QVariantMap> result;
+
+    for (auto exerciseImage: exerciseImages) {
+        if (!exerciseImage.toObject().value("is_main").toBool()) {
+            continue;
+        }
+
+        QVariantMap temp;
+
+        auto object = exerciseImage.toObject();
+        temp.insert("id", object.value("id").toInt());
+        temp.insert("image", object.value("image").toString());
+        temp.insert("exercise", object.value("exercice").toInt());
 
         result.append(temp);
     }

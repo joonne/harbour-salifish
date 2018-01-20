@@ -1,44 +1,34 @@
 #include "user.h"
 #include <QDebug>
 
-User::User(QObject *parent, DatabaseManager* dbmanager) : QObject(parent) {
-    mydbmanager = dbmanager;
-
+User::User(QObject *parent, DatabaseManager* dbmanager) :
+    QObject(parent),
+    mydbmanager(dbmanager)
+{
     getUser();
-    qDebug() << "calories in 60min gym workout: " << calculateBurntCalories(110);
-
-    qDebug() << "user created";
-
     setPause(2);
 }
 
 User::~User() {
-    qDebug() << "Destroying User..";
     clean();
 }
 
-QString User::getName() {
-    qDebug() << myName;
-    return myName;
-}
+QString User::getName() { return myName; }
 
-void User::setName(QString name) {
-
-    if(myName != name) {
+void User::setName(QString name)
+{
+    if (myName != name) {
         myName = name;
         updateName(name);
         emit nameChanged();
     }
 }
 
-int User::getAge() {
-    qDebug() << myAge;
-    return myAge;
-}
+int User::getAge() { return myAge; }
 
-void User::setAge(int age) {
-
-    if(myAge != age) {
+void User::setAge(int age)
+{
+    if (myAge != age) {
         myAge = age;
         updateAge(age);
         calculateBMR();
@@ -46,13 +36,11 @@ void User::setAge(int age) {
     }
 }
 
-QString User::getGender() {
-    return myGender;
-}
+QString User::getGender() { return myGender; }
 
-void User::setGender(QString gender) {
-
-    if(myGender != gender) {
+void User::setGender(QString gender)
+{
+    if (myGender != gender) {
         myGender = gender;
         updateGender(gender);
         calculateBMR();
@@ -60,13 +48,11 @@ void User::setGender(QString gender) {
     }
 }
 
-double User::getHeight() {
-    return myHeight;
-}
+double User::getHeight() { return myHeight; }
 
-void User::setHeight(double height) {
-
-    if(myHeight != height) {
+void User::setHeight(double height)
+{
+    if (myHeight != height) {
         myHeight = height;
         updateHeight(height);
         calculateBMI();
@@ -75,13 +61,11 @@ void User::setHeight(double height) {
     }
 }
 
-double User::getWeight() {
-    return myWeight;
-}
+double User::getWeight() { return myWeight; }
 
-void User::setWeight(double weight) {
-
-    if(myWeight != weight) {
+void User::setWeight(double weight)
+{
+    if (myWeight != weight) {
         myWeight = weight;
         updateWeight(weight);
         calculateBMI();
@@ -90,8 +74,8 @@ void User::setWeight(double weight) {
     }
 }
 
-bool User::getUser() {
-
+bool User::getUser()
+{
     auto user = mydbmanager->getUser();
 
     qDebug() << user;
@@ -108,77 +92,70 @@ bool User::getUser() {
     return true;
 }
 
-bool User::insertUser(QString name, int age, QString gender, double height, double weight) {
-
+bool User::insertUser(QString name, int age, QString gender, double height, double weight)
+{
     return mydbmanager->insertUser(name, age, gender, height, weight);
 }
 
-bool User::updateName(QString name) {
-
+bool User::updateName(QString name)
+{
     return mydbmanager->updateName(name);
 }
 
-bool User::updateAge(int age) {
-
+bool User::updateAge(int age)
+{
     return mydbmanager->updateAge(age);
-
 }
 
-bool User::updateGender(QString gender) {
-
+bool User::updateGender(QString gender)
+{
     return mydbmanager->updateGender(gender);
 }
 
-bool User::updateHeight(double height) {
-
+bool User::updateHeight(double height)
+{
     return mydbmanager->updateHeight(height);
 }
 
-bool User::updateWeight(double weight) {
-
+bool User::updateWeight(double weight)
+{
     return mydbmanager->updateWeight(weight);
 }
 
-void User::calculateBMI() {
-
+void User::calculateBMI()
+{
     myBMI = myWeight / ((myHeight/100) * (myHeight / 100));
     myBMI = static_cast<double>(static_cast<int>(myBMI*100+0.5))/100.0;
+
     emit BMIChanged();
 
-    if(myBMI < 15) {
+    if (myBMI < 15) {
         myBMIdescription = "Very severely underweight";
-    } else if(myBMI >= 15.0 and myBMI < 16.0 ) {
+    } else if (myBMI >= 15.0 and myBMI < 16.0 ) {
         myBMIdescription = "Severely underweight";
-    } else if(myBMI >= 16.0 and myBMI < 18.5) {
+    } else if (myBMI >= 16.0 and myBMI < 18.5) {
         myBMIdescription = "Underweight";
-    } else if(myBMI >= 18.5 and myBMI < 25.0) {
+    } else if (myBMI >= 18.5 and myBMI < 25.0) {
         myBMIdescription = "Normal (healthy weight)";
-    } else if(myBMI >= 25.0 and myBMI < 30.0) {
+    } else if (myBMI >= 25.0 and myBMI < 30.0) {
         myBMIdescription = "Overweight";
-    } else if( myBMI >= 30 and myBMI < 35) {
+    } else if ( myBMI >= 30 and myBMI < 35) {
         myBMIdescription = "Moderately obese";
-    } else if(myBMI >= 35 and myBMI < 40) {
+    } else if (myBMI >= 35 and myBMI < 40) {
         myBMIdescription = "Severely obese";
-    } else if(myBMI >= 40){
+    } else if (myBMI >= 40) {
         myBMIdescription = "Very severely obese";
     }
 
     emit BMIdescriptionChanged();
-
 }
 
-double User::getBMI() {
+double User::getBMI() { return myBMI; }
 
-    return myBMI;
-}
+QString User::getBMIdescription() { return myBMIdescription; }
 
-QString User::getBMIdescription() {
-
-    return myBMIdescription;
-}
-
-void User::clean() {
-
+void User::clean()
+{
     myName.clear();
     myAge = 0;
     myGender.clear();
@@ -189,36 +166,32 @@ void User::clean() {
     myBMR = 0;
 }
 
-void User::calculateBMR() {
-
-    if(myGender == "Male") {
+void User::calculateBMR()
+{
+    if (myGender == "Male") {
         myBMR = 66 + (13.8 * myWeight) + (5 * myHeight) - (6.8 * myAge);
-    } else if(myGender == "Female") {
+    } else if (myGender == "Female") {
         myBMR = 655 + (9.6 * myWeight) + (1.8 * myHeight) - (4.7 * myAge);
     }
+
     emit BMRChanged();
 }
 
-double User::getBMR() {
+double User::getBMR() { return myBMR; }
 
-    return myBMR;
-}
+int User::getPause() { return myPause; }
 
-int User::getPause() {
-    return myPause;
-}
-
-void User::setPause(int pause) {
-
-    if(myPause != pause) {
+void User::setPause(int pause)
+{
+    if (myPause != pause) {
         myPause = pause;
         emit pauseChanged();
     }
 }
 
 
-double User::calculateBurntCalories(int time) {
-
+double User::calculateBurntCalories(int time)
+{
     int myHeartRate = 150;
 
     if (myGender == "Male") {
@@ -227,4 +200,3 @@ double User::calculateBurntCalories(int time) {
         return ((myAge * 0.074) - (myWeight * 0.05741) + (myHeartRate * 0.4472) - 20.4022 * time / 4.184);
     }
 }
-

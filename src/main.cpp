@@ -21,8 +21,6 @@
 
 int main(int argc, char *argv[])
 {
-    // For this example, wizard-generates single line code would be good enough,
-    // but very soon it won't be enough for you anyway, so use this more detailed example from start
     QScopedPointer<QGuiApplication> app(SailfishApp::application(argc, argv));
     QScopedPointer<QQuickView> view(SailfishApp::createView());
 
@@ -39,8 +37,5 @@ int main(int argc, char *argv[])
 
     view->showFullScreen();
 
-    qDebug() << "main.cpp end";
-
     return app->exec();
-
 }
