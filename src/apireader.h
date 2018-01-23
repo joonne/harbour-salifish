@@ -26,7 +26,7 @@ public:
     void getAllExercises();
     void getMuscles();
     void getCategories();
-    void getExerciseImages();
+    void getExerciseImages(QList<QVariantMap> exercises);
 
     QList<QVariantMap> processExercises(QJsonArray exercises);
     QList<QVariantMap> processExerciseImages (QJsonArray exerciseImages);
@@ -34,8 +34,6 @@ public:
     QList<QVariantMap> processCategories(QJsonArray categories);
 
 signals:
-    void readyToStoreExercises();
-    void readyToStoreMuscles();
 
 public slots:
     void initRequested();
@@ -43,8 +41,6 @@ public slots:
 private:
     QNetworkAccessManager* myNetWorkAccessManager;
     DatabaseManager* mydbmanager;
-
-    QStringList m_tasks;
 };
 
 #endif // APIREADER_H

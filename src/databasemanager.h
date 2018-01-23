@@ -38,7 +38,7 @@ public:
 
     bool createExerciseTable();
     bool insertExercises(QList<QVariantMap> exercises);
-    bool insertExercise(int id, QString name, QString description, int category);
+    bool insertExercise(int id, QString name, QString description, int category, QString image);
 
     bool createExerciseMuscleTable();
     bool insertExerciseMuscle(int muscle, int exercise);
@@ -74,7 +74,7 @@ signals:
     void initDbWithData();
 
 private:
-    QSqlDatabase db;
+    QSqlDatabase m_db;
 };
 
 #endif // DATABASEMANAGER_H

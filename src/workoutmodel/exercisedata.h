@@ -21,6 +21,9 @@ public:
     QString getExerciseCategory();
     void setExerciseCategory(QString exerciseCategory);
 
+    QString getExerciseImage();
+    void setExerciseImage();
+
 private:
     int myExerciseId;
     QString myExerciseName;

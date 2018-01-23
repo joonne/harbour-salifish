@@ -31,12 +31,9 @@ QNetworkReply* APIReader::get(QUrl url)
 
 void APIReader::initRequested()
 {
-    qDebug() << "initRequested";
-
     getCategories();
     getMuscles();
     getAllExercises();
-    getExerciseImages();
 }
 
 void APIReader::getAllExercises()
@@ -50,7 +47,7 @@ void APIReader::getAllExercises()
 
         if (!document.isNull()) {
             auto exercises = processExercises(document.object().value("results").toArray());
-            mydbmanager->insertExercises(exercises);
+            getExerciseImages(exercises);
         }
 
         reply->deleteLater();
@@ -93,19 +90,30 @@ void APIReader::getCategories()
     });
 }
 
-void APIReader::getExerciseImages()
+void APIReader::getExerciseImages(QList<QVariantMap> exercises)
 {
     QUrl url(QString(QString(APIURL) + "/exerciseimage/"));
     auto reply = get(url);
 
-    connect(reply, &QNetworkReply::finished, [this, reply]()
+    connect(reply, &QNetworkReply::finished, [this, reply, exercises]()
     {
         auto document = QJsonDocument::fromJson(reply->readAll());
 
         if (!document.isNull()) {
             auto exerciseImages = processExerciseImages(document.object().value("results").toArray());
-            qDebug() << exerciseImages;
-//            mydbmanager->insertExerciseImages(exerciseImages);
+
+            qDebug() << "-------------------";
+            for (auto& exercise : exercises) {
+                for (auto image : exerciseImages) {
+                    if (exercise.value("id") == image.value("exercise")) {
+                        exercise["image"] = const_cast<QVariant&>(image["image"]); // WHY ??
+                        qDebug() << exercise["image"];
+                    }
+                }
+            }
+            qDebug() << "-------------------";
+
+            mydbmanager->insertExercises(exercises);
         }
 
         reply->deleteLater();
@@ -145,7 +153,7 @@ QList<QVariantMap> APIReader::processExerciseImages(QJsonArray exerciseImages)
         auto object = exerciseImage.toObject();
         temp.insert("id", object.value("id").toInt());
         temp.insert("image", object.value("image").toString());
-        temp.insert("exercise", object.value("exercice").toInt());
+        temp.insert("exercise", object.value("exercise").toInt());
 
         result.append(temp);
     }
