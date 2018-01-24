@@ -12,9 +12,9 @@
 class Controller : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(ExerciseModel* exerciseModel READ getExerciseModel)
-    Q_PROPERTY(WorkoutModel* workoutModel READ getWorkoutModel)
-    Q_PROPERTY(User* user READ getUser)
+    Q_PROPERTY(ExerciseModel* exerciseModel READ getExerciseModel CONSTANT)
+    Q_PROPERTY(WorkoutModel* workoutModel READ getWorkoutModel CONSTANT)
+    Q_PROPERTY(User* user READ getUser CONSTANT)
 
 public:
     explicit Controller(QObject *parent = 0);

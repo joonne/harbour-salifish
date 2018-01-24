@@ -133,6 +133,9 @@ QList<QVariantMap> APIReader::processExercises(QJsonArray exercises)
         temp.insert("name", object.value("name").toString());
         temp.insert("description", object.value("description").toString().remove(QRegExp("<[^>]*>")));
         temp.insert("category", object.value("category").toInt());
+        temp.insert("muscles", object.value("muscles").toArray().toVariantList());
+        temp.insert("muscles_secondary", object.value("muscles_secondary").toArray().toVariantList());
+        temp.insert("equipment", object.value("equipment").toArray().toVariantList());
 
         result.append(temp);
     }

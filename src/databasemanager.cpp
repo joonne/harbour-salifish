@@ -211,6 +211,7 @@ bool DatabaseManager::insertExercises(QList<QVariantMap> exercises)
         auto name = exercise.value("name").toString();
         name.replace("'", "''");
         auto description = exercise.value("description").toString();
+        description.replace("'", "''");
         auto category = exercise.value("category").toInt();
         auto image = exercise.value("image").toString();
 
@@ -222,7 +223,7 @@ bool DatabaseManager::insertExercises(QList<QVariantMap> exercises)
 
 bool DatabaseManager::insertExercise(int id, QString name, QString description, int category, QString image)
 {
-    qDebug() << "inserting " << id << name << image;
+    qDebug() << "inserting " << id << name << description;
     bool ret = false;
 
     if (m_db.isOpen()) {
@@ -614,11 +615,20 @@ QList<QMap<QString, QString> > DatabaseManager::getExercises(QString category)
         if (ret && query.isSelect()) {
             while (query.next()) {
                 QMap<QString, QString> temp;
+
                 temp.insert("id", query.value(0).toString());
-                temp.insert("name", query.value(1).toString());
-                temp.insert("description", query.value(2).toString());
+
+                auto name = query.value(1).toString();
+                name.replace("''", "'");
+                temp.insert("name", name);
+
+                auto description = query.value(2).toString();
+                description.replace("''", "'");
+                temp.insert("description", description);
+
                 temp.insert("category", query.value(3).toString());
                 temp.insert("image", query.value(4).toString());
+
                 exercises.append(temp);
             }
         }

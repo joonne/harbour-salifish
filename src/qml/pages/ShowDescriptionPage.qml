@@ -60,17 +60,20 @@ Page {
             spacing: Theme.paddingSmall
 
             PageHeader {
-                title: qsTr("Description")
+                title: exerciseName
             }
 
             Image {
                 source: exerciseImage
-                sourceSize.width: parent.width
+                sourceSize.width: parent.width - Theme.paddingLarge
+                anchors.left: parent.left
+                anchors.leftMargin: (parent.width - width) / 2
             }
 
             TextField {
                 id: header
-                text: exerciseName
+                text: '"' + exerciseName.toLocaleLowerCase() + '"'
+                font.italic: true
                 width: showdescriptionpage.width
                 readOnly: true
                 EnterKey.enabled: text.length > 0

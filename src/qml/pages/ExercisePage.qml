@@ -16,6 +16,10 @@ Page {
                 text: qsTr("Add a new exercise")
                 onClicked: pageStack.push(Qt.resolvedUrl("AddNewExercise.qml"))
             }
+            MenuItem {
+                text: qsTr("Select all")
+                onClicked: console.log("Select all")
+            }
         }
 
         PageHeader {
@@ -26,6 +30,15 @@ Page {
         Column {
             spacing: Theme.paddingLarge
             anchors.top: pageheader.bottom
+
+            SearchField {
+                placeholderText: qsTr("Search")
+                width: parent.width - Theme.paddingLarge
+                anchors {
+                    left: parent.left
+                    leftMargin: (parent.width - widht) / 2
+                }
+            }
 
             SilicaListView {
                 id: listView
