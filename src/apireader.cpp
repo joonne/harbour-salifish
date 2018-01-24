@@ -92,7 +92,7 @@ void APIReader::getCategories()
 
 void APIReader::getExerciseImages(QList<QVariantMap> exercises)
 {
-    QUrl url(QString(QString(APIURL) + "/exerciseimage/"));
+    QUrl url(QString(QString(APIURL) + "/exerciseimage/?limit=2000"));
     auto reply = get(url);
 
     connect(reply, &QNetworkReply::finished, [this, reply, exercises]()
@@ -102,18 +102,19 @@ void APIReader::getExerciseImages(QList<QVariantMap> exercises)
         if (!document.isNull()) {
             auto exerciseImages = processExerciseImages(document.object().value("results").toArray());
 
-            qDebug() << "-------------------";
-            for (auto& exercise : exercises) {
-                for (auto image : exerciseImages) {
-                    if (exercise.value("id") == image.value("exercise")) {
-                        exercise["image"] = const_cast<QVariant&>(image["image"]); // WHY ??
-                        qDebug() << exercise["image"];
+            QList<QVariantMap> result;
+            for (auto exercise : exercises) {
+                QVariantMap temp = QVariantMap(exercise);
+                for (auto exerciseImage: exerciseImages) {
+                    if (exercise["id"] == exerciseImage["exercise"]) {
+                        temp["image"] = exerciseImage["image"];
                     }
                 }
-            }
-            qDebug() << "-------------------";
 
-            mydbmanager->insertExercises(exercises);
+                result.append(temp);
+            }
+
+            mydbmanager->insertExercises(result);
         }
 
         reply->deleteLater();

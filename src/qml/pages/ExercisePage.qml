@@ -37,10 +37,15 @@ Page {
                 delegate: TextSwitch {
                     text: name
                     checked: controller.workoutModel.isSelected(name)
-                    onPressAndHold: {
-                        pageStack.push(Qt.resolvedUrl("ShowDescriptionPage.qml"), {exerciseName: name, exerciseDescription: description})
-                    }
-                    onClicked: checked ? controller.workoutModel.addExercise(0, "1", name, description, category, 80, 7) : controller.workoutModel.removeExerciseByName(name)
+
+                    onPressAndHold: pageStack.push(Qt.resolvedUrl("ShowDescriptionPage.qml"), {
+                                                       exerciseName: name,
+                                                       exerciseDescription: description,
+                                                       exerciseImage: image
+                                                    })
+                    onClicked: checked
+                               ? controller.workoutModel.addExercise(0, "1", name, description, category, 80, 7)
+                               : controller.workoutModel.removeExerciseByName(name)
                 }
             }
         }

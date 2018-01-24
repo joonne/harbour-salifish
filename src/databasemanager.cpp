@@ -502,15 +502,9 @@ bool DatabaseManager::insertUser(QString name, int age, QString gender, double h
 
 bool DatabaseManager::updateDB() { return false; }
 
-QMap<QString,QString> DatabaseManager::getUser()
+QMap<QString, QString> DatabaseManager::getUser()
 {
-    QString name;
-    QString age;
-    QString gender;
-    QString height;
-    QString weight;
-
-    QMap<QString,QString> temp;
+    QMap<QString, QString> user;
 
     if (m_db.isOpen()) {
 
@@ -518,32 +512,17 @@ QMap<QString,QString> DatabaseManager::getUser()
         query.exec("SELECT * FROM user WHERE id = 1;");
 
         if (query.isSelect()) {
-            while(query.next()) {
-
-                qDebug() << query.value(0);
-
-                name = query.value(1).toString();
-                temp.insert("name", name);
-
-                age = query.value(2).toString();
-                temp.insert("age", age);
-
-                gender = query.value(3).toString();
-                temp.insert("gender", gender);
-
-                height = query.value(4).toString();
-                temp.insert("height", height);
-
-                weight = query.value(5).toString();
-                temp.insert("weight", weight);
+            while (query.next()) {
+                user.insert("name", query.value(1).toString());
+                user.insert("age", query.value(2).toString());
+                user.insert("gender", query.value(3).toString());
+                user.insert("height", query.value(4).toString());
+                user.insert("weight", query.value(5).toString());
             }
         }
-
-        qDebug() << query.lastError();
-        qDebug() << m_db.lastError();
     }
 
-    return temp;
+    return user;
 }
 
 bool DatabaseManager::updateName(QString name)
@@ -623,7 +602,7 @@ QList<QMap<QString, QString> > DatabaseManager::getExercises(QString category)
     if (m_db.isOpen()) {
 
         QSqlQuery query(m_db);
-        query.exec(QString("SELECT exercise.id, exercise.name, exercise.description, category.name "
+        auto ret = query.exec(QString("SELECT exercise.id, exercise.name, exercise.description, category.name, exercise.image "
                            "FROM exercise "
                            "INNER JOIN category "
                            "ON exercise.category = category.id AND category.name = '%1' "
@@ -632,19 +611,19 @@ QList<QMap<QString, QString> > DatabaseManager::getExercises(QString category)
         qDebug() << query.lastError();
         qDebug() << query.lastQuery();
 
-        if (query.isSelect()) {
+        if (ret && query.isSelect()) {
             while (query.next()) {
-                QMap<QString,QString> temp;
+                QMap<QString, QString> temp;
                 temp.insert("id", query.value(0).toString());
                 temp.insert("name", query.value(1).toString());
                 temp.insert("description", query.value(2).toString());
                 temp.insert("category", query.value(3).toString());
+                temp.insert("image", query.value(4).toString());
                 exercises.append(temp);
             }
         }
     }
 
-    qDebug() << exercises;
     return exercises;
 }
 

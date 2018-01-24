@@ -17,7 +17,8 @@ public:
         IdRole = Qt::UserRole + 1,
         NameRole,
         DescriptionRole,
-        CategoryRole
+        CategoryRole,
+        ImageRole,
     };
 
     explicit ExerciseModel(QObject *parent = 0, DatabaseManager* dbmanager = 0);
@@ -27,8 +28,7 @@ public:
 
     virtual QHash<int, QByteArray> roleNames() const;
 
-    Q_INVOKABLE void populate(QString selectedMuscle);
-
+    Q_INVOKABLE void populate(const QString category);
     Q_INVOKABLE void createNewExercise(QString name, QString description, int category);
 
 private:

@@ -6,6 +6,19 @@ Page {
 
     property string exerciseName: ""
     property string exerciseDescription: ""
+    property string exerciseImage: ""
+
+    onExerciseNameChanged: {
+        console.log("name", exerciseName)
+    }
+
+    onExerciseDescriptionChanged: {
+        console.log("description", exerciseDescription)
+    }
+
+    onExerciseImageChanged: {
+        console.log("image", exerciseImage)
+    }
 
     SilicaFlickable {
         anchors.fill: parent
@@ -30,7 +43,7 @@ Page {
                 onClicked: {
                     header.readOnly == true ? header.readOnly = false : header.readOnly = true
                     description.readOnly == true ? description.readOnly = false : description.readOnly = true
-                    if(text === qsTr("Save")) {
+                    if (text === qsTr("Save")) {
                         //                        GymModel.Name = header.text
                         //                        GymModel.Description = description.text
                         //                        GymModel.updateExercise()
@@ -50,6 +63,11 @@ Page {
                 title: qsTr("Description")
             }
 
+            Image {
+                source: exerciseImage
+                sourceSize.width: parent.width
+            }
+
             TextField {
                 id: header
                 text: exerciseName
@@ -58,7 +76,6 @@ Page {
                 EnterKey.enabled: text.length > 0
                 EnterKey.iconSource: "image://theme/icon­-m-­enter-­next"
                 EnterKey.onClicked: description.focus = true
-
             }
 
             TextArea {

@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
     context->setContextProperty("controller", controller.data());
 
     qmlRegisterType<ExerciseModel>("harbour.salifish", 1, 0, "ExerciseModel");
-    qmlRegisterType<WorkoutModel>("harbour.salifish", 1, 0, "ExerciseModel");
+    qmlRegisterType<WorkoutModel>("harbour.salifish", 1, 0, "WorkoutModel");
     qmlRegisterType<User>("harbour.salifish", 1, 0, "User");
 
     view->engine()->addImportPath(SailfishApp::pathTo("qml/components").toString());

@@ -6,7 +6,7 @@
 class ExerciseData {
 
 public:
-    explicit ExerciseData(int exerciseId = 0, QString exerciseName = "", QString exerciseDescription = "", QString exerciseCategory = "");
+    explicit ExerciseData(int exerciseId = 0, QString exerciseName = "", QString exerciseDescription = "", QString exerciseCategory = "", QString exerciseImage = "");
     ~ExerciseData();
 
     int getExerciseId();
@@ -22,13 +22,14 @@ public:
     void setExerciseCategory(QString exerciseCategory);
 
     QString getExerciseImage();
-    void setExerciseImage();
+    void setExerciseImage(QString exerciseImage);
 
 private:
-    int myExerciseId;
-    QString myExerciseName;
-    QString myExerciseDescription;
-    QString myExerciseCategory;
+    int m_exerciseId;
+    QString m_exerciseName;
+    QString m_exerciseDescription;
+    QString m_exerciseCategory;
+    QString m_exerciseImage;
 
 };
 

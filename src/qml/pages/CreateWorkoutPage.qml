@@ -29,8 +29,8 @@ Page {
             MenuItem {
                 text: showMuscles ? qsTr("Categories") : qsTr("Muscles")
                 onClicked: {
-                    showMuscles ? gridView.model = controller.getCategoryModel() : gridView.model = controller.getMuscleModel()
-                    showMuscles ? showMuscles = false : showMuscles = true
+                    gridView.model = showMuscles ? controller.getCategoryModel() : controller.getMuscleModel()
+                    showMuscles = showMuscles ? false : true
                 }
             }
         }
