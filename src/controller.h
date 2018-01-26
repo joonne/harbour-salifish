@@ -2,6 +2,7 @@
 #define CONTROLLER_H
 
 #include <QObject>
+#include <QSortFilterProxyModel>
 
 #include "workoutmodel/exercisemodel.h"
 #include "workoutmodel/workoutmodel.h"
@@ -20,6 +21,8 @@ public:
     explicit Controller(QObject *parent = 0);
 
     ExerciseModel* getExerciseModel();
+    Q_INVOKABLE void sortExercises(QString name);
+
     WorkoutModel* getWorkoutModel();
     User* getUser();
 
@@ -32,6 +35,7 @@ public slots:
 
 private:
     ExerciseModel* myExerciseModel;
+    QSortFilterProxyModel* myExerciseProxyModel;
     WorkoutModel* myWorkoutModel;
     DatabaseManager* mydbmanager;
     APIReader* myapireader;

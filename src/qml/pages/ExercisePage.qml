@@ -36,7 +36,12 @@ Page {
                 width: parent.width - Theme.paddingLarge
                 anchors {
                     left: parent.left
-                    leftMargin: (parent.width - widht) / 2
+                    leftMargin: (parent.width - width) / 2
+                }
+
+                onTextChanged: {
+                    console.log(text)
+                    controller.sortExercises(text)
                 }
             }
 

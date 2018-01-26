@@ -15,7 +15,7 @@ public:
 
     enum ExerciseRoles {
         IdRole = Qt::UserRole + 1,
-        NameRole,
+        NameRole = Qt::DisplayRole,
         DescriptionRole,
         CategoryRole,
         ImageRole,

@@ -10,11 +10,21 @@ Controller::Controller(QObject *parent) : QObject(parent)
     myUser = new User(this, mydbmanager);
 
     mydbmanager->setUpDB();
+
+    myExerciseProxyModel = new QSortFilterProxyModel(this);
+    myExerciseProxyModel->setSourceModel(myExerciseModel);
+    myExerciseProxyModel->setFilterRole(0);
 }
 
 ExerciseModel* Controller::getExerciseModel()
 {
     return myExerciseModel;
+}
+
+void Controller::sortExercises(QString name)
+{
+    qDebug() << "sort: " << name;
+    myExerciseProxyModel->setFilterFixedString(name);
 }
 
 WorkoutModel* Controller::getWorkoutModel()
