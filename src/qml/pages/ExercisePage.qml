@@ -39,10 +39,7 @@ Page {
                     leftMargin: (parent.width - width) / 2
                 }
 
-                onTextChanged: {
-                    console.log(text)
-                    controller.sortExercises(text)
-                }
+                onTextChanged: controller.sortExercises(text)
             }
 
             SilicaListView {
@@ -50,7 +47,7 @@ Page {
                 width: exercisepage.width
                 height: exercisepage.height - pageheader.height
 
-                model: controller.exerciseModel
+                model: controller.exerciseProxyModel
 
                 delegate: TextSwitch {
                     text: name

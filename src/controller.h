@@ -14,13 +14,15 @@ class Controller : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(ExerciseModel* exerciseModel READ getExerciseModel CONSTANT)
+    Q_PROPERTY(QSortFilterProxyModel* proxyModel READ getProxyModel CONSTANT)
     Q_PROPERTY(WorkoutModel* workoutModel READ getWorkoutModel CONSTANT)
     Q_PROPERTY(User* user READ getUser CONSTANT)
 
 public:
     explicit Controller(QObject *parent = 0);
 
-    ExerciseModel* getExerciseModel();
+    ExerciseModel *getExerciseModel();
+    QSortFilterProxyModel *getExerciseProxyModel();
     Q_INVOKABLE void sortExercises(QString name);
 
     WorkoutModel* getWorkoutModel();
@@ -34,12 +36,12 @@ signals:
 public slots:
 
 private:
-    ExerciseModel* myExerciseModel;
-    QSortFilterProxyModel* myExerciseProxyModel;
-    WorkoutModel* myWorkoutModel;
-    DatabaseManager* mydbmanager;
-    APIReader* myapireader;
-    User* myUser;
+    ExerciseModel* m_ExerciseModel;
+    QSortFilterProxyModel* m_ExerciseProxyModel;
+    WorkoutModel* m_WorkoutModel;
+    DatabaseManager* m_dbmanager;
+    APIReader* m_apireader;
+    User* m_User;
 
 };
 

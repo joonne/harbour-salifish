@@ -3,44 +3,49 @@
 
 Controller::Controller(QObject *parent) : QObject(parent)
 {
-    mydbmanager = new DatabaseManager(this);
-    myExerciseModel = new ExerciseModel(this, mydbmanager);
-    myWorkoutModel = new WorkoutModel(this, mydbmanager);
-    myapireader = new APIReader(this, mydbmanager);
-    myUser = new User(this, mydbmanager);
+    m_dbmanager = new DatabaseManager(this);
+    m_ExerciseModel = new ExerciseModel(this, m_dbmanager);
+    m_WorkoutModel = new WorkoutModel(this, m_dbmanager);
+    m_apireader = new APIReader(this, m_dbmanager);
+    m_User = new User(this, m_dbmanager);
 
-    mydbmanager->setUpDB();
+    m_dbmanager->setUpDB();
 
-    myExerciseProxyModel = new QSortFilterProxyModel(this);
-    myExerciseProxyModel->setSourceModel(myExerciseModel);
-    myExerciseProxyModel->setFilterRole(0);
+    m_ExerciseProxyModel = new QSortFilterProxyModel(this);
+    m_ExerciseProxyModel->setSourceModel(m_ExerciseModel);
+    m_ExerciseProxyModel->setFilterRole(0);
+    m_ExerciseProxyModel->setDynamicSortFilter(true);
 }
 
 ExerciseModel* Controller::getExerciseModel()
 {
-    return myExerciseModel;
+    return m_ExerciseModel;
 }
 
 void Controller::sortExercises(QString name)
 {
-    qDebug() << "sort: " << name;
-    myExerciseProxyModel->setFilterFixedString(name);
+    m_ExerciseProxyModel->setFilterFixedString(name);
+}
+
+QSortFilterProxyModel* Controller::getExerciseProxyModel()
+{
+    return m_ExerciseProxyModel;
 }
 
 WorkoutModel* Controller::getWorkoutModel()
 {
-    return myWorkoutModel;
+    return m_WorkoutModel;
 }
 
 User* Controller::getUser()
 {
-    return myUser;
+    return m_User;
 }
 
 QVariantList Controller::getMuscleModel()
 {
     QVariantList result;
-    auto muscles = mydbmanager->getMuscles();
+    auto muscles = m_dbmanager->getMuscles();
 
     for (auto muscle : muscles) {
         QVariantMap temp;
@@ -59,7 +64,7 @@ QVariantList Controller::getMuscleModel()
 QVariantList Controller::getCategoryModel()
 {
     QVariantList result;
-    auto categories = mydbmanager->getCategories();
+    auto categories = m_dbmanager->getCategories();
 
     for (auto category : categories) {
         QVariantMap temp;
