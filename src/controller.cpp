@@ -3,13 +3,13 @@
 
 Controller::Controller(QObject *parent) : QObject(parent)
 {
-    m_dbmanager = new DatabaseManager(this);
-    m_ExerciseModel = new ExerciseModel(this, m_dbmanager);
-    m_WorkoutModel = new WorkoutModel(this, m_dbmanager);
-    m_apireader = new APIReader(this, m_dbmanager);
-    m_User = new User(this, m_dbmanager);
+    m_db = new DatabaseManager(this);
+    m_ExerciseModel = new ExerciseModel(this, m_db);
+    m_WorkoutModel = new WorkoutModel(this, m_db);
+    m_api = new APIReader(this, m_db);
+    m_User = new User(this, m_db);
 
-    m_dbmanager->setUpDB();
+    m_db->setUpDB();
 
     m_ExerciseProxyModel = new QSortFilterProxyModel(this);
     m_ExerciseProxyModel->setSourceModel(m_ExerciseModel);
@@ -45,7 +45,7 @@ User* Controller::getUser()
 QVariantList Controller::getMuscleModel()
 {
     QVariantList result;
-    auto muscles = m_dbmanager->getMuscles();
+    auto muscles = m_db->getMuscles();
 
     for (auto muscle : muscles) {
         QVariantMap temp;
@@ -64,7 +64,7 @@ QVariantList Controller::getMuscleModel()
 QVariantList Controller::getCategoryModel()
 {
     QVariantList result;
-    auto categories = m_dbmanager->getCategories();
+    auto categories = m_db->getCategories();
 
     for (auto category : categories) {
         QVariantMap temp;

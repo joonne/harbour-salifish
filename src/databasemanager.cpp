@@ -223,7 +223,6 @@ bool DatabaseManager::insertExercises(QList<QVariantMap> exercises)
 
 bool DatabaseManager::insertExercise(int id, QString name, QString description, int category, QString image)
 {
-    qDebug() << "inserting " << id << name << description;
     bool ret = false;
 
     if (m_db.isOpen()) {
@@ -231,8 +230,6 @@ bool DatabaseManager::insertExercise(int id, QString name, QString description, 
         QSqlQuery query(m_db);
         ret = query.exec(QString("INSERT OR REPLACE INTO exercise values(%0, '%1', '%2', %3, '%4')")
                          .arg(id).arg(name).arg(description).arg(category).arg(image));
-        qDebug() << query.lastError();
-
     }
 
     return ret;
@@ -319,6 +316,39 @@ bool DatabaseManager::insertMuscle(int id, QString name, int is_front)
     return ret;
 }
 
+bool DatabaseManager::storeWorkout(QString name, bool isTemplate, QList<QVariantMap> exercises)
+{
+    auto workoutId = insertWorkout(name, 0, isTemplate ? 1 : 0);
+
+    for (auto exercise : exercises) {
+        auto id = exercise["id"].toInt();
+        auto repeats = exercise["repeats"].toInt();
+        auto weights = exercise["weights"].toDouble();
+
+        insertWorkoutEntry(id, 1, workoutId, QDateTime::currentDateTime().toString(), repeats, weights, 1);
+    }
+
+    return true;
+}
+
+bool DatabaseManager::deleteWorkout(int id)
+{
+    bool ret1, ret2 = false;
+
+    if (m_db.isOpen())
+    {
+        QSqlQuery query(m_db);
+        ret1 = query.exec(QString("DELETE FROM workout WHERE id = %1;").arg(id));
+
+        if (ret1)
+        {
+            ret2 = query.exec(QString("DELETE FROM workoutEntry WHERE workout = %1;").arg(id));
+        }
+    }
+
+    return ret1 && ret2;
+}
+
 bool DatabaseManager::createWorkoutTable()
 {
     bool ret = false;
@@ -337,15 +367,17 @@ bool DatabaseManager::createWorkoutTable()
     return ret;
 }
 
-bool DatabaseManager::insertWorkout(QString name, double calories, int isTemplate)
+int DatabaseManager::insertWorkout(QString name, double calories, int isTemplate)
 {
-    bool ret = false;
+    int ret = -1;
 
     if (m_db.isOpen()) {
 
         QSqlQuery query(m_db);
-        ret = query.exec(QString("INSERT INTO workout VALUES(NULL,'%1', %2").arg(name).arg(calories).arg(isTemplate));
+        query.exec(QString("INSERT INTO workout VALUES(NULL, '%1', %2, %3").arg(name).arg(calories).arg(isTemplate));
+        ret = query.lastInsertId().toInt();
 
+        qDebug() << query.lastError();
     }
 
     return ret;
@@ -427,8 +459,6 @@ bool DatabaseManager::insertEquipment(QString name)
     return ret;
 }
 
-
-
 bool DatabaseManager::createDB()
 {
     bool info, tables, user = false;
@@ -452,14 +482,14 @@ bool DatabaseManager::createDB()
                 createWorkoutEntryTable() &&
                 createEquipmentTable()) {
             tables = true;
-            qDebug() << "Tables created";
+            qDebug() << "tables created";
         }
 
         //-----------------------------------------------------------------
 
         if (createUserTable() && insertUser("Sali Fish", 25, "Male", 180, 85)) {
             user = true;
-            qDebug() << "User table created";
+            qDebug() << "user table created";
         }
 
         //-----------------------------------------------------------------

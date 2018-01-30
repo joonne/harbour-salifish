@@ -31,7 +31,7 @@ public:
 
     Q_INVOKABLE void populate(QString workoutId);
 
-    Q_INVOKABLE void addExercise(int index, QString id, QString name, QString description, QString category, double weights, int reps);
+    Q_INVOKABLE void addExercise(QString id, QString name, QString description, QString category, double weights, int reps);
     Q_INVOKABLE void removeExerciseByIndex(const int i);
     Q_INVOKABLE void removeExerciseByName(QString name);
     Q_INVOKABLE void clearExercises();
@@ -40,12 +40,12 @@ public:
     Q_INVOKABLE double calculateTotalWeights();
     Q_INVOKABLE int calculateDuration(int pause);
 
-    Q_INVOKABLE void saveWorkout();
-    Q_INVOKABLE void saveWorkoutTemplate();
+    Q_INVOKABLE void saveWorkout(QString name);
+    Q_INVOKABLE void saveWorkoutTemplate(QString name);
 
 private:
-    QVector<WorkoutData*> myExercises;
-    DatabaseManager* mydbmanager;
+    QVector<WorkoutData*> m_exercises;
+    DatabaseManager* m_db;
 };
 
 #endif // WORKOUTMODEL_H

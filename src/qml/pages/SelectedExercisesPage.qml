@@ -139,17 +139,17 @@ Page {
                         Timer {
                             id: weightsReducer
                             interval: 200
-                            onTriggered: weights >= 0 ? weights = weights - 0.5 : weights = 0
+                            onTriggered: weights >= 0 ? weights -= 0.5 : weights = 0
                             running: false
                             repeat: true
                         }
 
                         MouseArea {
                             anchors.fill: parent
-                            onClicked: weights >= 0 ? weights = weights - 0.25 : weights = 0
+                            onClicked: weights >= 0 ? weights -= 0.25 : weights = 0
                             onPressAndHold: weightsReducer.running = true
                             onPressedChanged: {
-                                if(!pressed) {
+                                if (!pressed) {
                                     weightsReducer.running = false
                                 }
                             }
@@ -168,7 +168,7 @@ Page {
 
                         MouseArea {
                             anchors.fill: parent
-                            onClicked: weights = weights + 0.25
+                            onClicked: weights += 0.25
                         }
                     }
                 }
@@ -186,7 +186,7 @@ Page {
                     Button {
                         id: addButton
                         text: qsTr("Add")
-                        onClicked: controller.workoutModel.addExercise(index, "1", name, description, category, weights, reps)
+                        onClicked: controller.workoutModel.addExercise("1", name, description, category, weights, reps)
                     }
 
                     Button {

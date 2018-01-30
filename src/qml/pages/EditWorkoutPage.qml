@@ -11,13 +11,12 @@ Page {
 
             MenuItem {
                 text: qsTr("Save as a template")
-                onClicked: {
-                    console.log("save as a template")
-                }
+                onClicked: controller.workoutModel.saveWorkoutTemplate(workoutName.text)
             }
 
             MenuItem {
                 text: qsTr("I did this already")
+                onClicked: controller.workoutModel.saveWorkout(workoutName.text)
             }
         }
 

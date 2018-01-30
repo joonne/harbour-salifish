@@ -32,6 +32,7 @@ Page {
             anchors.top: pageheader.bottom
 
             SearchField {
+                id: searchfield
                 placeholderText: qsTr("Search")
                 width: parent.width - Theme.paddingLarge
                 anchors {
@@ -45,7 +46,8 @@ Page {
             SilicaListView {
                 id: listView
                 width: exercisepage.width
-                height: exercisepage.height - pageheader.height
+                height: exercisepage.height - pageheader.height - searchfield.height - Theme.paddingLarge
+                clip: true
 
                 model: controller.exerciseProxyModel
 
@@ -59,7 +61,7 @@ Page {
                                                        exerciseImage: image
                                                     })
                     onClicked: checked
-                               ? controller.workoutModel.addExercise(0, "1", name, description, category, 80, 7)
+                               ? controller.workoutModel.addExercise("1", name, description, category, 80, 7)
                                : controller.workoutModel.removeExerciseByName(name)
                 }
             }

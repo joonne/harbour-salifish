@@ -10,6 +10,7 @@
 #include <QTextStream>
 #include <QStandardPaths>
 #include <QVariant>
+#include <QDateTime>
 
 class DatabaseManager : public QObject
 {
@@ -47,8 +48,11 @@ public:
     bool insertMuscles(QList<QVariantMap> muscles);
     bool insertMuscle(int id, QString name, int is_front);
 
+    bool storeWorkout(QString name, bool isTemplate, QList<QVariantMap> exercises);
+    bool deleteWorkout(int id);
+
     bool createWorkoutTable();
-    bool insertWorkout(QString name, double calories, int isTemplate);
+    int insertWorkout(QString name, double calories, int isTemplate);
 
     bool createWorkoutEntryTable();
     bool insertWorkoutEntry(int exercise, int user, int  workout, QString date, int repeats, double weights, int equipment);

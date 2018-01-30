@@ -14,7 +14,7 @@ class Controller : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(ExerciseModel* exerciseModel READ getExerciseModel CONSTANT)
-    Q_PROPERTY(QSortFilterProxyModel* proxyModel READ getProxyModel CONSTANT)
+    Q_PROPERTY(QSortFilterProxyModel* exerciseProxyModel READ getExerciseProxyModel CONSTANT)
     Q_PROPERTY(WorkoutModel* workoutModel READ getWorkoutModel CONSTANT)
     Q_PROPERTY(User* user READ getUser CONSTANT)
 
@@ -39,8 +39,8 @@ private:
     ExerciseModel* m_ExerciseModel;
     QSortFilterProxyModel* m_ExerciseProxyModel;
     WorkoutModel* m_WorkoutModel;
-    DatabaseManager* m_dbmanager;
-    APIReader* m_apireader;
+    DatabaseManager* m_db;
+    APIReader* m_api;
     User* m_User;
 
 };
